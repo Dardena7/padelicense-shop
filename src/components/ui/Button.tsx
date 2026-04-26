@@ -11,10 +11,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700",
-  secondary: "bg-gray-900 text-white hover:bg-gray-800",
-  outline: "border border-gray-200 text-gray-900 hover:bg-gray-50",
-  ghost: "text-gray-900 hover:underline",
+  primary: "bg-accent text-white hover:bg-accent-hover",
+  secondary: "bg-foreground text-background hover:bg-foreground/90",
+  outline: "border border-border text-foreground hover:bg-foreground/5",
+  ghost: "text-foreground hover:underline",
 };
 
 const rippleColor: Record<ButtonVariant, string> = {

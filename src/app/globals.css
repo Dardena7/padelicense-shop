@@ -7,8 +7,13 @@
   --color-border: #e5e7eb;
   --color-accent: #2563eb;
   --color-accent-hover: #1d4ed8;
+  --color-danger: #dc2626;
+  --color-danger-light: #fef2f2;
+  --color-danger-border: #f87171;
   --color-success: #16a34a;
-  --color-error: #dc2626;
+  --color-success-light: #f0fdf4;
+  --color-accent-light: #eff6ff;
+  --color-foreground-light: #f3f4f6;
 
   --font-sans: "Atkinson Hyperlegible", sans-serif;
 }
