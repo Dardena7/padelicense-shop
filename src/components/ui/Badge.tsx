@@ -12,10 +12,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   accent: "bg-accent-light text-accent",
 };
 
-export default function Badge({
-  variant = "default",
-  children,
-}: BadgeProps) {
+export default function Badge({ variant = "default", children }: BadgeProps) {
   return (
     <span
       className={`

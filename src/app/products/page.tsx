@@ -23,7 +23,9 @@ export default async function ProductsPage() {
           {products.map((product) => {
             const firstImage = product.images?.[0];
             const defaultVariant = product.variants?.[0];
-            const inStock = defaultVariant ? defaultVariant.stockQuantity > 0 : false;
+            const inStock = defaultVariant
+              ? defaultVariant.stockQuantity > 0
+              : false;
 
             return (
               <ProductCard

@@ -32,9 +32,7 @@ export default function Input({
         `}
         {...props}
       />
-      {error && (
-        <p className="text-sm text-danger">{error}</p>
-      )}
+      {error && <p className="text-sm text-danger">{error}</p>}
     </div>
   );
 }

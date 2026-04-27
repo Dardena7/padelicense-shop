@@ -54,9 +54,7 @@ export default function ProductCard({
           {!inStock && <Badge variant="danger">Out of stock</Badge>}
         </div>
 
-        {!inStock && (
-          <div className="absolute inset-0 bg-background/40" />
-        )}
+        {!inStock && <div className="absolute inset-0 bg-background/40" />}
       </div>
 
       <div className="flex flex-col gap-2 p-5">

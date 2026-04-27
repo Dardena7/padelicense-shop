@@ -62,7 +62,7 @@ export type Product = Node & {
   images: Array<ProductImage>;
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
-  status: Scalars['String']['output'];
+  status: ProductStatus;
   variants: Array<ProductVariant>;
 };
 
@@ -94,6 +94,16 @@ export type ProductImage = Node & {
   imageUrl: Scalars['String']['output'];
   position: Scalars['Int']['output'];
 };
+
+/** Status of a product */
+export enum ProductStatus {
+  /** Product is visible and available */
+  Active = 'ACTIVE',
+  /** Product is no longer available */
+  Archived = 'ARCHIVED',
+  /** Product is not visible to customers */
+  Draft = 'DRAFT'
+}
 
 export type ProductVariant = Node & {
   __typename?: 'ProductVariant';

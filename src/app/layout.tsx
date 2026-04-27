@@ -21,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${atkinson.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-          <ApolloClientProvider>{children}</ApolloClientProvider>
-        </body>
+        <ApolloClientProvider>{children}</ApolloClientProvider>
+      </body>
     </html>
   );
 }

@@ -9,7 +9,8 @@ import {
 } from "@apollo/client-integration-nextjs";
 import { tokenStore } from "./token-store";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
 
 function makeClient() {
   const httpLink = new HttpLink({ uri: API_URL });

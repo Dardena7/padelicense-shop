@@ -5,7 +5,8 @@ import {
   InMemoryCache,
 } from "@apollo/client-integration-nextjs";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
 
 // For Server Components (public queries only, no auth)
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
