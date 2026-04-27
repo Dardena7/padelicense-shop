@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Badge from "./Badge";
 
 interface ProductCardProps {
@@ -30,9 +31,9 @@ export default function ProductCard({
   inStock = true,
 }: ProductCardProps) {
   return (
-    <a
+    <Link
       href={`/products/${slug}`}
-      className="group flex w-72 flex-col rounded-xl bg-background border border-border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      className="group flex flex-col rounded-xl bg-background border border-border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] bg-foreground-light overflow-hidden">
         {imageUrl ? (
@@ -73,6 +74,6 @@ export default function ProductCard({
           {formatPrice(priceCents)}
         </p>
       </div>
-    </a>
+    </Link>
   );
 }
