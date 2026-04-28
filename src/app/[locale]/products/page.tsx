@@ -1,4 +1,4 @@
-import { query } from "@/lib/apollo";
+import { getClient, localizedContext } from "@/lib/apollo";
 import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
 import { ProductCard } from "@/components/ui";
@@ -24,7 +24,10 @@ const ProductsPage = async (props: ProductsPageProps) => {
   const t = await getTranslations("products");
   const tCommon = await getTranslations("common");
 
-  const { data } = await query({ query: GET_PRODUCTS });
+  const { data } = await getClient().query({
+    query: GET_PRODUCTS,
+    ...localizedContext(locale),
+  });
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
 
   return (

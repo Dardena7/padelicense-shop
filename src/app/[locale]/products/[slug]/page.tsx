@@ -1,4 +1,4 @@
-import { query } from "@/lib/apollo";
+import { getClient, localizedContext } from "@/lib/apollo";
 import { GET_PRODUCT } from "./_queries/product";
 import Image from "next/image";
 import { Badge } from "@/components/ui";
@@ -22,9 +22,10 @@ const ProductPage = async (props: ProductPageProps) => {
   const t = await getTranslations("common");
   const tProducts = await getTranslations("products");
 
-  const { data } = await query({
+  const { data } = await getClient().query({
     query: GET_PRODUCT,
     variables: { slug },
+    ...localizedContext(locale),
   });
 
   const product = data?.product;

@@ -15,3 +15,9 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
     link: new HttpLink({ uri: API_URL }),
   });
 });
+
+export const localizedContext = (locale: string) => ({
+  context: {
+    headers: { "Accept-Language": locale },
+  },
+});

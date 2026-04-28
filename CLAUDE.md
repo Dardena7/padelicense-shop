@@ -44,6 +44,6 @@
 - `_hooks/` — hooks for client components
 
 ## API
-- Server Components use `query()` from `@/lib/apollo` (public, no auth)
+- Server Components use `getClient().query()` from `@/lib/apollo` with `context: { headers: { "Accept-Language": locale } }`
 - Client Components use hooks with `useSuspenseQuery` via ApolloProvider (with auth)
 - API runs on port 3000, frontend on port 3001
