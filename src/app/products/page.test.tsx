@@ -36,7 +36,7 @@ function mockProducts(products: object[]) {
         pageInfo: { hasNextPage: false, endCursor: null },
       },
     },
-  } as any);
+  } as unknown as Awaited<ReturnType<typeof query>>);
 }
 
 const productInStock = {

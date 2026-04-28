@@ -9,6 +9,7 @@
 - Queries colocated with pages in `_queries/` folders, or in `_hooks/` for client components
 - GraphQL Codegen generates types — never write types manually for API data
 - Front tests focus on business logic (conditional rendering, formatting, states), not trivial rendering
+- No `any` — use `unknown` with type guards or proper types instead
 
 ## Stack
 - Next.js 16 App Router, Tailwind 4, Apollo Client 4
