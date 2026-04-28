@@ -10,6 +10,7 @@
 - GraphQL Codegen generates types — never write types manually for API data
 - Front tests focus on business logic (conditional rendering, formatting, states), not trivial rendering
 - No `any` — use `unknown` with type guards or proper types instead
+- No deep relative imports (max 3 levels `../../../`) — use `@/` alias instead
 
 ## i18n
 - Supported locales: en, fr, nl (default: en)

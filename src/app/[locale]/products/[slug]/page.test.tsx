@@ -1,24 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { render } from "@/test/render";
 import { describe, it, expect, vi } from "vitest";
+import "@/test/mocks/next-intl-server";
 import ProductPage from "./page";
 
 vi.mock("@/lib/apollo", () => ({
   query: vi.fn(),
-}));
-
-vi.mock("next/link", () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
 }));
 
 vi.mock("next/image", () => ({
@@ -49,21 +36,38 @@ const fullProduct = {
   featured: true,
   category: { name: "Rackets", slug: "rackets" },
   variants: [
-    { id: "v1", name: "340g", sku: "HSP-340", effectivePrice: 24990, stockQuantity: 10 },
-    { id: "v2", name: "370g Limited", sku: "HSP-370", effectivePrice: 29990, stockQuantity: 0 },
+    {
+      id: "v1",
+      name: "340g",
+      sku: "HSP-340",
+      effectivePrice: 24990,
+      stockQuantity: 10,
+    },
+    {
+      id: "v2",
+      name: "370g Limited",
+      sku: "HSP-370",
+      effectivePrice: 29990,
+      stockQuantity: 0,
+    },
   ],
   images: [
-    { imageUrl: "https://example.com/img.jpg", altText: "Front view", position: 0 },
+    {
+      imageUrl: "https://example.com/img.jpg",
+      altText: "Front view",
+      position: 0,
+    },
   ],
 };
 
-function mockProduct(product: object | null) {
+const mockProduct = (product: object | null) => {
   mockedQuery.mockResolvedValue({
     data: { product },
   } as unknown as Awaited<ReturnType<typeof query>>);
-}
+};
 
-const makeParams = (slug: string) => Promise.resolve({ slug });
+const makeParams = (slug: string) =>
+  Promise.resolve({ locale: "en", slug });
 
 describe("ProductPage", () => {
   it("displays product details", async () => {
@@ -74,7 +78,9 @@ describe("ProductPage", () => {
     expect(screen.getByText("Head Speed Pro")).toBeInTheDocument();
     expect(screen.getByText("Head")).toBeInTheDocument();
     expect(screen.getByText("€249.90")).toBeInTheDocument();
-    expect(screen.getByText("A great racket for control players.")).toBeInTheDocument();
+    expect(
+      screen.getByText("A great racket for control players."),
+    ).toBeInTheDocument();
   });
 
   it("shows featured badge when product is featured", async () => {

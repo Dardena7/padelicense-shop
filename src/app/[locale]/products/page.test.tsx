@@ -1,24 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { render } from "@/test/render";
 import { describe, it, expect, vi } from "vitest";
+import "@/test/mocks/next-intl-server";
 import ProductsPage from "./page";
 
 vi.mock("@/lib/apollo", () => ({
   query: vi.fn(),
-}));
-
-vi.mock("next/link", () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
 }));
 
 vi.mock("next/image", () => ({
@@ -28,7 +15,9 @@ vi.mock("next/image", () => ({
 const { query } = await import("@/lib/apollo");
 const mockedQuery = vi.mocked(query);
 
-function mockProducts(products: object[]) {
+const mockParams = { params: Promise.resolve({ locale: "en" }) };
+
+const mockProducts = (products: object[]) => {
   mockedQuery.mockResolvedValue({
     data: {
       products: {
@@ -37,7 +26,7 @@ function mockProducts(products: object[]) {
       },
     },
   } as unknown as Awaited<ReturnType<typeof query>>);
-}
+};
 
 const productInStock = {
   id: "1",
@@ -47,7 +36,9 @@ const productInStock = {
   basePriceCents: 24990,
   featured: false,
   category: { name: "Rackets", slug: "rackets" },
-  variants: [{ id: "v1", name: "Default", effectivePrice: 24990, stockQuantity: 10 }],
+  variants: [
+    { id: "v1", name: "Default", effectivePrice: 24990, stockQuantity: 10 },
+  ],
   images: [],
 };
 
@@ -64,13 +55,15 @@ const productOutOfStock = {
   id: "3",
   name: "Nox AT10",
   slug: "nox-at10",
-  variants: [{ id: "v3", name: "Default", effectivePrice: 19990, stockQuantity: 0 }],
+  variants: [
+    { id: "v3", name: "Default", effectivePrice: 19990, stockQuantity: 0 },
+  ],
 };
 
 describe("ProductsPage", () => {
   it("displays products from the API", async () => {
     mockProducts([productInStock, productFeatured]);
-    const page = await ProductsPage();
+    const page = await ProductsPage(mockParams);
     render(page);
 
     expect(screen.getByText("Head Speed Pro")).toBeInTheDocument();
@@ -79,7 +72,7 @@ describe("ProductsPage", () => {
 
   it("shows featured badge on featured products", async () => {
     mockProducts([productFeatured]);
-    const page = await ProductsPage();
+    const page = await ProductsPage(mockParams);
     render(page);
 
     expect(screen.getByText("Featured")).toBeInTheDocument();
@@ -87,7 +80,7 @@ describe("ProductsPage", () => {
 
   it("does not show featured badge on non-featured products", async () => {
     mockProducts([productInStock]);
-    const page = await ProductsPage();
+    const page = await ProductsPage(mockParams);
     render(page);
 
     expect(screen.queryByText("Featured")).not.toBeInTheDocument();
@@ -95,7 +88,7 @@ describe("ProductsPage", () => {
 
   it("shows out of stock badge when variant has no stock", async () => {
     mockProducts([productOutOfStock]);
-    const page = await ProductsPage();
+    const page = await ProductsPage(mockParams);
     render(page);
 
     expect(screen.getByText("Out of stock")).toBeInTheDocument();
@@ -103,7 +96,7 @@ describe("ProductsPage", () => {
 
   it("shows empty state when no products", async () => {
     mockProducts([]);
-    const page = await ProductsPage();
+    const page = await ProductsPage(mockParams);
     render(page);
 
     expect(screen.getByText("No products found.")).toBeInTheDocument();
