@@ -2,22 +2,37 @@ import { query } from "@/lib/apollo";
 import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
 import { ProductCard } from "@/components/ui";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const metadata = {
-  title: "Products — Padelicense Shop",
-  description: "Browse our selection of premium padel equipment",
+type ProductsPageProps = {
+  params: Promise<{ locale: string }>;
 };
 
-export default async function ProductsPage() {
+export const generateMetadata = async (props: ProductsPageProps) => {
+  const { locale } = await props.params;
+  const t = await getTranslations({ locale, namespace: "metadata.products" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+};
+
+const ProductsPage = async (props: ProductsPageProps) => {
+  const { locale } = await props.params;
+  setRequestLocale(locale);
+  const t = await getTranslations("products");
+  const tCommon = await getTranslations("common");
+
   const { data } = await query({ query: GET_PRODUCTS });
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold text-foreground mb-8">Products</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
 
       {products.length === 0 ? (
-        <p className="text-muted">No products found.</p>
+        <p className="text-muted">{tCommon("noProductsFound")}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => {
@@ -45,4 +60,6 @@ export default async function ProductsPage() {
       )}
     </main>
   );
-}
+};
+
+export default ProductsPage;

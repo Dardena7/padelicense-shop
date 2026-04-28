@@ -1,0 +1,26 @@
+{
+  "common": {
+    "featured": "Featured",
+    "outOfStock": "Out of stock",
+    "inStock": "In stock",
+    "noImageAvailable": "No image available",
+    "noProductsFound": "No products found.",
+    "addToCart": "Add to cart",
+    "viewDetails": "View details"
+  },
+  "products": {
+    "title": "Products",
+    "description": "Browse our selection of premium padel equipment",
+    "variants": "Variants"
+  },
+  "metadata": {
+    "home": {
+      "title": "Padelicense Shop",
+      "description": "Premium padel equipment"
+    },
+    "products": {
+      "title": "Products — Padelicense Shop",
+      "description": "Browse our selection of premium padel equipment"
+    }
+  }
+}

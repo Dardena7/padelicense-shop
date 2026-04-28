@@ -1,0 +1,26 @@
+{
+  "common": {
+    "featured": "Uitgelicht",
+    "outOfStock": "Niet op voorraad",
+    "inStock": "Op voorraad",
+    "noImageAvailable": "Geen afbeelding beschikbaar",
+    "noProductsFound": "Geen producten gevonden.",
+    "addToCart": "In winkelwagen",
+    "viewDetails": "Bekijk details"
+  },
+  "products": {
+    "title": "Producten",
+    "description": "Bekijk ons assortiment premium padel uitrusting",
+    "variants": "Varianten"
+  },
+  "metadata": {
+    "home": {
+      "title": "Padelicense Shop",
+      "description": "Premium padel uitrusting"
+    },
+    "products": {
+      "title": "Producten — Padelicense Shop",
+      "description": "Bekijk ons assortiment premium padel uitrusting"
+    }
+  }
+}

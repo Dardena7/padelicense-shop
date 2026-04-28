@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Badge } from "../Badge/Badge";
 
 type ProductCardProps = {
@@ -13,14 +14,15 @@ type ProductCardProps = {
   inStock?: boolean;
 };
 
-const formatPrice = (cents: number): string => {
-  return new Intl.NumberFormat("en-US", {
+const formatPrice = (cents: number, locale: string): string => {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "EUR",
   }).format(cents / 100);
 };
 
 export const ProductCard = (props: ProductCardProps) => {
+  const locale = useLocale();
   const {
     name,
     brand,
@@ -31,6 +33,8 @@ export const ProductCard = (props: ProductCardProps) => {
     featured = false,
     inStock = true,
   } = props;
+
+  const t = useTranslations("common");
 
   return (
     <Link
@@ -47,13 +51,13 @@ export const ProductCard = (props: ProductCardProps) => {
           />
         ) : (
           <div className="flex items-center justify-center h-full text-muted text-sm">
-            No image available
+            {t("noImageAvailable")}
           </div>
         )}
 
         <div className="absolute top-3 left-3 flex gap-2">
-          {featured && <Badge variant="accent">Featured</Badge>}
-          {!inStock && <Badge variant="danger">Out of stock</Badge>}
+          {featured && <Badge variant="accent">{t("featured")}</Badge>}
+          {!inStock && <Badge variant="danger">{t("outOfStock")}</Badge>}
         </div>
 
         {!inStock && <div className="absolute inset-0 bg-background/40" />}
@@ -71,7 +75,7 @@ export const ProductCard = (props: ProductCardProps) => {
         </h3>
 
         <p className="text-xl font-bold text-foreground tracking-tight">
-          {formatPrice(priceCents)}
+          {formatPrice(priceCents, locale)}
         </p>
       </div>
     </Link>

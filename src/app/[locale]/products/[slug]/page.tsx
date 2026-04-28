@@ -3,20 +3,25 @@ import { GET_PRODUCT } from "./_queries/product";
 import Image from "next/image";
 import { Badge } from "@/components/ui";
 import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-interface ProductPageProps {
-  params: Promise<{ slug: string }>;
-}
+type ProductPageProps = {
+  params: Promise<{ locale: string; slug: string }>;
+};
 
-function formatPrice(cents: number): string {
-  return new Intl.NumberFormat("en-US", {
+const formatPrice = (cents: number, locale: string): string => {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "EUR",
   }).format(cents / 100);
-}
+};
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const { slug } = await params;
+const ProductPage = async (props: ProductPageProps) => {
+  const { locale, slug } = await props.params;
+  setRequestLocale(locale);
+  const t = await getTranslations("common");
+  const tProducts = await getTranslations("products");
+
   const { data } = await query({
     query: GET_PRODUCT,
     variables: { slug },
@@ -46,7 +51,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
           ) : (
             <div className="flex items-center justify-center h-full text-muted">
-              No image available
+              {t("noImageAvailable")}
             </div>
           )}
         </div>
@@ -60,12 +65,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {product.name}
             </h1>
             <div className="flex gap-2">
-              {product.featured && <Badge variant="accent">Featured</Badge>}
+              {product.featured && (
+                <Badge variant="accent">{t("featured")}</Badge>
+              )}
             </div>
           </div>
 
           <p className="text-3xl font-bold text-foreground">
-            {formatPrice(product.basePriceCents)}
+            {formatPrice(product.basePriceCents, locale)}
           </p>
 
           {product.description && (
@@ -74,7 +81,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           {product.variants && product.variants.length > 1 && (
             <div className="flex flex-col gap-3">
-              <h2 className="text-sm font-medium text-foreground">Variants</h2>
+              <h2 className="text-sm font-medium text-foreground">
+                {tProducts("variants")}
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((variant) =>
                   variant ? (
@@ -83,14 +92,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       className="border border-border rounded-lg px-4 py-2 text-sm"
                     >
                       <span className="font-medium">{variant.name}</span>
-                      {variant.effectivePrice !==
-                        product.basePriceCents && (
+                      {variant.effectivePrice !== product.basePriceCents && (
                         <span className="text-muted ml-2">
-                          {formatPrice(variant.effectivePrice)}
+                          {formatPrice(variant.effectivePrice, locale)}
                         </span>
                       )}
                       {variant.stockQuantity === 0 && (
-                        <Badge variant="danger">Out of stock</Badge>
+                        <Badge variant="danger">{t("outOfStock")}</Badge>
                       )}
                     </div>
                   ) : null,
@@ -102,4 +110,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
     </main>
   );
-}
+};
+
+export default ProductPage;
