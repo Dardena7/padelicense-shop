@@ -1,9 +1,9 @@
 type BadgeVariant = "default" | "success" | "danger" | "accent";
 
-interface BadgeProps {
+type BadgeProps = {
   variant?: BadgeVariant;
   children: React.ReactNode;
-}
+};
 
 const variantStyles: Record<BadgeVariant, string> = {
   default: "bg-foreground-light text-foreground",
@@ -12,7 +12,9 @@ const variantStyles: Record<BadgeVariant, string> = {
   accent: "bg-accent-light text-accent",
 };
 
-export default function Badge({ variant = "default", children }: BadgeProps) {
+export const Badge = (props: BadgeProps) => {
+  const { variant = "default", children } = props;
+
   return (
     <span
       className={`
@@ -24,4 +26,4 @@ export default function Badge({ variant = "default", children }: BadgeProps) {
       {children}
     </span>
   );
-}
+};

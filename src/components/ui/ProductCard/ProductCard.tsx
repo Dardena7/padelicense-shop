@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import Badge from "./Badge";
+import { Badge } from "../Badge/Badge";
 
-interface ProductCardProps {
+type ProductCardProps = {
   name: string;
   brand: string;
   slug: string;
@@ -11,25 +11,27 @@ interface ProductCardProps {
   imageAlt?: string;
   featured?: boolean;
   inStock?: boolean;
-}
+};
 
-function formatPrice(cents: number): string {
+const formatPrice = (cents: number): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "EUR",
   }).format(cents / 100);
-}
+};
 
-export default function ProductCard({
-  name,
-  brand,
-  slug,
-  priceCents,
-  imageUrl,
-  imageAlt,
-  featured = false,
-  inStock = true,
-}: ProductCardProps) {
+export const ProductCard = (props: ProductCardProps) => {
+  const {
+    name,
+    brand,
+    slug,
+    priceCents,
+    imageUrl,
+    imageAlt,
+    featured = false,
+    inStock = true,
+  } = props;
+
   return (
     <Link
       href={`/products/${slug}`}
@@ -74,4 +76,4 @@ export default function ProductCard({
       </div>
     </Link>
   );
-}
+};

@@ -1,17 +1,13 @@
 import { InputHTMLAttributes } from "react";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   error?: string;
-}
+};
 
-export default function Input({
-  label,
-  error,
-  id,
-  className = "",
-  ...props
-}: InputProps) {
+export const Input = (props: InputProps) => {
+  const { label, error, id, className = "", ...rest } = props;
+
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
@@ -30,9 +26,9 @@ export default function Input({
           ${error ? "border-danger-border bg-danger-light" : "border-border"}
           ${className}
         `}
-        {...props}
+        {...rest}
       />
       {error && <p className="text-sm text-danger">{error}</p>}
     </div>
   );
-}
+};

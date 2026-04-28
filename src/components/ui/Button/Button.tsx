@@ -5,10 +5,10 @@ import { ButtonHTMLAttributes, MouseEvent, useRef } from "react";
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
-}
+};
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-accent text-white hover:bg-accent-hover",
@@ -30,18 +30,20 @@ const sizeStyles: Record<ButtonSize, string> = {
   lg: "px-6 py-3 text-lg",
 };
 
-export default function Button({
-  variant = "primary",
-  size = "md",
-  className = "",
-  disabled,
-  children,
-  onClick,
-  ...props
-}: ButtonProps) {
+export const Button = (props: ButtonProps) => {
+  const {
+    variant = "primary",
+    size = "md",
+    className = "",
+    disabled,
+    children,
+    onClick,
+    ...rest
+  } = props;
+
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  function handleClick(e: MouseEvent<HTMLButtonElement>) {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (disabled || variant === "ghost") {
       onClick?.(e);
       return;
@@ -53,15 +55,15 @@ export default function Button({
     const rect = button.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const size = Math.max(rect.width, rect.height) * 2;
+    const rippleSize = Math.max(rect.width, rect.height) * 2;
 
     const ripple = document.createElement("span");
     ripple.style.cssText = `
       position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      left: ${x - size / 2}px;
-      top: ${y - size / 2}px;
+      width: ${rippleSize}px;
+      height: ${rippleSize}px;
+      left: ${x - rippleSize / 2}px;
+      top: ${y - rippleSize / 2}px;
       background: ${rippleColor[variant]};
       border-radius: 50%;
       transform: scale(0);
@@ -73,7 +75,7 @@ export default function Button({
     ripple.addEventListener("animationend", () => ripple.remove());
 
     onClick?.(e);
-  }
+  };
 
   return (
     <button
@@ -89,9 +91,9 @@ export default function Button({
       `}
       disabled={disabled}
       onClick={handleClick}
-      {...props}
+      {...rest}
     >
       {children}
     </button>
   );
-}
+};

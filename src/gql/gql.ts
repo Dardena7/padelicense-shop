@@ -14,9 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query GetProduct($slug: String!) {\n    product(slug: $slug) {\n      id\n      name\n      slug\n      description\n      brand\n      basePriceCents\n      status\n      featured\n      category {\n        name\n        slug\n      }\n      variants {\n        id\n        name\n        sku\n        effectivePrice\n        stockQuantity\n      }\n      images {\n        imageUrl\n        altText\n        position\n      }\n    }\n  }\n": typeof types.GetProductDocument,
     "\n  query GetProducts($first: Int, $categorySlug: String, $featured: Boolean) {\n    products(first: $first, categorySlug: $categorySlug, featured: $featured) {\n      nodes {\n        id\n        name\n        slug\n        brand\n        basePriceCents\n        featured\n        category {\n          name\n          slug\n        }\n        variants {\n          id\n          name\n          effectivePrice\n          stockQuantity\n        }\n        images {\n          imageUrl\n          altText\n          position\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetProductsDocument,
 };
 const documents: Documents = {
+    "\n  query GetProduct($slug: String!) {\n    product(slug: $slug) {\n      id\n      name\n      slug\n      description\n      brand\n      basePriceCents\n      status\n      featured\n      category {\n        name\n        slug\n      }\n      variants {\n        id\n        name\n        sku\n        effectivePrice\n        stockQuantity\n      }\n      images {\n        imageUrl\n        altText\n        position\n      }\n    }\n  }\n": types.GetProductDocument,
     "\n  query GetProducts($first: Int, $categorySlug: String, $featured: Boolean) {\n    products(first: $first, categorySlug: $categorySlug, featured: $featured) {\n      nodes {\n        id\n        name\n        slug\n        brand\n        basePriceCents\n        featured\n        category {\n          name\n          slug\n        }\n        variants {\n          id\n          name\n          effectivePrice\n          stockQuantity\n        }\n        images {\n          imageUrl\n          altText\n          position\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetProductsDocument,
 };
 
@@ -34,6 +36,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetProduct($slug: String!) {\n    product(slug: $slug) {\n      id\n      name\n      slug\n      description\n      brand\n      basePriceCents\n      status\n      featured\n      category {\n        name\n        slug\n      }\n      variants {\n        id\n        name\n        sku\n        effectivePrice\n        stockQuantity\n      }\n      images {\n        imageUrl\n        altText\n        position\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetProduct($slug: String!) {\n    product(slug: $slug) {\n      id\n      name\n      slug\n      description\n      brand\n      basePriceCents\n      status\n      featured\n      category {\n        name\n        slug\n      }\n      variants {\n        id\n        name\n        sku\n        effectivePrice\n        stockQuantity\n      }\n      images {\n        imageUrl\n        altText\n        position\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

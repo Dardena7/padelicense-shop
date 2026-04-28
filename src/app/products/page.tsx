@@ -1,7 +1,7 @@
 import { query } from "@/lib/apollo";
 import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
-import ProductCard from "@/components/ui/ProductCard";
+import { ProductCard } from "@/components/ui";
 
 export const metadata = {
   title: "Products — Padelicense Shop",
