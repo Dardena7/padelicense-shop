@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { NavbarAuth } from "./NavbarAuth";
 
 export const Navbar = () => {
   const t = useTranslations("nav");
@@ -24,12 +25,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-4">
           <LocaleSwitcher />
-          <Link
-            href="/login"
-            className="text-sm text-muted hover:text-foreground transition-colors"
-          >
-            {t("login")}
-          </Link>
+          <NavbarAuth />
         </div>
       </nav>
     </header>

@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import ApolloClientProvider from "@/lib/apolloProvider";
 import { Navbar, Footer } from "@/components/layout";
 import { LocalizationProvider } from "@/lib/localizationContext";
+import { AuthProvider } from "@/lib/authContext";
 import "./globals.css";
 
 const atkinson = Atkinson_Hyperlegible({
@@ -60,11 +61,13 @@ const LocaleLayout = async (props: LayoutProps) => {
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
           <ApolloClientProvider>
-            <LocalizationProvider>
-              <Navbar />
-              {children}
-              <Footer />
-            </LocalizationProvider>
+            <AuthProvider>
+              <LocalizationProvider>
+                <Navbar />
+                {children}
+                <Footer />
+              </LocalizationProvider>
+            </AuthProvider>
           </ApolloClientProvider>
         </NextIntlClientProvider>
       </body>

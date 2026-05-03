@@ -19,6 +19,28 @@
     "login": "Connexion",
     "signup": "Inscription"
   },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "signupLink": "Créer un compte",
+      "error": "Email ou mot de passe invalide"
+    },
+    "signup": {
+      "title": "Inscription",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "password": "Mot de passe",
+      "passwordConfirmation": "Confirmer le mot de passe",
+      "submit": "Créer un compte",
+      "hasAccount": "Déjà un compte ?",
+      "loginLink": "Se connecter"
+    }
+  },
   "products": {
     "title": "Produits",
     "description": "Parcourez notre sélection d'équipement de padel premium",

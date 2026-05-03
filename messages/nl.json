@@ -19,6 +19,28 @@
     "login": "Inloggen",
     "signup": "Registreren"
   },
+  "auth": {
+    "login": {
+      "title": "Inloggen",
+      "email": "Email",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "noAccount": "Nog geen account?",
+      "signupLink": "Registreren",
+      "error": "Ongeldig email of wachtwoord"
+    },
+    "signup": {
+      "title": "Registreren",
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
+      "email": "Email",
+      "password": "Wachtwoord",
+      "passwordConfirmation": "Bevestig wachtwoord",
+      "submit": "Account aanmaken",
+      "hasAccount": "Al een account?",
+      "loginLink": "Inloggen"
+    }
+  },
   "products": {
     "title": "Producten",
     "description": "Bekijk ons assortiment premium padel uitrusting",
