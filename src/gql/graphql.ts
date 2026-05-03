@@ -129,6 +129,8 @@ export type Query = {
   __typename?: 'Query';
   /** List root categories (without parent) */
   categories: Array<Category>;
+  /** Returns the currently authenticated user */
+  me?: Maybe<User>;
   /** Fetches an object given its ID. */
   node?: Maybe<Node>;
   /** Fetches a list of objects given a list of IDs. */
@@ -169,6 +171,26 @@ export enum SupportedLocale {
   En = 'EN',
   Fr = 'FR',
   Nl = 'NL'
+}
+
+export type User = Node & {
+  __typename?: 'User';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  /** ID of the object. */
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  publicId: Scalars['String']['output'];
+  role: UserRole;
+};
+
+/** Role of a user */
+export enum UserRole {
+  /** Administrator with full access */
+  Admin = 'ADMIN',
+  /** Regular customer */
+  Customer = 'CUSTOMER'
 }
 
 export type GetProductQueryVariables = Exact<{

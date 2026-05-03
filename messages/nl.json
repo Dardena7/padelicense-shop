@@ -39,6 +39,14 @@
       "submit": "Account aanmaken",
       "hasAccount": "Al een account?",
       "loginLink": "Inloggen"
+    },
+    "account": {
+      "title": "Mijn account",
+      "name": "Naam",
+      "email": "Email",
+      "role": "Rol",
+      "logout": "Uitloggen",
+      "memberSince": "Lid sinds {date}"
     }
   },
   "products": {

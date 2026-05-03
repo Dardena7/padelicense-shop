@@ -39,6 +39,14 @@
       "submit": "Créer un compte",
       "hasAccount": "Déjà un compte ?",
       "loginLink": "Se connecter"
+    },
+    "account": {
+      "title": "Mon compte",
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "logout": "Se déconnecter",
+      "memberSince": "Membre depuis le {date}"
     }
   },
   "products": {
