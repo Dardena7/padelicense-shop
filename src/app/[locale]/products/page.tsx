@@ -3,6 +3,7 @@ import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
 import { ProductCard } from "@/components/ui";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 
 type ProductsPageProps = {
   params: Promise<{ locale: string }>;
@@ -15,6 +16,21 @@ export const generateMetadata = async (props: ProductsPageProps) => {
   return {
     title: t("title"),
     description: t("description"),
+    alternates: {
+      canonical: `/${locale}/products`,
+      languages: {
+        ...Object.fromEntries(
+          routing.locales.map((loc) => [loc, `/${loc}/products`]),
+        ),
+        "x-default": `/${routing.defaultLocale}/products`,
+      },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      type: "website",
+      locale,
+    },
   };
 };
 

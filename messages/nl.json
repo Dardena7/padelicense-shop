@@ -1,4 +1,7 @@
 {
+  "footer": {
+    "copyright": "© {year} Padelicense. Alle rechten voorbehouden."
+  },
   "common": {
     "featured": "Uitgelicht",
     "outOfStock": "Niet op voorraad",
@@ -7,6 +10,14 @@
     "noProductsFound": "Geen producten gevonden.",
     "addToCart": "In winkelwagen",
     "viewDetails": "Bekijk details"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Producten",
+    "cart": "Winkelwagen",
+    "account": "Account",
+    "login": "Inloggen",
+    "signup": "Registreren"
   },
   "products": {
     "title": "Producten",

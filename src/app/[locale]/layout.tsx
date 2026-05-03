@@ -4,7 +4,9 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import ApolloClientProvider from "@/lib/apollo-provider";
+import ApolloClientProvider from "@/lib/apolloProvider";
+import { Navbar, Footer } from "@/components/layout";
+import { LocalizationProvider } from "@/lib/localizationContext";
 import "./globals.css";
 
 const atkinson = Atkinson_Hyperlegible({
@@ -26,8 +28,20 @@ export const generateMetadata = async (props: LayoutProps) => {
   const t = await getTranslations({ locale, namespace: "metadata.home" });
 
   return {
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001",
+    ),
     title: t("title"),
     description: t("description"),
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        ...Object.fromEntries(
+          routing.locales.map((loc) => [loc, `/${loc}`]),
+        ),
+        "x-default": `/${routing.defaultLocale}`,
+      },
+    },
   };
 };
 
@@ -45,7 +59,13 @@ const LocaleLayout = async (props: LayoutProps) => {
     <html lang={locale} className={`${atkinson.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <ApolloClientProvider>{children}</ApolloClientProvider>
+          <ApolloClientProvider>
+            <LocalizationProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </LocalizationProvider>
+          </ApolloClientProvider>
         </NextIntlClientProvider>
       </body>
     </html>

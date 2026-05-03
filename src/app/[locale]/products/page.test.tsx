@@ -4,28 +4,30 @@ import { describe, it, expect, vi } from "vitest";
 import "@/test/mocks/next-intl-server";
 import ProductsPage from "./page";
 
+const mockQuery = vi.fn();
+
 vi.mock("@/lib/apollo", () => ({
-  query: vi.fn(),
+  getClient: () => ({ query: mockQuery }),
+  localizedContext: (locale: string) => ({
+    context: { headers: { "Accept-Language": locale } },
+  }),
 }));
 
 vi.mock("next/image", () => ({
   default: ({ alt, ...props }: { alt: string }) => <img alt={alt} {...props} />,
 }));
 
-const { query } = await import("@/lib/apollo");
-const mockedQuery = vi.mocked(query);
-
 const mockParams = { params: Promise.resolve({ locale: "en" }) };
 
 const mockProducts = (products: object[]) => {
-  mockedQuery.mockResolvedValue({
+  mockQuery.mockResolvedValue({
     data: {
       products: {
         nodes: products,
         pageInfo: { hasNextPage: false, endCursor: null },
       },
     },
-  } as unknown as Awaited<ReturnType<typeof query>>);
+  });
 };
 
 const productInStock = {

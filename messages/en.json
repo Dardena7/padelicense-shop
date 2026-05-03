@@ -1,4 +1,7 @@
 {
+  "footer": {
+    "copyright": "© {year} Padelicense. All rights reserved."
+  },
   "common": {
     "featured": "Featured",
     "outOfStock": "Out of stock",
@@ -7,6 +10,14 @@
     "noProductsFound": "No products found.",
     "addToCart": "Add to cart",
     "viewDetails": "View details"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Log in",
+    "signup": "Sign up"
   },
   "products": {
     "title": "Products",

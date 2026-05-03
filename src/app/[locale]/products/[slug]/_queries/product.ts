@@ -1,4 +1,6 @@
+import { cache } from "react";
 import { graphql } from "@/gql";
+import { getClient, localizedContext } from "@/lib/apollo";
 
 export const GET_PRODUCT = graphql(`
   query GetProduct($slug: String!) {
@@ -27,6 +29,19 @@ export const GET_PRODUCT = graphql(`
         altText
         position
       }
+      alternateSlugs {
+        locale
+        value
+      }
     }
   }
 `);
+
+export const getProduct = cache(async (slug: string, locale: string) => {
+  const { data } = await getClient().query({
+    query: GET_PRODUCT,
+    variables: { slug },
+    ...localizedContext(locale),
+  });
+  return data?.product ?? null;
+});

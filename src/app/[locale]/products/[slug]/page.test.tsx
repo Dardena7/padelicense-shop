@@ -4,12 +4,21 @@ import { describe, it, expect, vi } from "vitest";
 import "@/test/mocks/next-intl-server";
 import ProductPage from "./page";
 
+const mockQuery = vi.fn();
+
 vi.mock("@/lib/apollo", () => ({
-  query: vi.fn(),
+  getClient: () => ({ query: mockQuery }),
+  localizedContext: (locale: string) => ({
+    context: { headers: { "Accept-Language": locale } },
+  }),
 }));
 
 vi.mock("next/image", () => ({
   default: ({ alt, ...props }: { alt: string }) => <img alt={alt} {...props} />,
+}));
+
+vi.mock("@/components/layout", () => ({
+  AlternateUrlsSync: () => null,
 }));
 
 class NotFoundError extends Error {}
@@ -20,9 +29,7 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-const { query } = await import("@/lib/apollo");
 const { notFound } = await import("next/navigation");
-const mockedQuery = vi.mocked(query);
 const mockedNotFound = vi.mocked(notFound);
 
 const fullProduct = {
@@ -58,12 +65,15 @@ const fullProduct = {
       position: 0,
     },
   ],
+  alternateSlugs: [
+    { locale: "EN", value: "head-speed-pro" },
+    { locale: "FR", value: "head-speed-pro-fr" },
+    { locale: "NL", value: "head-speed-pro-nl" },
+  ],
 };
 
 const mockProduct = (product: object | null) => {
-  mockedQuery.mockResolvedValue({
-    data: { product },
-  } as unknown as Awaited<ReturnType<typeof query>>);
+  mockQuery.mockResolvedValue({ data: { product } });
 };
 
 const makeParams = (slug: string) =>

@@ -1,12 +1,55 @@
-import { getClient, localizedContext } from "@/lib/apollo";
-import { GET_PRODUCT } from "./_queries/product";
+import { getProduct } from "./_queries/product";
 import Image from "next/image";
 import { Badge } from "@/components/ui";
+import { AlternateUrlsSync } from "@/components/layout";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { routing } from "@/i18n/routing";
 
 type ProductPageProps = {
   params: Promise<{ locale: string; slug: string }>;
+};
+
+const buildSlugsByLocale = (
+  alternateSlugs: { locale: string; value: string }[],
+) =>
+  Object.fromEntries(
+    alternateSlugs.map((alt) => [alt.locale.toLowerCase(), alt.value]),
+  );
+
+export const generateMetadata = async (
+  props: ProductPageProps,
+): Promise<Metadata> => {
+  const { locale, slug } = await props.params;
+  const product = await getProduct(slug, locale);
+
+  if (!product) return {};
+
+  const slugsByLocale = buildSlugsByLocale(product.alternateSlugs ?? []);
+
+  return {
+    title: `${product.name} — Padelicense Shop`,
+    description: product.description ?? undefined,
+    alternates: {
+      canonical: `/${locale}/products/${slug}`,
+      languages: {
+        ...Object.fromEntries(
+          routing.locales.map((loc) => [
+            loc,
+            `/${loc}/products/${slugsByLocale[loc] ?? slug}`,
+          ]),
+        ),
+        "x-default": `/${routing.defaultLocale}/products/${slugsByLocale[routing.defaultLocale] ?? slug}`,
+      },
+    },
+    openGraph: {
+      title: product.name,
+      description: product.description ?? undefined,
+      type: "website",
+      locale,
+    },
+  };
 };
 
 const formatPrice = (cents: number, locale: string): string => {
@@ -22,13 +65,7 @@ const ProductPage = async (props: ProductPageProps) => {
   const t = await getTranslations("common");
   const tProducts = await getTranslations("products");
 
-  const { data } = await getClient().query({
-    query: GET_PRODUCT,
-    variables: { slug },
-    ...localizedContext(locale),
-  });
-
-  const product = data?.product;
+  const product = await getProduct(slug, locale);
 
   if (!product) {
     notFound();
@@ -39,8 +76,41 @@ const ProductPage = async (props: ProductPageProps) => {
   );
   const mainImage = images[0];
 
+  const alternateUrls = Object.fromEntries(
+    (product.alternateSlugs ?? []).map((alt) => [
+      alt.locale.toLowerCase(),
+      `/products/${alt.value}`,
+    ]),
+  );
+
+  const defaultVariant = product.variants?.[0];
+  const inStock = defaultVariant ? defaultVariant.stockQuantity > 0 : false;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    brand: { "@type": "Brand", name: product.brand },
+    image: mainImage?.imageUrl,
+    offers: {
+      "@type": "Offer",
+      price: product.basePriceCents / 100,
+      priceCurrency: "EUR",
+      availability: inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      url: `/${locale}/products/${slug}`,
+    },
+  };
+
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <AlternateUrlsSync urls={alternateUrls} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="relative aspect-square bg-foreground-light rounded-xl overflow-hidden">
           {mainImage ? (
