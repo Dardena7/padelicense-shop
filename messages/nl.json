@@ -9,6 +9,7 @@
     "noImageAvailable": "Geen afbeelding beschikbaar",
     "noProductsFound": "Geen producten gevonden.",
     "addToCart": "In winkelwagen",
+    "itemAdded": "Toegevoegd!",
     "viewDetails": "Bekijk details"
   },
   "nav": {
@@ -48,6 +49,14 @@
       "logout": "Uitloggen",
       "memberSince": "Lid sinds {date}"
     }
+  },
+  "cart": {
+    "title": "Uw winkelwagen",
+    "empty": "Uw winkelwagen is leeg",
+    "continueShopping": "Verder winkelen",
+    "remove": "Verwijderen",
+    "total": "Totaal",
+    "checkout": "Afrekenen"
   },
   "products": {
     "title": "Producten",

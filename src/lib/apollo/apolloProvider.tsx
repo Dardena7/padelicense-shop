@@ -7,7 +7,7 @@ import {
   ApolloClient,
   InMemoryCache,
 } from "@apollo/client-integration-nextjs";
-import { tokenStore } from "./tokenStore";
+import { tokenStore } from "../auth";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";

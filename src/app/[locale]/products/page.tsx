@@ -1,7 +1,7 @@
 import { getClient, localizedContext } from "@/lib/apollo";
 import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
-import { ProductCard } from "@/components/ui";
+import { ProductCard, AddToCartAction } from "@/components/ui";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
@@ -72,6 +72,14 @@ const ProductsPage = async (props: ProductsPageProps) => {
                 imageAlt={firstImage?.altText ?? undefined}
                 featured={product.featured}
                 inStock={inStock}
+                action={
+                  defaultVariant && (
+                    <AddToCartAction
+                      productVariantId={defaultVariant.id}
+                      inStock={inStock}
+                    />
+                  )
+                }
               />
             );
           })}

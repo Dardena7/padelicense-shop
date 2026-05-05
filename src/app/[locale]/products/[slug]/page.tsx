@@ -2,6 +2,7 @@ import { getProduct } from "./_queries/product";
 import Image from "next/image";
 import { Badge } from "@/components/ui";
 import { AlternateUrlsSync } from "@/components/layout";
+import { AddToCartButton } from "./_components/AddToCartButton";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -148,6 +149,13 @@ const ProductPage = async (props: ProductPageProps) => {
 
           {product.description && (
             <p className="text-muted leading-relaxed">{product.description}</p>
+          )}
+
+          {defaultVariant && (
+            <AddToCartButton
+              productVariantId={defaultVariant.id}
+              inStock={inStock}
+            />
           )}
 
           {product.variants && product.variants.length > 1 && (

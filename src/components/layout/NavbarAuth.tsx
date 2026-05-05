@@ -2,11 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { useAuth } from "@/lib/authContext";
+import { useAuthContext } from "@/lib/auth";
 
 export const NavbarAuth = () => {
   const t = useTranslations("nav");
-  const { user, isLoading } = useAuth();
+  const { user, isLoading } = useAuthContext();
 
   if (isLoading) return null;
 

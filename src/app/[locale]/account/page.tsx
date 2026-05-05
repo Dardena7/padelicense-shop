@@ -2,13 +2,13 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth } from "@/lib/authContext";
+import { useAuthContext } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui";
 
 const AccountPage = () => {
   const t = useTranslations("auth.account");
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, logout } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {

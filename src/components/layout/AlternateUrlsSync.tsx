@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLocalization } from "@/lib/localizationContext";
+import { useLocalizationContext } from "@/lib/localization";
 
 type AlternateUrlsSyncProps = {
   urls: Record<string, string>;
@@ -9,7 +9,7 @@ type AlternateUrlsSyncProps = {
 
 export const AlternateUrlsSync = (props: AlternateUrlsSyncProps) => {
   const { urls } = props;
-  const { setAlternateUrls } = useLocalization();
+  const { setAlternateUrls } = useLocalizationContext();
 
   useEffect(() => {
     setAlternateUrls(urls);

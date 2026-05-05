@@ -9,6 +9,7 @@
     "noImageAvailable": "Aucune image disponible",
     "noProductsFound": "Aucun produit trouvé.",
     "addToCart": "Ajouter au panier",
+    "itemAdded": "Ajouté !",
     "viewDetails": "Voir les détails"
   },
   "nav": {
@@ -48,6 +49,14 @@
       "logout": "Se déconnecter",
       "memberSince": "Membre depuis le {date}"
     }
+  },
+  "cart": {
+    "title": "Votre panier",
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer vos achats",
+    "remove": "Supprimer",
+    "total": "Total",
+    "checkout": "Passer à la caisse"
   },
   "products": {
     "title": "Produits",

@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { useAuth, AuthError } from "@/lib/authContext";
+import { useAuthContext, AuthError } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
 import { Button, Input } from "@/components/ui";
 
 const LoginPage = () => {
   const t = useTranslations("auth.login");
-  const { login } = useAuth();
+  const { login } = useAuthContext();
   const router = useRouter();
 
   const [email, setEmail] = useState("");

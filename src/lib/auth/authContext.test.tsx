@@ -1,6 +1,6 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthProvider, useAuth } from "./authContext";
+import { AuthProvider, useAuthContext } from "./authContext";
 import { tokenStore } from "./tokenStore";
 
 const mockFetch = vi.fn();
@@ -14,7 +14,7 @@ vi.mock("./tokenStore", () => ({
 }));
 
 const TestConsumer = () => {
-  const { user, isLoading, login, signup, logout } = useAuth();
+  const { user, isLoading, login, signup, logout } = useAuthContext();
 
   if (isLoading) return <p>Loading</p>;
 

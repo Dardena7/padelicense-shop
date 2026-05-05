@@ -31,4 +31,4 @@ export const LocalizationProvider = (props: {
   );
 };
 
-export const useLocalization = () => useContext(LocalizationContext);
+export const useLocalizationContext = () => useContext(LocalizationContext);

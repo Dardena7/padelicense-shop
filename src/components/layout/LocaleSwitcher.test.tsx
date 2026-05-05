@@ -2,7 +2,7 @@ import { render } from "@/test/render";
 import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { LocaleSwitcher } from "./LocaleSwitcher";
-import { LocalizationProvider } from "@/lib/localizationContext";
+import { LocalizationProvider } from "@/lib/localization";
 
 const mockReplace = vi.fn();
 
@@ -36,10 +36,10 @@ const renderWithLocalization = (
 
 // Helper to set alternate urls in context
 import { useEffect } from "react";
-import { useLocalization } from "@/lib/localizationContext";
+import { useLocalizationContext } from "@/lib/localization";
 
 const SetUrls = (props: { urls: Record<string, string> }) => {
-  const { setAlternateUrls } = useLocalization();
+  const { setAlternateUrls } = useLocalizationContext();
   useEffect(() => {
     setAlternateUrls(props.urls);
   }, [props.urls, setAlternateUrls]);

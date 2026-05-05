@@ -147,6 +147,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -160,6 +161,6 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext);
 
 export { AuthError };
