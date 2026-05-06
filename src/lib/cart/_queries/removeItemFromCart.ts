@@ -15,7 +15,10 @@ export const REMOVE_ITEM_FROM_CART = graphql(`
             name
             effectivePrice
             stockQuantity
-            images {
+          product {
+            id
+            name
+          }            images {
               imageUrl
               altText
             }

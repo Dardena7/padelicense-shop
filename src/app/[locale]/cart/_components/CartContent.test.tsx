@@ -40,6 +40,7 @@ describe("CartContent", () => {
             name: "340g",
             effectivePrice: 24990,
             stockQuantity: 10,
+            product: { id: "p1", name: "Head Speed Pro" },
             images: [],
           },
         },
@@ -50,7 +51,7 @@ describe("CartContent", () => {
 
     render(<CartContent />);
 
-    expect(screen.getByText("340g")).toBeInTheDocument();
+    expect(screen.getByText("Head Speed Pro — 340g")).toBeInTheDocument();
     expect(screen.getByText("Total: €499.80")).toBeInTheDocument();
   });
 

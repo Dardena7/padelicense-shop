@@ -47,7 +47,7 @@ export const PaymentForm = (props: PaymentFormProps) => {
 
       {error && <p className="text-danger text-sm">{error}</p>}
 
-      <Button type="submit" size="lg" disabled={!stripe || isProcessing}>
+      <Button type="submit" size="lg" disabled={!stripe || isProcessing} data-testid="pay-button">
         {isProcessing ? t("processing") : t("pay", { amount })}
       </Button>
     </form>

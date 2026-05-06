@@ -14,6 +14,10 @@ export const GET_CART = graphql(`
           name
           effectivePrice
           stockQuantity
+          product {
+            id
+            name
+          }
           images {
             imageUrl
             altText

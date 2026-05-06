@@ -18,9 +18,12 @@ export const CartItemRow = (props: CartItemRowProps) => {
   const variant = item.productVariant;
 
   return (
-    <div className="flex items-center gap-4 py-4 border-b border-border">
+    <div data-testid="cart-item" className="flex items-center gap-4 py-4 border-b border-border">
       <div className="flex-1">
-        <p className="font-medium text-foreground">{variant.name}</p>
+        <p data-testid="cart-item-name" className="font-medium text-foreground">
+          {variant.product.name}
+          {variant.name !== "Default" && ` — ${variant.name}`}
+        </p>
         <p className="text-sm text-muted">
           {formatPrice(variant.effectivePrice, locale)}
         </p>
@@ -30,17 +33,19 @@ export const CartItemRow = (props: CartItemRowProps) => {
         <Button
           variant="outline"
           size="sm"
+          data-testid={`cart-item-decrease-${item.id}`}
           onClick={() => updateItem(item.id, Math.max(1, item.quantity - 1))}
           disabled={item.quantity <= 1}
         >
           -
         </Button>
-        <span className="w-8 text-center text-sm font-medium">
+        <span data-testid="cart-item-quantity" className="w-8 text-center text-sm font-medium">
           {item.quantity}
         </span>
         <Button
           variant="outline"
           size="sm"
+          data-testid={`cart-item-increase-${item.id}`}
           onClick={() => updateItem(item.id, item.quantity + 1)}
         >
           +
