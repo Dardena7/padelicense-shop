@@ -43,11 +43,15 @@
     },
     "account": {
       "title": "Mijn account",
-      "name": "Naam",
+      "profile": "Profiel",
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
       "email": "Email",
-      "role": "Rol",
-      "logout": "Uitloggen",
-      "memberSince": "Lid sinds {date}"
+      "phone": "Telefoon",
+      "edit": "Profiel bewerken",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "logout": "Uitloggen"
     }
   },
   "cart": {

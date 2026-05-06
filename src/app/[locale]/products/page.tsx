@@ -47,7 +47,7 @@ const ProductsPage = async (props: ProductsPageProps) => {
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-12">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
 
       {products.length === 0 ? (

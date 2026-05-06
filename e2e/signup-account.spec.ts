@@ -1,20 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { cleanupTestData } from "./helpers/cleanup";
 
-const TEST_EMAIL = "signup-test@e2e-test.com";
 const TEST_PASSWORD = "Password123!";
+const uniqueEmail = () => `signup-${Date.now()}@e2e-test.com`;
 
 test.describe("Signup + Account management", () => {
-  test.beforeAll(() => {
-    cleanupTestData();
-  });
+  test("signup, edit profile, manage addresses, change default", async ({ page }) => {
+    const email = uniqueEmail();
 
-  test("signup, manage addresses, change default", async ({ page }) => {
     // --- Signup ---
     await page.goto("/en/signup");
     await page.getByLabel("First name").fill("John");
     await page.getByLabel("Last name").fill("Doe");
-    await page.getByLabel("Email").fill(TEST_EMAIL);
+    await page.getByLabel("Email").fill(email);
     await page.getByLabel("Password", { exact: true }).fill(TEST_PASSWORD);
     await page.getByLabel("Confirm password").fill(TEST_PASSWORD);
     await page.getByRole("button", { name: "Create account" }).click();
@@ -26,10 +23,25 @@ test.describe("Signup + Account management", () => {
     // --- Navigate to account ---
     await page.getByRole("link", { name: "Account" }).click();
     await expect(page.getByRole("heading", { name: "My account" })).toBeVisible();
-    await expect(page.getByText("John Doe")).toBeVisible();
-    await expect(page.getByText(TEST_EMAIL)).toBeVisible();
 
-    // --- Addresses tab (default) - empty ---
+    // --- Profile tab (default) should show user info ---
+    await expect(page.getByText("John")).toBeVisible();
+    await expect(page.getByText("Doe")).toBeVisible();
+    await expect(page.getByText(email)).toBeVisible();
+    await expect(page.getByText("—")).toBeVisible();
+
+    // --- Edit profile ---
+    await page.getByRole("button", { name: "Edit profile" }).click();
+    await page.getByLabel("First name").fill("Johnny");
+    await page.getByLabel("Phone").fill("+32 470 123456");
+    await page.getByRole("button", { name: "Save" }).click();
+
+    // Profile should be updated
+    await expect(page.getByText("Johnny")).toBeVisible();
+    await expect(page.getByText("+32 470 123456")).toBeVisible();
+
+    // --- Switch to Addresses tab ---
+    await page.getByRole("button", { name: "My addresses" }).click();
     await expect(page.getByText("No addresses saved yet.")).toBeVisible();
 
     // --- Add first address ---
@@ -41,7 +53,6 @@ test.describe("Signup + Account management", () => {
     await page.getByLabel("Country").selectOption("BE");
     await page.getByRole("button", { name: "Save" }).click();
 
-    // First address should be visible and default
     await expect(page.getByText("Home")).toBeVisible();
     await expect(page.getByText("Rue de la Loi 1")).toBeVisible();
     await expect(page.getByText("Default")).toBeVisible();
@@ -55,12 +66,10 @@ test.describe("Signup + Account management", () => {
     await page.getByLabel("Country").selectOption("BE");
     await page.getByRole("button", { name: "Save" }).click();
 
-    // Both addresses should be visible
-    await expect(page.getByText("Home")).toBeVisible();
     await expect(page.getByText("Work")).toBeVisible();
     await expect(page.getByText("Avenue Louise 5")).toBeVisible();
 
-    // --- Update second address (second Edit button) ---
+    // --- Update second address ---
     await page.getByRole("button", { name: "Edit" }).nth(1).click();
     await page.getByLabel("Address line 1").fill("Avenue Louise 10");
     await page.getByRole("button", { name: "Save" }).click();
@@ -74,7 +83,6 @@ test.describe("Signup + Account management", () => {
     await expect(radios.nth(0)).toBeChecked();
     await expect(radios.nth(1)).not.toBeChecked();
 
-    // Click second radio to set Work as default
     await radios.nth(1).click();
     await expect(radios.nth(1)).toBeChecked();
     await expect(radios.nth(0)).not.toBeChecked();

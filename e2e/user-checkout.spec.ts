@@ -1,16 +1,13 @@
 import { test, expect } from "@playwright/test";
-import { cleanupTestData } from "./helpers/cleanup";
 import { fillStripeCardAndPay } from "./helpers/stripe";
 
-const TEST_EMAIL = "user-checkout@e2e-test.com";
 const TEST_PASSWORD = "Password123!";
+const uniqueEmail = () => `checkout-${Date.now()}@e2e-test.com`;
 
 test.describe("User checkout (guest → signup → checkout → verify order)", () => {
-  test.beforeAll(() => {
-    cleanupTestData();
-  });
-
   test("add to cart as guest, signup, checkout with saved address, verify order", async ({ page }) => {
+    const email = uniqueEmail();
+
     // --- Add first product as guest ---
     await page.goto("/en/products/head-speed-pro");
     await page.getByRole("button", { name: "Add to cart" }).click();
@@ -30,7 +27,7 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
 
     await page.getByLabel("First name").fill("Jane");
     await page.getByLabel("Last name").fill("Smith");
-    await page.getByLabel("Email").fill(TEST_EMAIL);
+    await page.getByLabel("Email").fill(email);
     await page.getByLabel("Password", { exact: true }).fill(TEST_PASSWORD);
     await page.getByLabel("Confirm password").fill(TEST_PASSWORD);
     await page.getByRole("button", { name: "Create account" }).click();
@@ -44,6 +41,7 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
 
     // --- Create an address via account ---
     await page.getByRole("link", { name: "Account" }).click();
+    await page.getByRole("button", { name: "My addresses" }).click();
     await page.getByRole("button", { name: "Add address" }).click();
     await page.getByLabel("Label (optional)").fill("Home");
     await page.getByLabel("Address line 1").fill("Grand Place 1");

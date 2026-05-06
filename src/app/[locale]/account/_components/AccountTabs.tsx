@@ -29,7 +29,7 @@ export const AccountTabs = (props: AccountTabsProps) => {
           </button>
         ))}
       </div>
-      {children[activeTab]}
+      <div className="w-full">{children[activeTab]}</div>
     </div>
   );
 };

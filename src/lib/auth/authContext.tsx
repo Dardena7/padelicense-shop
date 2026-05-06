@@ -16,6 +16,7 @@ type User = {
   email: string;
   firstName: string;
   lastName: string;
+  phone: string | null;
   role: string;
 };
 
@@ -25,6 +26,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   signup: (params: SignupParams) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (updates: Partial<User>) => void;
 };
 
 type SignupParams = {
@@ -43,6 +45,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   signup: async () => {},
   logout: async () => {},
+  updateUser: () => {},
 });
 
 const mapUser = (data: Record<string, string>): User => ({
@@ -50,6 +53,7 @@ const mapUser = (data: Record<string, string>): User => ({
   email: data.email,
   firstName: data.first_name,
   lastName: data.last_name,
+  phone: data.phone || null,
   role: data.role,
 });
 
@@ -150,12 +154,16 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const updateUser = useCallback((updates: Partial<User>) => {
+    setUser((prev) => (prev ? { ...prev, ...updates } : null));
+  }, []);
+
   useEffect(() => {
     refreshToken();
   }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, signup, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

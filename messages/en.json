@@ -43,11 +43,15 @@
     },
     "account": {
       "title": "My account",
-      "name": "Name",
+      "profile": "Profile",
+      "firstName": "First name",
+      "lastName": "Last name",
       "email": "Email",
-      "role": "Role",
-      "logout": "Log out",
-      "memberSince": "Member since {date}"
+      "phone": "Phone",
+      "edit": "Edit profile",
+      "save": "Save",
+      "cancel": "Cancel",
+      "logout": "Log out"
     }
   },
   "cart": {
