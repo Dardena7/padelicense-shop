@@ -5,6 +5,7 @@ import { AlternateUrlsSync } from "@/components/layout";
 import { AddToCartButton } from "./_components/AddToCartButton";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { formatPrice } from "@/lib/utils";
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
 
@@ -51,13 +52,6 @@ export const generateMetadata = async (
       locale,
     },
   };
-};
-
-const formatPrice = (cents: number, locale: string): string => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "EUR",
-  }).format(cents / 100);
 };
 
 const ProductPage = async (props: ProductPageProps) => {

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "../Badge/Badge";
+import { formatPrice } from "@/lib/utils";
 
 type ProductCardProps = {
   name: string;
@@ -13,13 +14,6 @@ type ProductCardProps = {
   featured?: boolean;
   inStock?: boolean;
   action?: React.ReactNode;
-};
-
-const formatPrice = (cents: number, locale: string): string => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "EUR",
-  }).format(cents / 100);
 };
 
 export const ProductCard = (props: ProductCardProps) => {

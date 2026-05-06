@@ -58,6 +58,66 @@
     "total": "Total",
     "checkout": "Proceed to checkout"
   },
+  "checkout": {
+    "title": "Checkout",
+    "shippingAddress": "Shipping address",
+    "selectAddress": "Select an address",
+    "newAddress": "New address",
+    "orNewAddress": "Or add a new address",
+    "useThisAddress": "Use this address",
+    "label": "Label (optional)",
+    "line1": "Address line 1",
+    "line2": "Address line 2 (optional)",
+    "city": "City",
+    "postalCode": "Postal code",
+    "country": "Country",
+    "email": "Email",
+    "payment": "Payment",
+    "pay": "Pay {amount}",
+    "processing": "Processing...",
+    "error": "An error occurred. Please try again.",
+    "cartIssues": "Some items in your cart need attention",
+    "emptyCart": "Your cart is empty",
+    "productUnavailable": "{name} is no longer available",
+    "insufficientStock": "{name}: only {available} left (you requested {requested})",
+    "backToCart": "Back to cart"
+  },
+  "confirmation": {
+    "title": "Order confirmed!",
+    "orderNumber": "Order #{number}",
+    "thankYou": "Thank you for your purchase. You will receive a confirmation email shortly.",
+    "continueShopping": "Continue shopping"
+  },
+  "account": {
+    "addresses": {
+      "title": "My addresses",
+      "empty": "No addresses saved yet.",
+      "add": "Add address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "confirmDelete": "Are you sure you want to delete this address?",
+      "default": "Default",
+      "setDefault": "Set as default"
+    },
+    "orders": {
+      "title": "My orders",
+      "empty": "No orders yet.",
+      "orderNumber": "Order #{number}",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "items": "Items",
+      "statuses": {
+        "PENDING": "Pending",
+        "PAID": "Paid",
+        "SHIPPED": "Shipped",
+        "DELIVERED": "Delivered",
+        "CANCELLED": "Cancelled"
+      }
+    }
+  },
   "products": {
     "title": "Products",
     "description": "Browse our selection of premium padel equipment",

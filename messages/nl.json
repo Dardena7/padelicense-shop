@@ -58,6 +58,66 @@
     "total": "Totaal",
     "checkout": "Afrekenen"
   },
+  "checkout": {
+    "title": "Afrekenen",
+    "shippingAddress": "Verzendadres",
+    "selectAddress": "Selecteer een adres",
+    "newAddress": "Nieuw adres",
+    "orNewAddress": "Of een nieuw adres toevoegen",
+    "useThisAddress": "Dit adres gebruiken",
+    "label": "Label (optioneel)",
+    "line1": "Adresregel 1",
+    "line2": "Adresregel 2 (optioneel)",
+    "city": "Stad",
+    "postalCode": "Postcode",
+    "country": "Land",
+    "email": "Email",
+    "payment": "Betaling",
+    "pay": "Betaal {amount}",
+    "processing": "Verwerken...",
+    "error": "Er is een fout opgetreden. Probeer het opnieuw.",
+    "cartIssues": "Sommige artikelen in uw winkelwagen vereisen aandacht",
+    "emptyCart": "Uw winkelwagen is leeg",
+    "productUnavailable": "{name} is niet meer beschikbaar",
+    "insufficientStock": "{name}: slechts {available} beschikbaar (u vroeg {requested})",
+    "backToCart": "Terug naar winkelwagen"
+  },
+  "confirmation": {
+    "title": "Bestelling bevestigd!",
+    "orderNumber": "Bestelling #{number}",
+    "thankYou": "Bedankt voor uw aankoop. U ontvangt binnenkort een bevestigingsmail.",
+    "continueShopping": "Verder winkelen"
+  },
+  "account": {
+    "addresses": {
+      "title": "Mijn adressen",
+      "empty": "Nog geen adressen opgeslagen.",
+      "add": "Adres toevoegen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "confirmDelete": "Weet u zeker dat u dit adres wilt verwijderen?",
+      "default": "Standaard",
+      "setDefault": "Als standaard instellen"
+    },
+    "orders": {
+      "title": "Mijn bestellingen",
+      "empty": "Nog geen bestellingen.",
+      "orderNumber": "Bestelling #{number}",
+      "date": "Datum",
+      "status": "Status",
+      "total": "Totaal",
+      "items": "Artikelen",
+      "statuses": {
+        "PENDING": "In afwachting",
+        "PAID": "Betaald",
+        "SHIPPED": "Verzonden",
+        "DELIVERED": "Geleverd",
+        "CANCELLED": "Geannuleerd"
+      }
+    }
+  },
   "products": {
     "title": "Producten",
     "description": "Bekijk ons assortiment premium padel uitrusting",

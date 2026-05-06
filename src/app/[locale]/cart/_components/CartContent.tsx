@@ -4,14 +4,8 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCartContext } from "@/lib/cart";
 import { Button } from "@/components/ui";
+import { formatPrice } from "@/lib/utils";
 import { CartItemRow } from "./CartItemRow";
-
-const formatPrice = (cents: number, locale: string): string => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "EUR",
-  }).format(cents / 100);
-};
 
 export const CartContent = () => {
   const t = useTranslations("cart");
@@ -45,9 +39,9 @@ export const CartContent = () => {
         <p className="text-lg font-bold text-foreground">
           {t("total")}: {formatPrice(totalCents, locale)}
         </p>
-        <Button size="lg" disabled>
-          {t("checkout")}
-        </Button>
+        <Link href="/checkout">
+          <Button size="lg">{t("checkout")}</Button>
+        </Link>
       </div>
     </div>
   );

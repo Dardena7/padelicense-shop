@@ -30,6 +30,7 @@ type CartContextType = {
   addItem: (productVariantId: string, quantity?: number) => Promise<void>;
   updateItem: (cartItemId: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextType>({
@@ -40,6 +41,7 @@ const CartContext = createContext<CartContextType>({
   addItem: async () => {},
   updateItem: async () => {},
   removeItem: async () => {},
+  clearCart: () => {},
 });
 
 export const CartProvider = (props: { children: React.ReactNode }) => {
@@ -98,6 +100,9 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
         updateCartState(data?.claimGuestCart?.cart);
         cartStorage.clearGuestUuid();
         setIsLoading(false);
+      }).catch(() => {
+        cartStorage.clearGuestUuid();
+        loadCart();
       });
       return;
     }
@@ -169,6 +174,11 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
     [user, removeItemMutation, updateCartState],
   );
 
+  const clearCart = useCallback(() => {
+    setItems([]);
+    setTotalCents(0);
+  }, []);
+
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -181,6 +191,7 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
         addItem,
         updateItem,
         removeItem,
+        clearCart,
       }}
     >
       {children}

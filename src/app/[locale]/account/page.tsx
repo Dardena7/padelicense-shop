@@ -5,9 +5,14 @@ import { useTranslations } from "next-intl";
 import { useAuthContext } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui";
+import { AccountTabs } from "./_components/AccountTabs";
+import { AddressesTab } from "./_components/AddressesTab";
+import { OrdersTab } from "./_components/OrdersTab";
 
 const AccountPage = () => {
   const t = useTranslations("auth.account");
+  const tAddresses = useTranslations("account.addresses");
+  const tOrders = useTranslations("account.orders");
   const { user, isLoading, logout } = useAuthContext();
   const router = useRouter();
 
@@ -53,6 +58,11 @@ const AccountPage = () => {
             </div>
           </div>
         </div>
+
+        <AccountTabs labels={[tAddresses("title"), tOrders("title")]}>
+          <AddressesTab />
+          <OrdersTab />
+        </AccountTabs>
 
         <Button variant="outline" onClick={handleLogout}>
           {t("logout")}

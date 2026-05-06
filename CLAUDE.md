@@ -43,6 +43,11 @@
 - `_queries/` — GraphQL queries colocated with pages
 - `_hooks/` — hooks for client components
 
+## GraphQL
+- Always request `id` on types that implement Node — Apollo cache needs it to normalize and merge results across queries
+- `lib/` only contains global contexts and config (auth, cart, apollo, stripe), not feature-specific hooks
+- Feature hooks (`_hooks/`) live colocated with the page that uses them
+
 ## API
 - Server Components use `getClient().query()` from `@/lib/apollo` with `context: { headers: { "Accept-Language": locale } }`
 - Client Components use hooks with `useSuspenseQuery` via ApolloProvider (with auth)

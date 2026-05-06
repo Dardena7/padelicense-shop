@@ -58,6 +58,66 @@
     "total": "Total",
     "checkout": "Passer à la caisse"
   },
+  "checkout": {
+    "title": "Paiement",
+    "shippingAddress": "Adresse de livraison",
+    "selectAddress": "Sélectionner une adresse",
+    "newAddress": "Nouvelle adresse",
+    "orNewAddress": "Ou ajouter une nouvelle adresse",
+    "useThisAddress": "Utiliser cette adresse",
+    "label": "Libellé (optionnel)",
+    "line1": "Adresse ligne 1",
+    "line2": "Adresse ligne 2 (optionnel)",
+    "city": "Ville",
+    "postalCode": "Code postal",
+    "country": "Pays",
+    "email": "Email",
+    "payment": "Paiement",
+    "pay": "Payer {amount}",
+    "processing": "Traitement en cours...",
+    "error": "Une erreur est survenue. Veuillez réessayer.",
+    "cartIssues": "Certains articles de votre panier nécessitent votre attention",
+    "emptyCart": "Votre panier est vide",
+    "productUnavailable": "{name} n'est plus disponible",
+    "insufficientStock": "{name} : seulement {available} disponible(s) (vous en avez demandé {requested})",
+    "backToCart": "Retour au panier"
+  },
+  "confirmation": {
+    "title": "Commande confirmée !",
+    "orderNumber": "Commande n°{number}",
+    "thankYou": "Merci pour votre achat. Vous recevrez un email de confirmation sous peu.",
+    "continueShopping": "Continuer vos achats"
+  },
+  "account": {
+    "addresses": {
+      "title": "Mes adresses",
+      "empty": "Aucune adresse enregistrée.",
+      "add": "Ajouter une adresse",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette adresse ?",
+      "default": "Principale",
+      "setDefault": "Définir comme principale"
+    },
+    "orders": {
+      "title": "Mes commandes",
+      "empty": "Aucune commande pour le moment.",
+      "orderNumber": "Commande n°{number}",
+      "date": "Date",
+      "status": "Statut",
+      "total": "Total",
+      "items": "Articles",
+      "statuses": {
+        "PENDING": "En attente",
+        "PAID": "Payée",
+        "SHIPPED": "Expédiée",
+        "DELIVERED": "Livrée",
+        "CANCELLED": "Annulée"
+      }
+    }
+  },
   "products": {
     "title": "Produits",
     "description": "Parcourez notre sélection d'équipement de padel premium",

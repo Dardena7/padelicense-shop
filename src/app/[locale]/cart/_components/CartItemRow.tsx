@@ -3,17 +3,11 @@
 import { useTranslations, useLocale } from "next-intl";
 import { useCartContext } from "@/lib/cart";
 import { Button } from "@/components/ui";
+import { formatPrice } from "@/lib/utils";
 import type { GetCartQuery } from "@/gql/graphql";
 
 type CartItemRowProps = {
   item: NonNullable<GetCartQuery["cart"]>["items"][number];
-};
-
-const formatPrice = (cents: number, locale: string): string => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "EUR",
-  }).format(cents / 100);
 };
 
 export const CartItemRow = (props: CartItemRowProps) => {
