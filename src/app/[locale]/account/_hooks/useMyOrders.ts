@@ -7,6 +7,7 @@ const GET_MY_ORDERS = graphql(`
       id
       orders {
         id
+        uuid
         number
         status
         totalCents

@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Padelicense Shop
+
+E-commerce storefront for padel equipment. Server-rendered Next.js 16 with Apollo Client, i18n (en/fr/nl), and Stripe checkout.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router), React 19
+- **Styling:** Tailwind CSS 4
+- **API:** Apollo Client 4, GraphQL Codegen
+- **i18n:** next-intl (en, fr, nl) with locale-aware routing
+- **Payments:** Stripe Elements (PaymentElement)
+- **Design System:** Storybook 10
+- **Tests:** Vitest + React Testing Library (86 tests), Playwright E2E (3 flows)
+
+## Architecture
+
+```
+src/
+  app/[locale]/            # Pages (App Router, Server Components by default)
+    products/              #   Catalogue + product detail
+    cart/                  #   Shopping cart
+    checkout/              #   Stripe checkout + confirmation
+    account/               #   Profile, addresses, orders (3 tabs)
+    login/ & signup/       #   Authentication
+  components/ui/           # Design system (Button, Input, Select, Badge, etc.)
+  lib/                     # Global contexts (auth, cart, apollo, stripe)
+  gql/                     # Auto-generated GraphQL types (do not edit)
+  i18n/                    # Routing & locale config
+messages/                  # Translation files (en.json, fr.json, nl.json)
+e2e/                       # Playwright E2E tests
+```
+
+**Conventions:**
+- Named exports only, no default exports
+- Props as `(props: Type) => { const { ... } = props; }`
+- `type` over `interface`
+- Queries in `_queries/` (Server Components), hooks in `_hooks/` (Client Components)
+- Always request `id` on GraphQL Node types (Apollo cache normalization)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- [padelicense-api](https://github.com/your-user/padelicense-api) running on port 3000
+
+### Setup
 
 ```bash
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Shop available at http://localhost:3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Development server (port 3001) |
+| `npm run build` | Production build |
+| `npm run test` | Unit tests (Vitest) |
+| `npm run test:e2e` | E2E tests (Playwright, requires API) |
+| `npm run lint` | ESLint |
+| `npm run format:check` | Prettier check |
+| `npm run typecheck` | TypeScript type checking |
+| `npm run codegen` | GraphQL Codegen (requires API) |
+| `npm run storybook` | Storybook dev server |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## E2E Test Coverage
 
-## Learn More
+| Flow | Steps |
+|------|-------|
+| **Signup + Account** | Signup, edit profile, add/edit addresses, change default, check orders |
+| **Guest Checkout** | Add products, modify cart, checkout with email + address, Stripe payment, confirmation |
+| **User Checkout** | Add to cart as guest, signup (cart claimed), save address, checkout, pay, verify order in account |
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See `.env.example` for required configuration.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | GraphQL API endpoint |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |

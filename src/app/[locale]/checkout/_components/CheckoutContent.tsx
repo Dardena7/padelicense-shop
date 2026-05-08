@@ -33,6 +33,7 @@ export const CheckoutContent = () => {
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [orderUuid, setOrderUuid] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [guestEmail, setGuestEmail] = useState("");
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
@@ -70,6 +71,7 @@ export const CheckoutContent = () => {
       if (result) {
         setClientSecret(result.clientSecret);
         setOrderNumber(result.order.number);
+        setOrderUuid(result.order.uuid);
       }
     } catch {
       setError(t("error"));
@@ -96,6 +98,7 @@ export const CheckoutContent = () => {
         if (result) {
           setClientSecret(result.clientSecret);
           setOrderNumber(result.order.number);
+          setOrderUuid(result.order.uuid);
         }
       } else {
         const result = await createGuestOrder(guestEmail, {
@@ -109,6 +112,7 @@ export const CheckoutContent = () => {
         if (result) {
           setClientSecret(result.clientSecret);
           setOrderNumber(result.order.number);
+          setOrderUuid(result.order.uuid);
         }
       }
     } catch {
@@ -119,7 +123,7 @@ export const CheckoutContent = () => {
   const handlePaymentSuccess = () => {
     clearCart();
     cartStorage.clearGuestUuid();
-    router.push(`/checkout/confirmation?order=${orderNumber}`);
+    router.push(`/checkout/confirmation?order=${orderNumber}&uuid=${orderUuid}`);
   };
 
   if (cartLoading || verifyLoading) {

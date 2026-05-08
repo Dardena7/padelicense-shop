@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Job 1 : Qualité du code
+  # Vérifie le style, le formatage, les types, et les vulnérabilités
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Installe Node avec la version du .nvmrc
+      # cache: npm → met en cache node_modules pour accélérer
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # npm ci = install depuis le lockfile exact (pas npm install)
+      # Plus rapide et reproductible
+      - name: Install dependencies
+        run: npm ci
+
+      # ESLint vérifie les erreurs de code (variables inutilisées, imports manquants, etc.)
+      - name: Lint
+        run: npm run lint
+
+      # Prettier vérifie que le formatage est cohérent (indentation, guillemets, etc.)
+      - name: Format check
+        run: npm run format:check
+
+      # TypeScript vérifie les types sans compiler — attrape les erreurs de type
+      - name: Type check
+        run: npm run typecheck
+
+      # Scanne les dépendances pour les vulnérabilités connues (CVE)
+      # --audit-level=high → ne bloque que sur high/critical, pas les low/moderate
+      - name: Security audit
+        run: npm audit --audit-level=high
+
+  # Job 2 : Tests unitaires
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test
+
+  # Job 3 : Build Next.js
+  # Vérifie que l'app compile en production (imports cassés, erreurs de build, etc.)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Le build Next.js a besoin de ces variables d'environnement
+      # même si elles sont fausses — sinon le build crash
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3000/graphql
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_fake_for_ci
+        run: npm run build
+
+  # Job 4 : Build Storybook
+  # Vérifie que toutes les stories compilent (composants UI cassés)
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook

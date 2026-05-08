@@ -7,6 +7,7 @@ const CREATE_GUEST_ORDER = graphql(`
     createGuestOrder(input: $input) {
       order {
         id
+        uuid
         number
         status
         totalCents

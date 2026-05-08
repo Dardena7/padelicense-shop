@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { fillStripeCardAndPay } from "./helpers/stripe";
+import { simulatePaymentSucceeded } from "./helpers/simulate-webhook";
 
 const TEST_PASSWORD = "Password123!";
 const uniqueEmail = () => `checkout-${Date.now()}@e2e-test.com`;
@@ -71,6 +72,13 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
     await expect(page.getByText("Order confirmed!")).toBeVisible({ timeout: 20000 });
     const orderText = await page.getByText(/Order #PAD-/).textContent();
     const orderNumber = orderText?.match(/PAD-[\w-]+/)?.[0];
+
+    // --- Simulate webhook (CI only, in local stripe listen handles it) ---
+    const url = new URL(page.url());
+    const orderUuid = url.searchParams.get("uuid");
+    if (orderUuid) {
+      await simulatePaymentSucceeded(orderUuid);
+    }
 
     // --- Verify order in account ---
     await page.getByRole("link", { name: "Account" }).click();

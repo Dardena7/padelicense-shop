@@ -6,6 +6,7 @@ const CREATE_USER_ORDER = graphql(`
     createUserOrder(input: $input) {
       order {
         id
+        uuid
         number
         status
         totalCents
