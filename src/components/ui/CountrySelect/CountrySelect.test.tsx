@@ -1,7 +1,8 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { render } from "@/test/render";
 import { describe, it, expect, vi } from "vitest";
-import { CountrySelect, getCountryName } from "./CountrySelect";
+import { CountrySelect } from "./CountrySelect";
+import { getCountryName } from "./getCountryName";
 
 describe("CountrySelect", () => {
   it("renders countries sorted alphabetically", () => {

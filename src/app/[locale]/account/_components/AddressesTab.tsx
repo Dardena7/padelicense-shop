@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useApolloClient } from "@apollo/client/react";
 import { useMyAddresses, useCreateAddress, useUpdateAddress, useDeleteAddress } from "../_hooks";
-import { Button, AddressForm, getCountryName } from "@/components/ui";
+import { Button, AddressForm } from "@/components/ui";
+import { getCountryName } from "@/components/ui/CountrySelect/getCountryName";
 
 type AddressFormValues = {
   label: string;

@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Input, Button, CountrySelect } from "@/components/ui";
+import dynamic from "next/dynamic";
+import { Input, Button } from "@/components/ui";
+
+const CountrySelect = dynamic(
+  () => import("@/components/ui/CountrySelect/CountrySelect").then((m) => m.CountrySelect),
+  { loading: () => <select className="w-full rounded-md border border-border px-3 py-2" disabled><option>...</option></select> },
+);
 
 type AddressFormValues = {
   label: string;

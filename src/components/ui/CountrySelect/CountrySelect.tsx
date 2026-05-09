@@ -50,9 +50,3 @@ export const CountrySelect = (props: CountrySelectProps) => {
     </Select>
   );
 };
-
-export const getCountryName = (code: string, locale: string): string => {
-  return countries.getName(code, locale, { select: "alias" })
-    ?? countries.getName(code, locale)
-    ?? code;
-};
