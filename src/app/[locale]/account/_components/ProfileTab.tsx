@@ -110,19 +110,27 @@ export const ProfileTab = () => {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs text-muted uppercase tracking-wider mb-1">{t("firstName")}</p>
+            <p className="text-xs text-muted uppercase tracking-wider mb-1">
+              {t("firstName")}
+            </p>
             <p className="font-medium text-foreground">{user.firstName}</p>
           </div>
           <div>
-            <p className="text-xs text-muted uppercase tracking-wider mb-1">{t("lastName")}</p>
+            <p className="text-xs text-muted uppercase tracking-wider mb-1">
+              {t("lastName")}
+            </p>
             <p className="font-medium text-foreground">{user.lastName}</p>
           </div>
           <div>
-            <p className="text-xs text-muted uppercase tracking-wider mb-1">{t("email")}</p>
+            <p className="text-xs text-muted uppercase tracking-wider mb-1">
+              {t("email")}
+            </p>
             <p className="font-medium text-foreground">{user.email}</p>
           </div>
           <div>
-            <p className="text-xs text-muted uppercase tracking-wider mb-1">{t("phone")}</p>
+            <p className="text-xs text-muted uppercase tracking-wider mb-1">
+              {t("phone")}
+            </p>
             <p className="font-medium text-foreground">{user.phone || "—"}</p>
           </div>
         </div>

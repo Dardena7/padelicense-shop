@@ -34,7 +34,9 @@ const AccountPage = () => {
     <main className="w-full max-w-2xl mx-auto px-6 py-12">
       <h1 className="text-2xl font-bold text-foreground mb-8">{t("title")}</h1>
 
-      <AccountTabs labels={[t("profile"), tAddresses("title"), tOrders("title")]}>
+      <AccountTabs
+        labels={[t("profile"), tAddresses("title"), tOrders("title")]}
+      >
         <ProfileTab />
         <AddressesTab />
         <OrdersTab />

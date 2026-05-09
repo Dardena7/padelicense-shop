@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
 import { OrderStatus } from "@/gql/graphql";
 
-const statusVariant = (status: OrderStatus): "default" | "success" | "danger" | "accent" => {
+const statusVariant = (
+  status: OrderStatus,
+): "default" | "success" | "danger" | "accent" => {
   switch (status) {
     case OrderStatus.Paid:
       return "success";
@@ -38,7 +40,10 @@ export const OrdersTab = () => {
   return (
     <div className="flex flex-col gap-4">
       {orders.map((order) => (
-        <div key={order.id} className="border border-border rounded-xl p-4 flex flex-col gap-3">
+        <div
+          key={order.id}
+          className="border border-border rounded-xl p-4 flex flex-col gap-3"
+        >
           <div className="flex justify-between items-center">
             <h3 className="font-medium text-foreground">
               {t("orderNumber", { number: order.number })}
@@ -50,7 +55,10 @@ export const OrdersTab = () => {
 
           <div className="grid grid-cols-2 gap-2 text-sm text-muted">
             <p>
-              {t("date")}: {new Intl.DateTimeFormat(locale).format(new Date(order.createdAt))}
+              {t("date")}:{" "}
+              {new Intl.DateTimeFormat(locale).format(
+                new Date(order.createdAt),
+              )}
             </p>
             <p className="text-right">
               {t("total")}: {formatPrice(order.totalCents, locale)}
@@ -58,7 +66,9 @@ export const OrdersTab = () => {
           </div>
 
           <div className="border-t border-border pt-3">
-            <p className="text-xs text-muted uppercase tracking-wider mb-2">{t("items")}</p>
+            <p className="text-xs text-muted uppercase tracking-wider mb-2">
+              {t("items")}
+            </p>
             {order.lineItems.map((item) => (
               <div key={item.id} className="flex justify-between text-sm">
                 <span className="text-foreground">

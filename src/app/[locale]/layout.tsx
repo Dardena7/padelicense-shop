@@ -38,9 +38,7 @@ export const generateMetadata = async (props: LayoutProps) => {
     alternates: {
       canonical: `/${locale}`,
       languages: {
-        ...Object.fromEntries(
-          routing.locales.map((loc) => [loc, `/${loc}`]),
-        ),
+        ...Object.fromEntries(routing.locales.map((loc) => [loc, `/${loc}`])),
         "x-default": `/${routing.defaultLocale}`,
       },
     },

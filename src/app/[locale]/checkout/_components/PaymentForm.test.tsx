@@ -8,7 +8,9 @@ const mockStripe = { confirmPayment: mockConfirmPayment };
 const mockElements = {};
 
 vi.mock("@stripe/react-stripe-js", () => ({
-  PaymentElement: () => <div data-testid="payment-element">Stripe Payment Element</div>,
+  PaymentElement: () => (
+    <div data-testid="payment-element">Stripe Payment Element</div>
+  ),
   useStripe: () => mockStripe,
   useElements: () => mockElements,
 }));

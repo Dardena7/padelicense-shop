@@ -59,8 +59,7 @@ const cartData = {
 };
 
 const TestConsumer = () => {
-  const { items, totalCents, itemCount, isLoading, addItem } =
-    useCartContext();
+  const { items, totalCents, itemCount, isLoading, addItem } = useCartContext();
 
   if (isLoading) return <p>Loading cart</p>;
 
@@ -150,9 +149,7 @@ describe("CartContext", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Items: 1")).toBeInTheDocument();
-        expect(cartStorage.setGuestUuid).toHaveBeenCalledWith(
-          "new-guest-uuid",
-        );
+        expect(cartStorage.setGuestUuid).toHaveBeenCalledWith("new-guest-uuid");
       });
     });
   });

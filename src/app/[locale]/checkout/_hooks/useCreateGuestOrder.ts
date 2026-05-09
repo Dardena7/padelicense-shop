@@ -28,7 +28,10 @@ type ShippingAddress = {
 export const useCreateGuestOrder = () => {
   const [mutate, { loading }] = useMutation(CREATE_GUEST_ORDER);
 
-  const createGuestOrder = async (guestEmail: string, shippingAddress: ShippingAddress) => {
+  const createGuestOrder = async (
+    guestEmail: string,
+    shippingAddress: ShippingAddress,
+  ) => {
     const guestUuid = cartStorage.getGuestUuid();
     if (!guestUuid) return null;
 

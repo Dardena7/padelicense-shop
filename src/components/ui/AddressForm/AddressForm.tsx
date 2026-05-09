@@ -6,8 +6,20 @@ import dynamic from "next/dynamic";
 import { Input, Button } from "@/components/ui";
 
 const CountrySelect = dynamic(
-  () => import("@/components/ui/CountrySelect/CountrySelect").then((m) => m.CountrySelect),
-  { loading: () => <select className="w-full rounded-md border border-border px-3 py-2" disabled><option>...</option></select> },
+  () =>
+    import("@/components/ui/CountrySelect/CountrySelect").then(
+      (m) => m.CountrySelect,
+    ),
+  {
+    loading: () => (
+      <select
+        className="w-full rounded-md border border-border px-3 py-2"
+        disabled
+      >
+        <option>...</option>
+      </select>
+    ),
+  },
 );
 
 type AddressFormValues = {
@@ -28,7 +40,13 @@ type AddressFormProps = {
 };
 
 export const AddressForm = (props: AddressFormProps) => {
-  const { initialValues, onSubmit, onCancel, submitLabel, showLabel = true } = props;
+  const {
+    initialValues,
+    onSubmit,
+    onCancel,
+    submitLabel,
+    showLabel = true,
+  } = props;
   const t = useTranslations("checkout");
 
   const [values, setValues] = useState<AddressFormValues>({

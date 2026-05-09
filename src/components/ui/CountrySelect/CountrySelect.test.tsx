@@ -7,7 +7,12 @@ import { getCountryName } from "./getCountryName";
 describe("CountrySelect", () => {
   it("renders countries sorted alphabetically", () => {
     render(
-      <CountrySelect label="Country" id="country" value="" onChange={() => {}} />,
+      <CountrySelect
+        label="Country"
+        id="country"
+        value=""
+        onChange={() => {}}
+      />,
     );
 
     const select = screen.getByLabelText("Country");
@@ -19,7 +24,12 @@ describe("CountrySelect", () => {
 
   it("selects the correct country by ISO code", () => {
     render(
-      <CountrySelect label="Country" id="country" value="BE" onChange={() => {}} />,
+      <CountrySelect
+        label="Country"
+        id="country"
+        value="BE"
+        onChange={() => {}}
+      />,
     );
 
     const select = screen.getByLabelText("Country") as HTMLSelectElement;
@@ -29,10 +39,17 @@ describe("CountrySelect", () => {
   it("calls onChange with country code", () => {
     const handleChange = vi.fn();
     render(
-      <CountrySelect label="Country" id="country" value="" onChange={handleChange} />,
+      <CountrySelect
+        label="Country"
+        id="country"
+        value=""
+        onChange={handleChange}
+      />,
     );
 
-    fireEvent.change(screen.getByLabelText("Country"), { target: { value: "FR" } });
+    fireEvent.change(screen.getByLabelText("Country"), {
+      target: { value: "FR" },
+    });
     expect(handleChange).toHaveBeenCalledWith("FR");
   });
 });

@@ -9,7 +9,9 @@ import {
 } from "react";
 import { tokenStore } from "./tokenStore";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/graphql", "") || "http://localhost:3000";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace("/graphql", "") ||
+  "http://localhost:3000";
 
 type User = {
   publicId: string;
@@ -165,7 +167,9 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, signup, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, signup, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

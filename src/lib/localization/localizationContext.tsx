@@ -14,9 +14,7 @@ const LocalizationContext = createContext<LocalizationContextType>({
   setAlternateUrls: () => {},
 });
 
-export const LocalizationProvider = (props: {
-  children: React.ReactNode;
-}) => {
+export const LocalizationProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const [alternateUrls, setAlternateUrlsState] = useState<AlternateUrls>({});
 

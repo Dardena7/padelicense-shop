@@ -42,9 +42,7 @@ const LoginPage = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {error && (
-            <p className="text-sm text-danger text-center">{error}</p>
-          )}
+          {error && <p className="text-sm text-danger text-center">{error}</p>}
 
           <Input
             id="email"

@@ -9,9 +9,8 @@ const getNestedValue = (obj: Messages, path: string): Messages => {
 
 vi.mock("next-intl/server", () => ({
   getTranslations: vi.fn(
-    async (namespace: string) =>
-      (key: string) =>
-        getNestedValue(messages, namespace)[key],
+    async (namespace: string) => (key: string) =>
+      getNestedValue(messages, namespace)[key],
   ),
   setRequestLocale: vi.fn(),
 }));

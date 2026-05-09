@@ -76,8 +76,7 @@ const mockProduct = (product: object | null) => {
   mockQuery.mockResolvedValue({ data: { product } });
 };
 
-const makeParams = (slug: string) =>
-  Promise.resolve({ locale: "en", slug });
+const makeParams = (slug: string) => Promise.resolve({ locale: "en", slug });
 
 describe("ProductPage", () => {
   it("displays product details", async () => {

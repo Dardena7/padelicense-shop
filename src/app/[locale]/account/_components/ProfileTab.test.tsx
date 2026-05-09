@@ -24,7 +24,10 @@ vi.mock("@/lib/auth", () => ({
 }));
 
 vi.mock("../_hooks", () => ({
-  useUpdateProfile: () => ({ updateProfile: mockUpdateProfile, loading: false }),
+  useUpdateProfile: () => ({
+    updateProfile: mockUpdateProfile,
+    loading: false,
+  }),
 }));
 
 vi.mock("@/i18n/navigation", () => ({
@@ -39,7 +42,9 @@ describe("ProfileTab", () => {
     expect(screen.getByText("Doe")).toBeInTheDocument();
     expect(screen.getByText("john@example.com")).toBeInTheDocument();
     expect(screen.getByText("+32 470 123456")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Edit profile" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Edit profile" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 
@@ -48,17 +53,27 @@ describe("ProfileTab", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Edit profile" }));
 
-    expect((screen.getByLabelText("First name") as HTMLInputElement).value).toBe("John");
-    expect((screen.getByLabelText("Last name") as HTMLInputElement).value).toBe("Doe");
-    expect((screen.getByLabelText("Email") as HTMLInputElement).value).toBe("john@example.com");
-    expect((screen.getByLabelText("Phone") as HTMLInputElement).value).toBe("+32 470 123456");
+    expect(
+      (screen.getByLabelText("First name") as HTMLInputElement).value,
+    ).toBe("John");
+    expect((screen.getByLabelText("Last name") as HTMLInputElement).value).toBe(
+      "Doe",
+    );
+    expect((screen.getByLabelText("Email") as HTMLInputElement).value).toBe(
+      "john@example.com",
+    );
+    expect((screen.getByLabelText("Phone") as HTMLInputElement).value).toBe(
+      "+32 470 123456",
+    );
   });
 
   it("cancels editing and restores original values", () => {
     render(<ProfileTab />);
 
     fireEvent.click(screen.getByRole("button", { name: "Edit profile" }));
-    fireEvent.change(screen.getByLabelText("First name"), { target: { value: "Jane" } });
+    fireEvent.change(screen.getByLabelText("First name"), {
+      target: { value: "Jane" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(screen.getByText("John")).toBeInTheDocument();

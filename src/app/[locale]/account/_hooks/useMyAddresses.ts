@@ -24,7 +24,9 @@ type UseMyAddressesOptions = {
 };
 
 export const useMyAddresses = (options?: UseMyAddressesOptions) => {
-  const { data, loading, refetch } = useQuery(GET_MY_ADDRESSES, { skip: options?.skip });
+  const { data, loading, refetch } = useQuery(GET_MY_ADDRESSES, {
+    skip: options?.skip,
+  });
 
   const addresses = data?.me?.addresses ?? [];
 

@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useApolloClient } from "@apollo/client/react";
-import { useMyAddresses, useCreateAddress, useUpdateAddress, useDeleteAddress } from "../_hooks";
+import {
+  useMyAddresses,
+  useCreateAddress,
+  useUpdateAddress,
+  useDeleteAddress,
+} from "../_hooks";
 import { Button, AddressForm } from "@/components/ui";
 import { getCountryName } from "@/components/ui/CountrySelect/getCountryName";
 
@@ -64,7 +69,10 @@ export const AddressesTab = () => {
     // Update cache immediately — no flicker
     if (currentDefault) {
       client.cache.modify({
-        id: client.cache.identify({ __typename: "Address", id: currentDefault.id }),
+        id: client.cache.identify({
+          __typename: "Address",
+          id: currentDefault.id,
+        }),
         fields: { default: () => false },
       });
     }
@@ -103,7 +111,10 @@ export const AddressesTab = () => {
       {addresses.map((address) => {
         if (editingId === address.id) {
           return (
-            <div key={address.id} className="border border-border rounded-xl p-4">
+            <div
+              key={address.id}
+              className="border border-border rounded-xl p-4"
+            >
               <AddressForm
                 initialValues={{
                   label: address.label ?? "",
@@ -122,7 +133,10 @@ export const AddressesTab = () => {
         }
 
         return (
-          <div key={address.id} className={`border rounded-xl p-4 ${address.default ? "border-accent" : "border-border"}`}>
+          <div
+            key={address.id}
+            className={`border rounded-xl p-4 ${address.default ? "border-accent" : "border-border"}`}
+          >
             <div className="flex items-center justify-between mb-2">
               <label className="flex items-center gap-2 cursor-pointer text-sm">
                 <input
@@ -131,26 +145,43 @@ export const AddressesTab = () => {
                   checked={address.default}
                   onChange={() => handleSetDefault(address.id)}
                 />
-                <span className={address.default ? "font-medium text-accent" : "text-muted"}>
+                <span
+                  className={
+                    address.default ? "font-medium text-accent" : "text-muted"
+                  }
+                >
                   {address.default ? t("default") : t("setDefault")}
                 </span>
               </label>
               <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => setEditingId(address.id)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEditingId(address.id)}
+                >
                   {t("edit")}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => handleDelete(address.id)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(address.id)}
+                >
                   {t("delete")}
                 </Button>
               </div>
             </div>
             {address.label && (
-              <p className="text-sm font-medium text-foreground">{address.label}</p>
+              <p className="text-sm font-medium text-foreground">
+                {address.label}
+              </p>
             )}
             <p className="text-sm text-muted">{address.line1}</p>
-            {address.line2 && <p className="text-sm text-muted">{address.line2}</p>}
+            {address.line2 && (
+              <p className="text-sm text-muted">{address.line2}</p>
+            )}
             <p className="text-sm text-muted">
-              {address.postalCode} {address.city}, {getCountryName(address.countryIso, locale)}
+              {address.postalCode} {address.city},{" "}
+              {getCountryName(address.countryIso, locale)}
             </p>
           </div>
         );

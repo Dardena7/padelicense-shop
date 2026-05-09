@@ -15,10 +15,11 @@ export const CLAIM_GUEST_CART = graphql(`
             name
             effectivePrice
             stockQuantity
-          product {
-            id
-            name
-          }            images {
+            product {
+              id
+              name
+            }
+            images {
               imageUrl
               altText
             }

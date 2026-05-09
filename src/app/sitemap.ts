@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
 
 type ProductNode = {
   slug: string;
@@ -70,10 +71,7 @@ const buildAlternates = (
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const [products] = await Promise.all([
-    fetchProducts(),
-    fetchCategories(),
-  ]);
+  const [products] = await Promise.all([fetchProducts(), fetchCategories()]);
 
   const staticPages = ["", "/products"].flatMap((path) =>
     routing.locales.map((locale) => ({

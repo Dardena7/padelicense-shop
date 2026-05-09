@@ -12,7 +12,11 @@ import { stripePromise } from "@/lib/stripe";
 import { Button, AddressForm } from "@/components/ui";
 import { getCountryName } from "@/components/ui/CountrySelect/getCountryName";
 import { formatPrice } from "@/lib/utils";
-import { useVerifyCart, useCreateUserOrder, useCreateGuestOrder } from "../_hooks";
+import {
+  useVerifyCart,
+  useCreateUserOrder,
+  useCreateGuestOrder,
+} from "../_hooks";
 import { useMyAddresses, useCreateAddress } from "../../account/_hooks";
 import { PaymentForm } from "./PaymentForm";
 
@@ -30,7 +34,12 @@ export const CheckoutContent = () => {
   const locale = useLocale();
   const router = useRouter();
   const { user } = useAuthContext();
-  const { items, totalCents, isLoading: cartLoading, clearCart } = useCartContext();
+  const {
+    items,
+    totalCents,
+    isLoading: cartLoading,
+    clearCart,
+  } = useCartContext();
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
@@ -38,21 +47,31 @@ export const CheckoutContent = () => {
   const [error, setError] = useState<string | null>(null);
   const [guestEmail, setGuestEmail] = useState("");
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    null,
+  );
 
   // Derive the effective selected address: manual selection, or default, or first
-  
-  const { verifyCart, result: cartVerification, loading: verifyLoading } = useVerifyCart();
-  const { addresses, loading: addressesLoading } = useMyAddresses({ skip: !user });
+
+  const {
+    verifyCart,
+    result: cartVerification,
+    loading: verifyLoading,
+  } = useVerifyCart();
+  const { addresses, loading: addressesLoading } = useMyAddresses({
+    skip: !user,
+  });
   const { createAddress } = useCreateAddress();
   const { createUserOrder, loading: userOrderLoading } = useCreateUserOrder();
-  const { createGuestOrder, loading: guestOrderLoading } = useCreateGuestOrder();
-  
-  const effectiveAddressId = selectedAddressId
-    ?? addresses.find((a) => a.default)?.id
-    ?? addresses[0]?.id
-    ?? null;
-    
+  const { createGuestOrder, loading: guestOrderLoading } =
+    useCreateGuestOrder();
+
+  const effectiveAddressId =
+    selectedAddressId ??
+    addresses.find((a) => a.default)?.id ??
+    addresses[0]?.id ??
+    null;
+
   const isCreatingOrder = userOrderLoading || guestOrderLoading;
 
   useEffect(() => {
@@ -60,7 +79,6 @@ export const CheckoutContent = () => {
       verifyCart();
     }
   }, [cartLoading, verifyCart]);
-
 
   const hasIssues = cartVerification && !cartVerification.valid;
 
@@ -125,7 +143,9 @@ export const CheckoutContent = () => {
   const handlePaymentSuccess = () => {
     clearCart();
     cartStorage.clearGuestUuid();
-    router.push(`/checkout/confirmation?order=${orderNumber}&uuid=${orderUuid}`);
+    router.push(
+      `/checkout/confirmation?order=${orderNumber}&uuid=${orderUuid}`,
+    );
   };
 
   if (cartLoading || verifyLoading) {
@@ -187,10 +207,15 @@ export const CheckoutContent = () => {
   if (!user) {
     return (
       <div className="flex flex-col gap-6">
-        <h2 className="text-lg font-bold text-foreground">{t("shippingAddress")}</h2>
+        <h2 className="text-lg font-bold text-foreground">
+          {t("shippingAddress")}
+        </h2>
 
         <div className="mb-2">
-          <label htmlFor="guestEmail" className="text-sm font-medium text-foreground block mb-1.5">
+          <label
+            htmlFor="guestEmail"
+            className="text-sm font-medium text-foreground block mb-1.5"
+          >
             {t("email")}
           </label>
           <input
@@ -206,7 +231,11 @@ export const CheckoutContent = () => {
         <AddressForm
           showLabel={false}
           onSubmit={handleNewAddressSubmit}
-          submitLabel={isCreatingOrder ? t("processing") : t("pay", { amount: formatPrice(totalCents, locale) })}
+          submitLabel={
+            isCreatingOrder
+              ? t("processing")
+              : t("pay", { amount: formatPrice(totalCents, locale) })
+          }
         />
 
         {error && <p className="text-danger text-sm">{error}</p>}
@@ -221,7 +250,9 @@ export const CheckoutContent = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-bold text-foreground">{t("shippingAddress")}</h2>
+      <h2 className="text-lg font-bold text-foreground">
+        {t("shippingAddress")}
+      </h2>
 
       {addresses.length > 0 && !showNewAddressForm && (
         <>
@@ -245,12 +276,17 @@ export const CheckoutContent = () => {
                   />
                   <div>
                     {address.label && (
-                      <p className="text-sm font-medium text-foreground">{address.label}</p>
+                      <p className="text-sm font-medium text-foreground">
+                        {address.label}
+                      </p>
                     )}
                     <p className="text-sm text-muted">{address.line1}</p>
-                    {address.line2 && <p className="text-sm text-muted">{address.line2}</p>}
+                    {address.line2 && (
+                      <p className="text-sm text-muted">{address.line2}</p>
+                    )}
                     <p className="text-sm text-muted">
-                      {address.postalCode} {address.city}, {getCountryName(address.countryIso, locale)}
+                      {address.postalCode} {address.city},{" "}
+                      {getCountryName(address.countryIso, locale)}
                     </p>
                   </div>
                 </div>
@@ -262,7 +298,10 @@ export const CheckoutContent = () => {
             <Button onClick={handleSelectAddress} disabled={isCreatingOrder}>
               {isCreatingOrder ? t("processing") : t("useThisAddress")}
             </Button>
-            <Button variant="outline" onClick={() => setShowNewAddressForm(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowNewAddressForm(true)}
+            >
               {t("newAddress")}
             </Button>
           </div>
@@ -277,8 +316,16 @@ export const CheckoutContent = () => {
           <AddressForm
             showLabel={false}
             onSubmit={handleNewAddressSubmit}
-            onCancel={addresses.length > 0 ? () => setShowNewAddressForm(false) : undefined}
-            submitLabel={isCreatingOrder ? t("processing") : t("pay", { amount: formatPrice(totalCents, locale) })}
+            onCancel={
+              addresses.length > 0
+                ? () => setShowNewAddressForm(false)
+                : undefined
+            }
+            submitLabel={
+              isCreatingOrder
+                ? t("processing")
+                : t("pay", { amount: formatPrice(totalCents, locale) })
+            }
           />
         </>
       )}

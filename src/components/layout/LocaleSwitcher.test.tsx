@@ -19,9 +19,7 @@ vi.mock("@/i18n/navigation", () => ({
   usePathname: () => "/products/head-speed-pro",
 }));
 
-const renderWithLocalization = (
-  alternateUrls: Record<string, string> = {},
-) => {
+const renderWithLocalization = (alternateUrls: Record<string, string> = {}) => {
   const Wrapper = (props: { children: React.ReactNode }) => {
     return (
       <LocalizationProvider>

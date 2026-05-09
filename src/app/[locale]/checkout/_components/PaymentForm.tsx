@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui";
 
 type PaymentFormProps = {
@@ -47,7 +51,12 @@ export const PaymentForm = (props: PaymentFormProps) => {
 
       {error && <p className="text-danger text-sm">{error}</p>}
 
-      <Button type="submit" size="lg" disabled={!stripe || isProcessing} data-testid="pay-button">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={!stripe || isProcessing}
+        data-testid="pay-button"
+      >
         {isProcessing ? t("processing") : t("pay", { amount })}
       </Button>
     </form>

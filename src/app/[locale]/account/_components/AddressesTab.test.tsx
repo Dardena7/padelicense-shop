@@ -19,14 +19,27 @@ vi.mock("@apollo/client/react", () => ({
 
 vi.mock("../_hooks", () => ({
   useMyAddresses: () => mockUseMyAddresses(),
-  useCreateAddress: () => ({ createAddress: mockCreateAddress, loading: false }),
-  useUpdateAddress: () => ({ updateAddress: mockUpdateAddress, loading: false }),
-  useDeleteAddress: () => ({ deleteAddress: mockDeleteAddress, loading: false }),
+  useCreateAddress: () => ({
+    createAddress: mockCreateAddress,
+    loading: false,
+  }),
+  useUpdateAddress: () => ({
+    updateAddress: mockUpdateAddress,
+    loading: false,
+  }),
+  useDeleteAddress: () => ({
+    deleteAddress: mockDeleteAddress,
+    loading: false,
+  }),
 }));
 
 describe("AddressesTab", () => {
   it("shows loading state", () => {
-    mockUseMyAddresses.mockReturnValue({ addresses: [], loading: true, refetch: vi.fn() });
+    mockUseMyAddresses.mockReturnValue({
+      addresses: [],
+      loading: true,
+      refetch: vi.fn(),
+    });
 
     render(<AddressesTab />);
 
@@ -34,7 +47,11 @@ describe("AddressesTab", () => {
   });
 
   it("shows empty state", () => {
-    mockUseMyAddresses.mockReturnValue({ addresses: [], loading: false, refetch: vi.fn() });
+    mockUseMyAddresses.mockReturnValue({
+      addresses: [],
+      loading: false,
+      refetch: vi.fn(),
+    });
 
     render(<AddressesTab />);
 
@@ -74,8 +91,26 @@ describe("AddressesTab", () => {
   it("pre-selects the default address radio", () => {
     mockUseMyAddresses.mockReturnValue({
       addresses: [
-        { id: "addr-1", label: "Home", line1: "Rue 1", line2: null, city: "Bruxelles", postalCode: "1000", countryIso: "BE", default: true },
-        { id: "addr-2", label: "Work", line1: "Rue 2", line2: null, city: "Bruxelles", postalCode: "1050", countryIso: "BE", default: false },
+        {
+          id: "addr-1",
+          label: "Home",
+          line1: "Rue 1",
+          line2: null,
+          city: "Bruxelles",
+          postalCode: "1000",
+          countryIso: "BE",
+          default: true,
+        },
+        {
+          id: "addr-2",
+          label: "Work",
+          line1: "Rue 2",
+          line2: null,
+          city: "Bruxelles",
+          postalCode: "1050",
+          countryIso: "BE",
+          default: false,
+        },
       ],
       loading: false,
       refetch: vi.fn(),
@@ -92,7 +127,11 @@ describe("AddressesTab", () => {
   });
 
   it("shows address form when clicking add", () => {
-    mockUseMyAddresses.mockReturnValue({ addresses: [], loading: false, refetch: vi.fn() });
+    mockUseMyAddresses.mockReturnValue({
+      addresses: [],
+      loading: false,
+      refetch: vi.fn(),
+    });
 
     render(<AddressesTab />);
 
@@ -125,7 +164,9 @@ describe("AddressesTab", () => {
 
     fireEvent.click(screen.getByText("Edit"));
 
-    const line1Input = screen.getByLabelText("Address line 1") as HTMLInputElement;
+    const line1Input = screen.getByLabelText(
+      "Address line 1",
+    ) as HTMLInputElement;
     expect(line1Input.value).toBe("Rue Test");
   });
 });

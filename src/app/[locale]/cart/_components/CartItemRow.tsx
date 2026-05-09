@@ -18,7 +18,10 @@ export const CartItemRow = (props: CartItemRowProps) => {
   const variant = item.productVariant;
 
   return (
-    <div data-testid="cart-item" className="flex items-center gap-4 py-4 border-b border-border">
+    <div
+      data-testid="cart-item"
+      className="flex items-center gap-4 py-4 border-b border-border"
+    >
       <div className="flex-1">
         <p data-testid="cart-item-name" className="font-medium text-foreground">
           {variant.product.name}
@@ -39,7 +42,10 @@ export const CartItemRow = (props: CartItemRowProps) => {
         >
           -
         </Button>
-        <span data-testid="cart-item-quantity" className="w-8 text-center text-sm font-medium">
+        <span
+          data-testid="cart-item-quantity"
+          className="w-8 text-center text-sm font-medium"
+        >
           {item.quantity}
         </span>
         <Button

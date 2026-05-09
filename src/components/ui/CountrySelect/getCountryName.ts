@@ -8,7 +8,9 @@ countries.registerLocale(fr);
 countries.registerLocale(nl);
 
 export const getCountryName = (code: string, locale: string): string => {
-  return countries.getName(code, locale, { select: "alias" })
-    ?? countries.getName(code, locale)
-    ?? code;
+  return (
+    countries.getName(code, locale, { select: "alias" }) ??
+    countries.getName(code, locale) ??
+    code
+  );
 };

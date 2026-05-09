@@ -30,7 +30,9 @@ const TestConsumer = () => {
   return (
     <div>
       <p>Not logged in</p>
-      <button onClick={() => login("john@example.com", "password123").catch(() => {})}>
+      <button
+        onClick={() => login("john@example.com", "password123").catch(() => {})}
+      >
         Login
       </button>
       <button

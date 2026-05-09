@@ -72,7 +72,9 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const guestUuid = user ? undefined : cartStorage.getGuestUuid() ?? undefined;
+  const guestUuid = user
+    ? undefined
+    : (cartStorage.getGuestUuid() ?? undefined);
 
   const loadCart = useCallback(async () => {
     const guestUuid = cartStorage.getGuestUuid();
@@ -92,21 +94,24 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
     setIsLoading(false);
   }, [user, fetchCart, syncCartState]);
 
-  const claimGuestCart = useCallback(async (guestUuid: string) => {
-    try {
-      const { data } = await claimCartMutation({
-        variables: { input: { guestUuid } },
-      });
-      if (data?.claimGuestCart?.cart) {
-        syncCartState(data.claimGuestCart.cart);
+  const claimGuestCart = useCallback(
+    async (guestUuid: string) => {
+      try {
+        const { data } = await claimCartMutation({
+          variables: { input: { guestUuid } },
+        });
+        if (data?.claimGuestCart?.cart) {
+          syncCartState(data.claimGuestCart.cart);
+        }
+        cartStorage.clearGuestUuid();
+        setIsLoading(false);
+      } catch {
+        cartStorage.clearGuestUuid();
+        loadCart();
       }
-      cartStorage.clearGuestUuid();
-      setIsLoading(false);
-    } catch {
-      cartStorage.clearGuestUuid();
-      loadCart();
-    }
-  }, [claimCartMutation, syncCartState, loadCart]);
+    },
+    [claimCartMutation, syncCartState, loadCart],
+  );
 
   // Sync cart with auth state (login, logout, page load)
   useEffect(() => {

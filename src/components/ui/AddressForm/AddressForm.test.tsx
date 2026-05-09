@@ -9,7 +9,9 @@ describe("AddressForm", () => {
 
     expect(screen.getByLabelText("Label (optional)")).toBeInTheDocument();
     expect(screen.getByLabelText("Address line 1")).toBeInTheDocument();
-    expect(screen.getByLabelText("Address line 2 (optional)")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Address line 2 (optional)"),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("City")).toBeInTheDocument();
     expect(screen.getByLabelText("Postal code")).toBeInTheDocument();
     expect(screen.getByLabelText("Country")).toBeInTheDocument();
@@ -36,9 +38,15 @@ describe("AddressForm", () => {
       />,
     );
 
-    expect((screen.getByLabelText("Label (optional)") as HTMLInputElement).value).toBe("Home");
-    expect((screen.getByLabelText("Address line 1") as HTMLInputElement).value).toBe("Rue de la Loi 1");
-    expect((screen.getByLabelText("City") as HTMLInputElement).value).toBe("Bruxelles");
+    expect(
+      (screen.getByLabelText("Label (optional)") as HTMLInputElement).value,
+    ).toBe("Home");
+    expect(
+      (screen.getByLabelText("Address line 1") as HTMLInputElement).value,
+    ).toBe("Rue de la Loi 1");
+    expect((screen.getByLabelText("City") as HTMLInputElement).value).toBe(
+      "Bruxelles",
+    );
   });
 
   it("uses custom submit label", () => {
