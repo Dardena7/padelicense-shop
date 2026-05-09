@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui";
 
-const ConfirmationPage = () => {
+const ConfirmationContent = () => {
   const t = useTranslations("confirmation");
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("order");
@@ -26,6 +27,14 @@ const ConfirmationPage = () => {
         <Button variant="outline">{t("continueShopping")}</Button>
       </Link>
     </main>
+  );
+};
+
+const ConfirmationPage = () => {
+  return (
+    <Suspense fallback={<p className="text-muted text-center py-12">...</p>}>
+      <ConfirmationContent />
+    </Suspense>
   );
 };
 

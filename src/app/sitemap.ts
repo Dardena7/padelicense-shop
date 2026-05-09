@@ -70,7 +70,7 @@ const buildAlternates = (
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const [products, categories] = await Promise.all([
+  const [products] = await Promise.all([
     fetchProducts(),
     fetchCategories(),
   ]);

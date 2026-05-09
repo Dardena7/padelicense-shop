@@ -159,6 +159,8 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    // Restore session on mount — setState in effect is intentional here
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshToken();
   }, [refreshToken]);
 

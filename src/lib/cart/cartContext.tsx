@@ -58,13 +58,12 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
   const [removeItemMutation] = useMutation(REMOVE_ITEM_FROM_CART);
   const [claimCartMutation] = useMutation(CLAIM_GUEST_CART);
 
-  const updateCartState = useCallback((cart: CartData | null | undefined) => {
-    if (!cart) {
-      setItems([]);
-      setTotalCents(0);
-      return;
-    }
+  const clearCart = useCallback(() => {
+    setItems([]);
+    setTotalCents(0);
+  }, []);
 
+  const syncCartState = useCallback((cart: CartData) => {
     setItems(cart.items ?? []);
     setTotalCents(cart.totalCents);
 
@@ -72,6 +71,8 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
       cartStorage.setGuestUuid(cart.guestUuid);
     }
   }, []);
+
+  const guestUuid = user ? undefined : cartStorage.getGuestUuid() ?? undefined;
 
   const loadCart = useCallback(async () => {
     const guestUuid = cartStorage.getGuestUuid();
@@ -85,99 +86,102 @@ export const CartProvider = (props: { children: React.ReactNode }) => {
       variables: { guestUuid: user ? undefined : guestUuid },
     });
 
-    updateCartState(data?.cart);
+    if (data?.cart) {
+      syncCartState(data.cart);
+    }
     setIsLoading(false);
-  }, [user, fetchCart, updateCartState]);
+  }, [user, fetchCart, syncCartState]);
 
+  const claimGuestCart = useCallback(async (guestUuid: string) => {
+    try {
+      const { data } = await claimCartMutation({
+        variables: { input: { guestUuid } },
+      });
+      if (data?.claimGuestCart?.cart) {
+        syncCartState(data.claimGuestCart.cart);
+      }
+      cartStorage.clearGuestUuid();
+      setIsLoading(false);
+    } catch {
+      cartStorage.clearGuestUuid();
+      loadCart();
+    }
+  }, [claimCartMutation, syncCartState, loadCart]);
+
+  // Sync cart with auth state (login, logout, page load)
   useEffect(() => {
     const guestUuid = cartStorage.getGuestUuid();
 
-    // User just logged in with a guest cart → claim it
     if (user && guestUuid) {
-      claimCartMutation({
-        variables: { input: { guestUuid } },
-      }).then(({ data }) => {
-        updateCartState(data?.claimGuestCart?.cart);
-        cartStorage.clearGuestUuid();
-        setIsLoading(false);
-      }).catch(() => {
-        cartStorage.clearGuestUuid();
-        loadCart();
-      });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      claimGuestCart(guestUuid);
       return;
     }
 
-    // User just logged out → clear cart state
     if (!user && !guestUuid) {
-      setItems([]);
-      setTotalCents(0);
+      clearCart();
       setIsLoading(false);
       return;
     }
 
     loadCart();
-  }, [user, claimCartMutation, updateCartState, loadCart]);
+  }, [user, claimGuestCart, clearCart, loadCart]);
 
   const addItem = useCallback(
     async (productVariantId: string, quantity = 1) => {
-      const guestUuid = cartStorage.getGuestUuid();
-
       const { data } = await addItemMutation({
         variables: {
           input: {
             productVariantId,
             quantity,
-            guestUuid: user ? undefined : guestUuid ?? undefined,
+            guestUuid: guestUuid,
           },
         },
       });
 
-      updateCartState(data?.addItemToCart?.cart);
+      if (data?.addItemToCart?.cart) {
+        syncCartState(data.addItemToCart.cart);
+      }
     },
-    [user, addItemMutation, updateCartState],
+    [guestUuid, addItemMutation, syncCartState],
   );
 
   const updateItem = useCallback(
     async (cartItemId: string, quantity: number) => {
-      const guestUuid = cartStorage.getGuestUuid();
-
       const { data } = await updateItemMutation({
         variables: {
           input: {
             cartItemId,
             quantity,
-            guestUuid: user ? undefined : guestUuid ?? undefined,
+            guestUuid: guestUuid,
           },
         },
       });
 
-      updateCartState(data?.updateCartItem?.cart);
+      if (data?.updateCartItem?.cart) {
+        syncCartState(data.updateCartItem.cart);
+      }
     },
-    [user, updateItemMutation, updateCartState],
+    [guestUuid, updateItemMutation, syncCartState],
   );
 
   const removeItem = useCallback(
     async (cartItemId: string) => {
-      const guestUuid = cartStorage.getGuestUuid();
-
       const { data } = await removeItemMutation({
         variables: {
           input: {
             cartItemId,
-            guestUuid: user ? undefined : guestUuid ?? undefined,
+            guestUuid: guestUuid,
           },
         },
       });
 
-      updateCartState(data?.removeItemFromCart?.cart);
+      if (data?.removeItemFromCart?.cart) {
+        syncCartState(data.removeItemFromCart.cart);
+      }
     },
-    [user, removeItemMutation, updateCartState],
+    [guestUuid, removeItemMutation, syncCartState],
   );
-
-  const clearCart = useCallback(() => {
-    setItems([]);
-    setTotalCents(0);
-  }, []);
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 

@@ -39,12 +39,19 @@ export const CheckoutContent = () => {
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
 
+  // Derive the effective selected address: manual selection, or default, or first
+  
   const { verifyCart, result: cartVerification, loading: verifyLoading } = useVerifyCart();
   const { addresses, loading: addressesLoading } = useMyAddresses({ skip: !user });
   const { createAddress } = useCreateAddress();
   const { createUserOrder, loading: userOrderLoading } = useCreateUserOrder();
   const { createGuestOrder, loading: guestOrderLoading } = useCreateGuestOrder();
-
+  
+  const effectiveAddressId = selectedAddressId
+    ?? addresses.find((a) => a.default)?.id
+    ?? addresses[0]?.id
+    ?? null;
+    
   const isCreatingOrder = userOrderLoading || guestOrderLoading;
 
   useEffect(() => {
@@ -53,21 +60,15 @@ export const CheckoutContent = () => {
     }
   }, [cartLoading, verifyCart]);
 
-  useEffect(() => {
-    if (addresses.length > 0 && !selectedAddressId) {
-      const defaultAddress = addresses.find((a) => a.default);
-      setSelectedAddressId(defaultAddress?.id ?? addresses[0].id);
-    }
-  }, [addresses, selectedAddressId]);
 
   const hasIssues = cartVerification && !cartVerification.valid;
 
   const handleSelectAddress = async () => {
-    if (!selectedAddressId) return;
+    if (!effectiveAddressId) return;
     setError(null);
 
     try {
-      const result = await createUserOrder(selectedAddressId);
+      const result = await createUserOrder(effectiveAddressId);
       if (result) {
         setClientSecret(result.clientSecret);
         setOrderNumber(result.order.number);
@@ -228,7 +229,7 @@ export const CheckoutContent = () => {
               <label
                 key={address.id}
                 className={`border rounded-xl p-4 cursor-pointer transition-colors ${
-                  selectedAddressId === address.id
+                  effectiveAddressId === address.id
                     ? "border-accent bg-accent/5"
                     : "border-border hover:border-accent/50"
                 }`}
@@ -237,7 +238,7 @@ export const CheckoutContent = () => {
                   <input
                     type="radio"
                     name="address"
-                    checked={selectedAddressId === address.id}
+                    checked={effectiveAddressId === address.id}
                     onChange={() => setSelectedAddressId(address.id)}
                     className="mt-1"
                   />
