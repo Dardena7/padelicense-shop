@@ -42,10 +42,12 @@ jobs:
       # Le webhook secret est inventé — c'est un circuit fermé en CI
       - name: Create API .env
         run: |
-          cat > api/.env << EOF
+          cat > api/.env <<'ENVEOF'
           STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          EOF
+          SECRET_KEY_BASE=ci_secret_key_base_for_e2e_tests_at_least_64_characters_long
+          ENVEOF
+          sed -i 's/^ *//' api/.env
 
       # Lancer PostgreSQL + Redis + Rails API
       # Le docker-entrypoint fait automatiquement db:prepare (create + migrate)
@@ -54,11 +56,11 @@ jobs:
         run: docker compose up -d api
 
       # Attendre que l'API soit prête (healthcheck endpoint /up)
-      # Essaie toutes les 2 secondes, max 60 secondes
+      # Premier run : db:prepare (create + migrate) peut prendre du temps
       - name: Wait for API
         run: |
           echo "Waiting for API..."
-          timeout 60 bash -c 'until curl -sf http://localhost:3000/up; do sleep 2; done'
+          timeout 120 bash -c 'until curl -sf http://localhost:3000/up; do sleep 3; done'
           echo "API is ready"
 
       # Seeder la base de données avec les produits de démo
