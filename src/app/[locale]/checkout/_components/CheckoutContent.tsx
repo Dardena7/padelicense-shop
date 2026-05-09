@@ -9,8 +9,7 @@ import { useAuthContext } from "@/lib/auth";
 import { useCartContext } from "@/lib/cart";
 import { cartStorage } from "@/lib/cart/storage";
 import { stripePromise } from "@/lib/stripe";
-import { Button, AddressForm } from "@/components/ui";
-import { getCountryName } from "@/components/ui/CountrySelect/getCountryName";
+import { Button } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
 import {
   useVerifyCart,
@@ -19,6 +18,9 @@ import {
 } from "../_hooks";
 import { useMyAddresses, useCreateAddress } from "../../account/_hooks";
 import { PaymentForm } from "./PaymentForm";
+import { CartIssues } from "./CartIssues";
+import { GuestAddressForm } from "./GuestAddressForm";
+import { UserAddressSelection } from "./UserAddressSelection";
 
 type AddressValues = {
   label: string;
@@ -45,13 +47,9 @@ export const CheckoutContent = () => {
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [orderUuid, setOrderUuid] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [guestEmail, setGuestEmail] = useState("");
-  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
-
-  // Derive the effective selected address: manual selection, or default, or first
 
   const {
     verifyCart,
@@ -80,61 +78,57 @@ export const CheckoutContent = () => {
     }
   }, [cartLoading, verifyCart]);
 
-  const hasIssues = cartVerification && !cartVerification.valid;
+  const handleOrderCreated = (result: {
+    clientSecret: string;
+    order: { number: string; uuid: string };
+  }) => {
+    setClientSecret(result.clientSecret);
+    setOrderNumber(result.order.number);
+    setOrderUuid(result.order.uuid);
+  };
 
-  const handleSelectAddress = async () => {
+  const handleUseAddress = async () => {
     if (!effectiveAddressId) return;
     setError(null);
-
     try {
       const result = await createUserOrder(effectiveAddressId);
-      if (result) {
-        setClientSecret(result.clientSecret);
-        setOrderNumber(result.order.number);
-        setOrderUuid(result.order.uuid);
-      }
+      if (result) handleOrderCreated(result);
     } catch {
       setError(t("error"));
     }
   };
 
-  const handleNewAddressSubmit = async (address: AddressValues) => {
+  const handleNewAddress = async (address: AddressValues) => {
     setError(null);
-
     try {
-      if (user) {
-        const addressResult = await createAddress({
-          line1: address.line1,
-          line2: address.line2 || undefined,
-          city: address.city,
-          postalCode: address.postalCode,
-          countryIso: address.countryIso,
-        });
+      const addressResult = await createAddress({
+        line1: address.line1,
+        line2: address.line2 || undefined,
+        city: address.city,
+        postalCode: address.postalCode,
+        countryIso: address.countryIso,
+      });
+      const addressId = addressResult.data?.createAddress?.address?.id;
+      if (!addressId) return;
 
-        const addressId = addressResult.data?.createAddress?.address?.id;
-        if (!addressId) return;
+      const result = await createUserOrder(addressId);
+      if (result) handleOrderCreated(result);
+    } catch {
+      setError(t("error"));
+    }
+  };
 
-        const result = await createUserOrder(addressId);
-        if (result) {
-          setClientSecret(result.clientSecret);
-          setOrderNumber(result.order.number);
-          setOrderUuid(result.order.uuid);
-        }
-      } else {
-        const result = await createGuestOrder(guestEmail, {
-          line1: address.line1,
-          line2: address.line2 || undefined,
-          city: address.city,
-          postalCode: address.postalCode,
-          countryIso: address.countryIso,
-        });
-
-        if (result) {
-          setClientSecret(result.clientSecret);
-          setOrderNumber(result.order.number);
-          setOrderUuid(result.order.uuid);
-        }
-      }
+  const handleGuestSubmit = async (email: string, address: AddressValues) => {
+    setError(null);
+    try {
+      const result = await createGuestOrder(email, {
+        line1: address.line1,
+        line2: address.line2 || undefined,
+        city: address.city,
+        postalCode: address.postalCode,
+        countryIso: address.countryIso,
+      });
+      if (result) handleOrderCreated(result);
     } catch {
       setError(t("error"));
     }
@@ -152,30 +146,8 @@ export const CheckoutContent = () => {
     return <p className="text-muted">...</p>;
   }
 
-  if (hasIssues) {
-    return (
-      <div className="flex flex-col gap-4">
-        <p className="text-danger font-medium">{t("cartIssues")}</p>
-        <ul className="flex flex-col gap-2">
-          {cartVerification.issues.map((issue, i) => (
-            <li key={i} className="text-sm text-danger">
-              {issue.type === "EMPTY_CART" && t("emptyCart")}
-              {issue.type === "PRODUCT_UNAVAILABLE" &&
-                t("productUnavailable", { name: issue.productName ?? "" })}
-              {issue.type === "INSUFFICIENT_STOCK" &&
-                t("insufficientStock", {
-                  name: issue.productName ?? "",
-                  available: issue.available ?? 0,
-                  requested: issue.requested ?? 0,
-                })}
-            </li>
-          ))}
-        </ul>
-        <Link href="/cart">
-          <Button variant="outline">{t("backToCart")}</Button>
-        </Link>
-      </div>
-    );
+  if (cartVerification && !cartVerification.valid) {
+    return <CartIssues issues={cartVerification.issues} />;
   }
 
   if (clientSecret) {
@@ -203,134 +175,31 @@ export const CheckoutContent = () => {
     );
   }
 
-  // Guest checkout — email + address form
   if (!user) {
     return (
-      <div className="flex flex-col gap-6">
-        <h2 className="text-lg font-bold text-foreground">
-          {t("shippingAddress")}
-        </h2>
-
-        <div className="mb-2">
-          <label
-            htmlFor="guestEmail"
-            className="text-sm font-medium text-foreground block mb-1.5"
-          >
-            {t("email")}
-          </label>
-          <input
-            id="guestEmail"
-            type="email"
-            value={guestEmail}
-            onChange={(e) => setGuestEmail(e.target.value)}
-            required
-            className="w-full rounded-md border border-border px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-          />
-        </div>
-
-        <AddressForm
-          showLabel={false}
-          onSubmit={handleNewAddressSubmit}
-          submitLabel={
-            isCreatingOrder
-              ? t("processing")
-              : t("pay", { amount: formatPrice(totalCents, locale) })
-          }
-        />
-
-        {error && <p className="text-danger text-sm">{error}</p>}
-      </div>
+      <GuestAddressForm
+        totalCents={totalCents}
+        isCreatingOrder={isCreatingOrder}
+        error={error}
+        onSubmit={handleGuestSubmit}
+      />
     );
   }
 
-  // User checkout — select saved address or add new
   if (addressesLoading) {
     return <p className="text-muted">...</p>;
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-bold text-foreground">
-        {t("shippingAddress")}
-      </h2>
-
-      {addresses.length > 0 && !showNewAddressForm && (
-        <>
-          <div className="flex flex-col gap-3">
-            {addresses.map((address) => (
-              <label
-                key={address.id}
-                className={`border rounded-xl p-4 cursor-pointer transition-colors ${
-                  effectiveAddressId === address.id
-                    ? "border-accent bg-accent/5"
-                    : "border-border hover:border-accent/50"
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <input
-                    type="radio"
-                    name="address"
-                    checked={effectiveAddressId === address.id}
-                    onChange={() => setSelectedAddressId(address.id)}
-                    className="mt-1"
-                  />
-                  <div>
-                    {address.label && (
-                      <p className="text-sm font-medium text-foreground">
-                        {address.label}
-                      </p>
-                    )}
-                    <p className="text-sm text-muted">{address.line1}</p>
-                    {address.line2 && (
-                      <p className="text-sm text-muted">{address.line2}</p>
-                    )}
-                    <p className="text-sm text-muted">
-                      {address.postalCode} {address.city},{" "}
-                      {getCountryName(address.countryIso, locale)}
-                    </p>
-                  </div>
-                </div>
-              </label>
-            ))}
-          </div>
-
-          <div className="flex gap-3">
-            <Button onClick={handleSelectAddress} disabled={isCreatingOrder}>
-              {isCreatingOrder ? t("processing") : t("useThisAddress")}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowNewAddressForm(true)}
-            >
-              {t("newAddress")}
-            </Button>
-          </div>
-        </>
-      )}
-
-      {(addresses.length === 0 || showNewAddressForm) && (
-        <>
-          {addresses.length > 0 && (
-            <p className="text-sm text-muted">{t("orNewAddress")}</p>
-          )}
-          <AddressForm
-            showLabel={false}
-            onSubmit={handleNewAddressSubmit}
-            onCancel={
-              addresses.length > 0
-                ? () => setShowNewAddressForm(false)
-                : undefined
-            }
-            submitLabel={
-              isCreatingOrder
-                ? t("processing")
-                : t("pay", { amount: formatPrice(totalCents, locale) })
-            }
-          />
-        </>
-      )}
-
-      {error && <p className="text-danger text-sm">{error}</p>}
-    </div>
+    <UserAddressSelection
+      addresses={addresses}
+      effectiveAddressId={effectiveAddressId}
+      totalCents={totalCents}
+      isCreatingOrder={isCreatingOrder}
+      error={error}
+      onSelectAddress={setSelectedAddressId}
+      onUseAddress={handleUseAddress}
+      onNewAddress={handleNewAddress}
+    />
   );
 };

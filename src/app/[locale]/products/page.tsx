@@ -5,6 +5,8 @@ import { ProductCard, AddToCartAction } from "@/components/ui";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
+export const dynamic = "force-dynamic";
+
 type ProductsPageProps = {
   params: Promise<{ locale: string }>;
 };

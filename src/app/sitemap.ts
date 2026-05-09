@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 
+export const revalidate = 3600;
+
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/graphql";
