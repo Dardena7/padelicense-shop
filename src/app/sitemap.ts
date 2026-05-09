@@ -18,39 +18,47 @@ type CategoryNode = {
 };
 
 const fetchProducts = async (): Promise<ProductNode[]> => {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: `{
-        products(first: 100) {
-          nodes {
-            slug
-            alternateSlugs { locale value }
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `{
+          products(first: 100) {
+            nodes {
+              slug
+              alternateSlugs { locale value }
+            }
           }
-        }
-      }`,
-    }),
-  });
-  const json = await res.json();
-  return json.data?.products?.nodes?.filter(Boolean) ?? [];
+        }`,
+      }),
+    });
+    const json = await res.json();
+    return json.data?.products?.nodes?.filter(Boolean) ?? [];
+  } catch {
+    return [];
+  }
 };
 
 const fetchCategories = async (): Promise<CategoryNode[]> => {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: `{
-        categories {
-          slug
-          alternateSlugs { locale value }
-        }
-      }`,
-    }),
-  });
-  const json = await res.json();
-  return json.data?.categories?.filter(Boolean) ?? [];
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `{
+          categories {
+            slug
+            alternateSlugs { locale value }
+          }
+        }`,
+      }),
+    });
+    const json = await res.json();
+    return json.data?.categories?.filter(Boolean) ?? [];
+  } catch {
+    return [];
+  }
 };
 
 const buildAlternates = (
