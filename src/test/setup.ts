@@ -31,7 +31,7 @@ beforeAll(async () => {
 
 vi.mock("@/i18n/navigation", () => ({
   Link: (props: Record<string, unknown>) =>
-    createElement("a", { href: props.href }, props.children),
+    createElement("a", { href: props.href }, props.children as React.ReactNode),
   redirect: vi.fn(),
   usePathname: vi.fn(() => "/"),
   useRouter: vi.fn(() => ({ push: vi.fn(), replace: vi.fn() })),

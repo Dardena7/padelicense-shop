@@ -99,6 +99,7 @@ describe("CartContext", () => {
       login: vi.fn(),
       signup: vi.fn(),
       logout: vi.fn(),
+      updateUser: vi.fn(),
     });
   });
 
@@ -163,11 +164,13 @@ describe("CartContext", () => {
           firstName: "Test",
           lastName: "User",
           role: "customer",
+          phone: null,
         },
         isLoading: false,
         login: vi.fn(),
         signup: vi.fn(),
         logout: vi.fn(),
+        updateUser: vi.fn(),
       });
 
       mockFetchCart.mockResolvedValue({
@@ -196,11 +199,13 @@ describe("CartContext", () => {
           firstName: "Test",
           lastName: "User",
           role: "customer",
+          phone: null,
         },
         isLoading: false,
         login: vi.fn(),
         signup: vi.fn(),
         logout: vi.fn(),
+        updateUser: vi.fn(),
       });
 
       mockClaimCart.mockResolvedValue({
@@ -231,6 +236,7 @@ describe("CartContext", () => {
         firstName: "Test",
         lastName: "User",
         role: "customer",
+        phone: null,
       };
 
       mockedUseAuth.mockReturnValue({
@@ -239,6 +245,7 @@ describe("CartContext", () => {
         login: vi.fn(),
         signup: vi.fn(),
         logout: vi.fn(),
+        updateUser: vi.fn(),
       });
 
       mockFetchCart.mockResolvedValue({
@@ -258,6 +265,7 @@ describe("CartContext", () => {
         login: vi.fn(),
         signup: vi.fn(),
         logout: vi.fn(),
+        updateUser: vi.fn(),
       });
 
       rerender(

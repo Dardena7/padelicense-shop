@@ -1,6 +1,6 @@
 import { render } from "@/test/render";
 import { screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { LocalizationProvider } from "@/lib/localization";
 
