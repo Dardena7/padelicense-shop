@@ -55,6 +55,12 @@ jobs:
           echo "=== Containers status ==="
           docker compose ps
 
+      # L'entrypoint ne fait pas db:prepare car la commande est "bash -c ..."
+      # On le fait explicitement
+      - name: Setup database
+        working-directory: api
+        run: docker compose exec -T api rails db:prepare
+
       - name: Wait for API
         run: |
           echo "=== Waiting for API (max 120s) ==="
