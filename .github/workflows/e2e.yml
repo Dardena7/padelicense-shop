@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout shop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout API
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ github.repository_owner }}/padelicense-api
           ref: ${{ inputs.api_ref || 'main' }}

@@ -12,11 +12,11 @@ jobs:
     steps:
       # Checkout le front (branche de la PR) — contient les nouvelles queries
       - name: Checkout shop (PR branch)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Checkout le back (main) — le schema actuel en production
       - name: Checkout API
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ github.repository_owner }}/padelicense-api
           path: api
