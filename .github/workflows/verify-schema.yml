@@ -1,0 +1,62 @@
+name: Verify Schema
+
+# Vérifie que les nouvelles queries du front sont compatibles avec le schema du back
+on:
+  pull_request:
+
+jobs:
+  verify-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # Checkout le front (branche de la PR) — contient les nouvelles queries
+      - name: Checkout shop (PR branch)
+        uses: actions/checkout@v4
+
+      # Checkout le back (main) — le schema actuel en production
+      - name: Checkout API
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/padelicense-api
+          path: api
+          token: ${{ secrets.REPO_DISPATCH_TOKEN }}
+
+      # Créer le .env minimal pour l'API
+      - name: Create API .env
+        run: |
+          cat > api/.env <<'EOF'
+          STRIPE_SECRET_KEY=sk_test_fake
+          STRIPE_WEBHOOK_SECRET=whsec_fake
+          SECRET_KEY_BASE=verify_schema_secret_key_base_at_least_64_characters_long
+          EOF
+
+      # Lancer l'API pour exposer le schema GraphQL
+      - name: Start API
+        working-directory: api
+        run: |
+          docker compose up -d api
+          docker compose exec -T api rails db:prepare
+          echo "Waiting for API..."
+          timeout 120 bash -c 'until curl -sf http://localhost:3000/up; do sleep 3; done'
+          echo "API is ready"
+
+      # Installer Node + dépendances du front
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Lancer le codegen — valide les queries de la PR contre le schema actuel
+      # Si une query utilise un champ qui n'existe pas → erreur
+      - name: Validate queries against schema
+        run: npx graphql-codegen
+
+      - name: Stop API
+        if: always()
+        working-directory: api
+        run: docker compose down
