@@ -1,34 +1,22 @@
 name: E2E Tests
 
 on:
-  # Déclenché par le CI du back quand il push sur main
   repository_dispatch:
     types: [api-updated]
-
-  # Aussi sur nos propres PRs et pushs sur main
   push:
     branches: [main]
   pull_request:
-
-  # Permet de lancer manuellement depuis l'onglet Actions de GitHub
   workflow_dispatch:
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    # Timeout plus long que les autres jobs — les E2E prennent du temps
     timeout-minutes: 15
 
     steps:
-      # --- Étape 1 : Checkout des deux repos ---
-
-      # Checkout du repo front (celui-ci)
       - name: Checkout shop
         uses: actions/checkout@v4
 
-      # Checkout du repo back dans un sous-dossier ./api
-      # token: nécessaire car le repo est privé
-      # Le PAT (Personal Access Token) doit avoir accès aux deux repos
       - name: Checkout API
         uses: actions/checkout@v4
         with:
@@ -36,10 +24,18 @@ jobs:
           path: api
           token: ${{ secrets.REPO_DISPATCH_TOKEN }}
 
-      # --- Étape 2 : Lancer l'API avec Docker Compose ---
+      # --- Debug: vérifier ce qu'on a ---
+      - name: Debug - verify checkout
+        run: |
+          echo "=== Shop root ==="
+          ls -la
+          echo "=== API root ==="
+          ls -la api/
+          echo "=== API Dockerfile ==="
+          head -5 api/Dockerfile
+          echo "=== API docker-compose.yml ==="
+          cat api/docker-compose.yml
 
-      # Créer le .env pour l'API avec les clés Stripe
-      # Le webhook secret est inventé — c'est un circuit fermé en CI
       - name: Create API .env
         run: |
           cat > api/.env <<'ENVEOF'
@@ -48,28 +44,47 @@ jobs:
           SECRET_KEY_BASE=ci_secret_key_base_for_e2e_tests_at_least_64_characters_long
           ENVEOF
           sed -i 's/^ *//' api/.env
+          echo "=== .env content (keys masked) ==="
+          cat api/.env | sed 's/=.*/=***/'
 
-      # Lancer PostgreSQL + Redis + Rails API
-      # Le docker-entrypoint fait automatiquement db:prepare (create + migrate)
       - name: Start API
         working-directory: api
-        run: docker compose up -d api
+        run: |
+          echo "=== Starting Docker Compose ==="
+          docker compose up -d api
+          echo "=== Containers status ==="
+          docker compose ps
 
-      # Attendre que l'API soit prête (healthcheck endpoint /up)
-      # Premier run : db:prepare (create + migrate) peut prendre du temps
       - name: Wait for API
         run: |
-          echo "Waiting for API..."
-          timeout 120 bash -c 'until curl -sf http://localhost:3000/up; do sleep 3; done'
-          echo "API is ready"
+          echo "=== Waiting for API (max 120s) ==="
+          START=$(date +%s)
+          while ! curl -sf http://localhost:3000/up 2>/dev/null; do
+            ELAPSED=$(( $(date +%s) - START ))
+            if [ $ELAPSED -gt 120 ]; then
+              echo "=== TIMEOUT after ${ELAPSED}s ==="
+              echo "=== Docker containers ==="
+              docker compose -f api/docker-compose.yml ps -a
+              echo "=== API container logs ==="
+              docker compose -f api/docker-compose.yml logs api --tail 50
+              echo "=== Postgres logs ==="
+              docker compose -f api/docker-compose.yml logs postgres --tail 20
+              echo "=== Redis logs ==="
+              docker compose -f api/docker-compose.yml logs redis --tail 10
+              exit 1
+            fi
+            echo "  ... waiting (${ELAPSED}s elapsed)"
+            sleep 5
+          done
+          ELAPSED=$(( $(date +%s) - START ))
+          echo "=== API ready after ${ELAPSED}s ==="
 
-      # Seeder la base de données avec les produits de démo
-      # Les tests E2E naviguent vers des URLs spécifiques (/products/head-speed-pro)
       - name: Seed database
         working-directory: api
-        run: docker compose exec -T api rails db:seed
-
-      # --- Étape 3 : Setup du front ---
+        run: |
+          echo "=== Seeding database ==="
+          docker compose exec -T api rails db:seed
+          echo "=== Seed complete ==="
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -80,15 +95,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Installer Chromium pour Playwright
-      # --with-deps installe aussi les libs système nécessaires (fonts, etc.)
       - name: Install Playwright
         run: npx playwright install chromium --with-deps
 
-      # --- Étape 4 : Lancer les tests E2E ---
-
-      # Les variables d'environnement pour le front
-      # STRIPE_WEBHOOK_SECRET est passé pour le helper simulate-webhook.ts
       - name: Run E2E tests
         env:
           NEXT_PUBLIC_API_URL: http://localhost:3000/graphql
@@ -96,10 +105,6 @@ jobs:
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
         run: npx playwright test
 
-      # --- Étape 5 : Artifacts en cas d'échec ---
-
-      # Si les tests échouent, upload les screenshots et traces
-      # pour pouvoir debugger sans relancer
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v4
@@ -109,8 +114,6 @@ jobs:
             test-results/
             playwright-report/
           retention-days: 7
-
-      # --- Étape 6 : Cleanup ---
 
       - name: Stop API
         if: always()
