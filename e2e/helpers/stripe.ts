@@ -35,6 +35,12 @@ export const fillStripeCardAndPay = async (page: Page) => {
   await paymentFrame.locator("#payment-expiryInput").fill("1230");
   await paymentFrame.locator("#payment-cvcInput").fill("123");
 
+  // Fill ZIP code if visible (Stripe shows it for US-based IPs, e.g. GitHub Actions runners)
+  const zipInput = paymentFrame.locator("#payment-postalCodeInput");
+  if ((await zipInput.count()) > 0) {
+    await zipInput.fill("10001");
+  }
+
   // Close Stripe Link popup
   await page.keyboard.press("Escape");
   await page.waitForTimeout(1000);
