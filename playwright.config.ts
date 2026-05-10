@@ -5,10 +5,11 @@ export default defineConfig({
   fullyParallel: false,
   retries: 0,
   workers: 1,
-  reporter: "list",
+  reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: "http://localhost:3001",
-    trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    trace: "retain-on-failure",
     locale: "en",
   },
   projects: [
