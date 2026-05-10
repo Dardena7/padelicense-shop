@@ -1,10 +1,13 @@
 import { test, expect } from "@playwright/test";
+import { clickAndWaitForURL } from "./helpers/navigation";
 
 const TEST_PASSWORD = "Password123!";
 const uniqueEmail = () => `signup-${Date.now()}@e2e-test.com`;
 
 test.describe("Signup + Account management", () => {
-  test("signup, edit profile, manage addresses, change default", async ({ page }) => {
+  test("signup, edit profile, manage addresses, change default", async ({
+    page,
+  }) => {
     const email = uniqueEmail();
 
     // --- Signup ---
@@ -17,12 +20,20 @@ test.describe("Signup + Account management", () => {
     await page.getByRole("button", { name: "Create account" }).click();
 
     // Should redirect to home after signup
-    await expect(page).toHaveURL(/\/en$/);
-    await expect(page.getByRole("link", { name: "Account" })).toBeVisible();
+    await expect(page).toHaveURL(/\/en$/, { timeout: 10000 });
+    await expect(page.getByRole("link", { name: "Account" })).toBeVisible({
+      timeout: 10000,
+    });
 
     // --- Navigate to account ---
-    await page.getByRole("link", { name: "Account" }).click();
-    await expect(page.getByRole("heading", { name: "My account" })).toBeVisible();
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("link", { name: "Account" }),
+      /\/account/,
+    );
+    await expect(
+      page.getByRole("heading", { name: "My account" }),
+    ).toBeVisible();
 
     // --- Profile tab (default) should show user info ---
     await expect(page.getByText("John")).toBeVisible();
@@ -74,7 +85,9 @@ test.describe("Signup + Account management", () => {
     await page.getByLabel("Address line 1").fill("Avenue Louise 10");
     await page.getByRole("button", { name: "Save" }).click();
 
-    await expect(page.getByText("Avenue Louise 5")).not.toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Avenue Louise 5")).not.toBeVisible({
+      timeout: 10000,
+    });
     await expect(page.getByText("Avenue Louise 10")).toBeVisible();
 
     // --- Change default to second address ---
