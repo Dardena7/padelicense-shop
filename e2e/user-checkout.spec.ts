@@ -69,7 +69,7 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
     await fillStripeCardAndPay(page);
 
     // --- Should redirect to confirmation ---
-    await expect(page.getByText("Order confirmed!")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByRole("heading", { name: "Order confirmed!" })).toBeVisible({ timeout: 20000 });
     const orderText = await page.getByText(/Order #PAD-/).textContent();
     const orderNumber = orderText?.match(/PAD-[\w-]+/)?.[0];
 

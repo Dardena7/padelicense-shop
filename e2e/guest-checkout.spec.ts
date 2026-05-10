@@ -50,7 +50,7 @@ test.describe("Guest checkout", () => {
     await fillStripeCardAndPay(page);
 
     // --- Should redirect to confirmation ---
-    await expect(page.getByText("Order confirmed!")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByRole("heading", { name: "Order confirmed!" })).toBeVisible({ timeout: 20000 });
     await expect(page.getByText(/Order #PAD-/)).toBeVisible();
 
     // Cart should be empty
