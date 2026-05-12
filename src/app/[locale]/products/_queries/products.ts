@@ -10,6 +10,7 @@ export const GET_PRODUCTS = graphql(`
         brand
         basePriceCents
         featured
+        rating
         category {
           name
           slug
