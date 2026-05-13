@@ -57,7 +57,7 @@ const mapUser = (data: Record<string, string>): User => ({
   firstName: data.first_name,
   lastName: data.last_name,
   phone: data.phone || null,
-  role: data.role,
+  role: data.role.toUpperCase() as UserRole,
 });
 
 export const AuthProvider = (props: { children: React.ReactNode }) => {
