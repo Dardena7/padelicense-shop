@@ -236,7 +236,7 @@ describe("CartContext", () => {
         email: "test@test.com",
         firstName: "Test",
         lastName: "User",
-        role: "customer",
+        role: UserRole.Customer,
         phone: null,
       };
 
