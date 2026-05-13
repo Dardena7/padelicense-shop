@@ -5,7 +5,6 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ApolloClientProvider } from "@/lib/apollo";
-import { Navbar, Footer } from "@/components/layout";
 import { LocalizationProvider } from "@/lib/localization";
 import { AuthProvider } from "@/lib/auth";
 import { CartProvider } from "@/lib/cart";
@@ -62,11 +61,7 @@ const LocaleLayout = async (props: LayoutProps) => {
           <ApolloClientProvider>
             <AuthProvider>
               <LocalizationProvider>
-                <CartProvider>
-                  <Navbar />
-                  {children}
-                  <Footer />
-                </CartProvider>
+                <CartProvider>{children}</CartProvider>
               </LocalizationProvider>
             </AuthProvider>
           </ApolloClientProvider>
