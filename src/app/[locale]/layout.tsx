@@ -5,10 +5,8 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ApolloClientProvider } from "@/lib/apollo";
-import { Navbar, Footer } from "@/components/layout";
 import { LocalizationProvider } from "@/lib/localization";
 import { AuthProvider } from "@/lib/auth";
-import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 const atkinson = Atkinson_Hyperlegible({
@@ -61,13 +59,7 @@ const LocaleLayout = async (props: LayoutProps) => {
         <NextIntlClientProvider>
           <ApolloClientProvider>
             <AuthProvider>
-              <LocalizationProvider>
-                <CartProvider>
-                  <Navbar />
-                  {children}
-                  <Footer />
-                </CartProvider>
-              </LocalizationProvider>
+              <LocalizationProvider>{children}</LocalizationProvider>
             </AuthProvider>
           </ApolloClientProvider>
         </NextIntlClientProvider>
