@@ -43,9 +43,18 @@ export const DashboardContent = () => {
       <h2 className="text-2xl font-bold">{t("title")}</h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatsCard label={t("revenueToday")} value={formatPrice(dashboard.revenueTodayCents)} />
-        <StatsCard label={t("revenueWeek")} value={formatPrice(dashboard.revenueThisWeekCents)} />
-        <StatsCard label={t("revenueMonth")} value={formatPrice(dashboard.revenueThisMonthCents)} />
+        <StatsCard
+          label={t("revenueToday")}
+          value={formatPrice(dashboard.revenueTodayCents)}
+        />
+        <StatsCard
+          label={t("revenueWeek")}
+          value={formatPrice(dashboard.revenueThisWeekCents)}
+        />
+        <StatsCard
+          label={t("revenueMonth")}
+          value={formatPrice(dashboard.revenueThisMonthCents)}
+        />
         <StatsCard label={t("totalOrders")} value={String(totalOrders)} />
       </div>
 

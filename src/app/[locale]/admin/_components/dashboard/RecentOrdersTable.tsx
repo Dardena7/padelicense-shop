@@ -49,12 +49,17 @@ export const RecentOrdersTable = (props: RecentOrdersTableProps) => {
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.id} className="border-b border-gray-50 last:border-0">
+            <tr
+              key={order.id}
+              className="border-b border-gray-50 last:border-0"
+            >
               <td className="px-6 py-3 text-sm font-medium">{order.number}</td>
               <td className="px-6 py-3">
                 <StatusBadge status={order.status} />
               </td>
-              <td className="px-6 py-3 text-sm">{formatPrice(order.totalCents)}</td>
+              <td className="px-6 py-3 text-sm">
+                {formatPrice(order.totalCents)}
+              </td>
               <td className="px-6 py-3 text-sm text-gray-500">
                 {formatDate(order.createdAt)}
               </td>

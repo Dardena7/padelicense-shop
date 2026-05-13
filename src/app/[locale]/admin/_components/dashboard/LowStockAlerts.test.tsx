@@ -4,8 +4,20 @@ import { render } from "@/test/render";
 import { LowStockAlerts } from "./LowStockAlerts";
 
 const mockVariants = [
-  { id: "1", name: "EU 42", sku: "SHOE-42", stockQuantity: 1, productName: "Asics Gel" },
-  { id: "2", name: "Limited", sku: "RACKET-LTD", stockQuantity: 0, productName: "Bullpadel Vertex" },
+  {
+    id: "1",
+    name: "EU 42",
+    sku: "SHOE-42",
+    stockQuantity: 1,
+    productName: "Asics Gel",
+  },
+  {
+    id: "2",
+    name: "Limited",
+    sku: "RACKET-LTD",
+    stockQuantity: 0,
+    productName: "Bullpadel Vertex",
+  },
 ];
 
 describe("LowStockAlerts", () => {

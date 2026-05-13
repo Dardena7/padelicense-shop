@@ -27,7 +27,10 @@ export const LowStockAlerts = (props: LowStockAlertsProps) => {
       </h3>
       <ul className="divide-y divide-gray-50">
         {variants.map((variant) => (
-          <li key={variant.id} className="flex items-center justify-between px-6 py-3">
+          <li
+            key={variant.id}
+            className="flex items-center justify-between px-6 py-3"
+          >
             <div>
               <p className="text-sm font-medium">{variant.productName}</p>
               <p className="text-xs text-gray-500">

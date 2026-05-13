@@ -16,10 +16,13 @@ const STATUS_COLORS: Record<string, string> = {
 export const StatusBadge = (props: StatusBadgeProps) => {
   const { status } = props;
 
-  const colorClass = STATUS_COLORS[status.toLowerCase()] ?? "bg-gray-100 text-gray-800";
+  const colorClass =
+    STATUS_COLORS[status.toLowerCase()] ?? "bg-gray-100 text-gray-800";
 
   return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClass}`}>
+    <span
+      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClass}`}
+    >
       {status}
     </span>
   );
