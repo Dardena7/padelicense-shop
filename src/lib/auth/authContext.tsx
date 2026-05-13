@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import { tokenStore } from "./tokenStore";
+import { UserRole } from "@/gql/graphql";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace("/graphql", "") ||
@@ -19,7 +20,7 @@ type User = {
   firstName: string;
   lastName: string;
   phone: string | null;
-  role: string;
+  role: UserRole;
 };
 
 type AuthContextType = {

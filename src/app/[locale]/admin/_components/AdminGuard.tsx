@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useAuthContext } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
+import { UserRole } from "@/gql/graphql";
 
 type AdminGuardProps = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export const AdminGuard = (props: AdminGuardProps) => {
   const { user, isLoading } = useAuthContext();
   const router = useRouter();
 
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = user?.role === UserRole.Admin;
 
   useEffect(() => {
     if (!isLoading && !user) {
