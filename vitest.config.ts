@@ -38,7 +38,7 @@ export default defineConfig({
           setupFiles: ["src/test/setup.ts"],
           server: {
             deps: {
-              inline: ["next-intl"],
+              inline: ["next-intl", /\(shop\)/],
             },
           },
         },
