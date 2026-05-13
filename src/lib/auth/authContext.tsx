@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import { tokenStore } from "./tokenStore";
+import { UserRole } from "@/gql/graphql";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace("/graphql", "") ||
@@ -19,7 +20,7 @@ type User = {
   firstName: string;
   lastName: string;
   phone: string | null;
-  role: string;
+  role: UserRole;
 };
 
 type AuthContextType = {
@@ -56,7 +57,7 @@ const mapUser = (data: Record<string, string>): User => ({
   firstName: data.first_name,
   lastName: data.last_name,
   phone: data.phone || null,
-  role: data.role,
+  role: data.role.toUpperCase() as UserRole,
 });
 
 export const AuthProvider = (props: { children: React.ReactNode }) => {

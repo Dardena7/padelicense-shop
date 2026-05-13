@@ -1,6 +1,7 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CartProvider, useCartContext } from "./cartContext";
+import { UserRole } from "@/gql/graphql";
 import { cartStorage } from "./storage";
 import { NextIntlClientProvider } from "next-intl";
 import messages from "../../../messages/en.json";
@@ -163,7 +164,7 @@ describe("CartContext", () => {
           email: "test@test.com",
           firstName: "Test",
           lastName: "User",
-          role: "customer",
+          role: UserRole.Customer,
           phone: null,
         },
         isLoading: false,
@@ -198,7 +199,7 @@ describe("CartContext", () => {
           email: "test@test.com",
           firstName: "Test",
           lastName: "User",
-          role: "customer",
+          role: UserRole.Customer,
           phone: null,
         },
         isLoading: false,
@@ -235,7 +236,7 @@ describe("CartContext", () => {
         email: "test@test.com",
         firstName: "Test",
         lastName: "User",
-        role: "customer",
+        role: UserRole.Customer,
         phone: null,
       };
 
