@@ -140,7 +140,17 @@
       "logout": "Log out"
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "revenueToday": "Revenue today",
+      "revenueWeek": "Revenue this week",
+      "revenueMonth": "Revenue this month",
+      "totalOrders": "Total orders",
+      "recentOrders": "Recent orders",
+      "orderNumber": "Order",
+      "status": "Status",
+      "total": "Total",
+      "date": "Date",
+      "lowStock": "Low stock alerts"
     },
     "products": {
       "title": "Products"
