@@ -7,7 +7,6 @@ import { routing } from "@/i18n/routing";
 import { ApolloClientProvider } from "@/lib/apollo";
 import { LocalizationProvider } from "@/lib/localization";
 import { AuthProvider } from "@/lib/auth";
-import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 const atkinson = Atkinson_Hyperlegible({
@@ -60,9 +59,7 @@ const LocaleLayout = async (props: LayoutProps) => {
         <NextIntlClientProvider>
           <ApolloClientProvider>
             <AuthProvider>
-              <LocalizationProvider>
-                <CartProvider>{children}</CartProvider>
-              </LocalizationProvider>
+              <LocalizationProvider>{children}</LocalizationProvider>
             </AuthProvider>
           </ApolloClientProvider>
         </NextIntlClientProvider>
