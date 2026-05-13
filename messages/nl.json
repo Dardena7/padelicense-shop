@@ -18,7 +18,8 @@
     "cart": "Winkelwagen",
     "account": "Account",
     "login": "Inloggen",
-    "signup": "Registreren"
+    "signup": "Registreren",
+    "admin": "Admin"
   },
   "auth": {
     "login": {
@@ -126,6 +127,33 @@
     "title": "Producten",
     "description": "Bekijk ons assortiment premium padel uitrusting",
     "variants": "Varianten"
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Producten",
+      "categories": "Categorieën",
+      "orders": "Bestellingen"
+    },
+    "header": {
+      "title": "Admin",
+      "logout": "Uitloggen"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "products": {
+      "title": "Producten"
+    },
+    "categories": {
+      "title": "Categorieën"
+    },
+    "orders": {
+      "title": "Bestellingen"
+    },
+    "guard": {
+      "unauthorized": "U moet een beheerder zijn om deze pagina te openen."
+    }
   },
   "metadata": {
     "home": {

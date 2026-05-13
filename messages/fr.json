@@ -18,7 +18,8 @@
     "cart": "Panier",
     "account": "Compte",
     "login": "Connexion",
-    "signup": "Inscription"
+    "signup": "Inscription",
+    "admin": "Admin"
   },
   "auth": {
     "login": {
@@ -126,6 +127,33 @@
     "title": "Produits",
     "description": "Parcourez notre sélection d'équipement de padel premium",
     "variants": "Variantes"
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "Tableau de bord",
+      "products": "Produits",
+      "categories": "Catégories",
+      "orders": "Commandes"
+    },
+    "header": {
+      "title": "Admin",
+      "logout": "Se déconnecter"
+    },
+    "dashboard": {
+      "title": "Tableau de bord"
+    },
+    "products": {
+      "title": "Produits"
+    },
+    "categories": {
+      "title": "Catégories"
+    },
+    "orders": {
+      "title": "Commandes"
+    },
+    "guard": {
+      "unauthorized": "Vous devez être administrateur pour accéder à cette page."
+    }
   },
   "metadata": {
     "home": {

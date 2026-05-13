@@ -12,12 +12,22 @@ export const NavbarAuth = () => {
 
   if (user) {
     return (
-      <Link
-        href="/account"
-        className="text-sm text-muted hover:text-foreground transition-colors"
-      >
-        {t("account")}
-      </Link>
+      <div className="flex items-center gap-4">
+        {user.role === "ADMIN" && (
+          <Link
+            href="/admin"
+            className="text-sm font-medium text-muted hover:text-foreground transition-colors"
+          >
+            {t("admin")}
+          </Link>
+        )}
+        <Link
+          href="/account"
+          className="text-sm text-muted hover:text-foreground transition-colors"
+        >
+          {t("account")}
+        </Link>
+      </div>
     );
   }
 
