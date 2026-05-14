@@ -5,13 +5,11 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthContext } from "@/lib/auth";
 import { useMyOrder } from "../_hooks";
-import { Badge } from "@/components/ui";
+import { Badge, type BadgeVariant } from "@/components/ui";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { OrderStatus } from "@/gql/graphql";
 
-const statusVariant = (
-  status: OrderStatus,
-): "default" | "success" | "danger" | "accent" => {
+const statusVariant = (status: OrderStatus): BadgeVariant => {
   switch (status) {
     case OrderStatus.Paid:
     case OrderStatus.Delivered:

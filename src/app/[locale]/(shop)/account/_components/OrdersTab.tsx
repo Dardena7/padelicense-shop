@@ -3,13 +3,11 @@
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useMyOrders } from "../_hooks";
-import { Badge } from "@/components/ui";
+import { Badge, type BadgeVariant } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
 import { OrderStatus } from "@/gql/graphql";
 
-const statusVariant = (
-  status: OrderStatus,
-): "default" | "success" | "danger" | "accent" => {
+const statusVariant = (status: OrderStatus): BadgeVariant => {
   switch (status) {
     case OrderStatus.Paid:
       return "success";

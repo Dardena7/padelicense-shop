@@ -22,6 +22,7 @@
     "@apollo/client-integration-nextjs": "^0.14.5",
     "@stripe/react-stripe-js": "^6.3.0",
     "@stripe/stripe-js": "^9.4.0",
+    "clsx": "^2.1.1",
     "graphql": "^16.13.2",
     "i18n-iso-countries": "^7.14.0",
     "next": "^16.2.6",

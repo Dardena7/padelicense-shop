@@ -1,4 +1,4 @@
-type BadgeVariant = "default" | "success" | "danger" | "accent";
+export type BadgeVariant = "default" | "success" | "danger" | "accent";
 
 type BadgeProps = {
   variant?: BadgeVariant;

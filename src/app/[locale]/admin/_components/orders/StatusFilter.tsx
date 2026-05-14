@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { OrderStatus } from "@/gql/graphql";
 
@@ -25,11 +26,10 @@ export const StatusFilter = (props: StatusFilterProps) => {
       <button
         type="button"
         onClick={() => onChange(undefined)}
-        className={`rounded-md px-3 py-1.5 text-sm ${
-          value === undefined
-            ? "bg-gray-900 text-white"
-            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-        }`}
+        className={clsx("rounded-md px-3 py-1.5 text-sm", {
+          "bg-gray-900 text-white": value === undefined,
+          "bg-gray-100 text-gray-700 hover:bg-gray-200": value !== undefined,
+        })}
       >
         {t("all")}
       </button>
@@ -38,11 +38,10 @@ export const StatusFilter = (props: StatusFilterProps) => {
           key={status}
           type="button"
           onClick={() => onChange(status)}
-          className={`rounded-md px-3 py-1.5 text-sm ${
-            value === status
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
+          className={clsx("rounded-md px-3 py-1.5 text-sm", {
+            "bg-gray-900 text-white": value === status,
+            "bg-gray-100 text-gray-700 hover:bg-gray-200": value !== status,
+          })}
         >
           {t(`statuses.${status}`)}
         </button>

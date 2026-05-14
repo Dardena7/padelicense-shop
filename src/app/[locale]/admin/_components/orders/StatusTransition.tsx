@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { OrderStatus } from "@/gql/graphql";
 
@@ -31,11 +32,12 @@ export const StatusTransition = (props: StatusTransitionProps) => {
           type="button"
           disabled={loading}
           onClick={() => onTransition(status)}
-          className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+          className={clsx(
+            "rounded-md px-3 py-1.5 text-sm font-medium disabled:opacity-50",
             status === OrderStatus.Cancelled
               ? "bg-red-100 text-red-700 hover:bg-red-200"
-              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-          } disabled:opacity-50`}
+              : "bg-blue-100 text-blue-700 hover:bg-blue-200",
+          )}
         >
           {t(`transitionTo.${status}`)}
         </button>
