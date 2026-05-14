@@ -1,17 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-
-type Variant = {
-  id: string;
-  name: string;
-  sku: string;
-  stockQuantity: number;
-  productName: string;
-};
+import { AdminDashboardQuery } from "@/gql/graphql";
 
 type LowStockAlertsProps = {
-  variants: Variant[];
+  variants: AdminDashboardQuery["adminDashboard"]["lowStockVariants"];
 };
 
 export const LowStockAlerts = (props: LowStockAlertsProps) => {
@@ -32,7 +25,7 @@ export const LowStockAlerts = (props: LowStockAlertsProps) => {
             className="flex items-center justify-between px-6 py-3"
           >
             <div>
-              <p className="text-sm font-medium">{variant.productName}</p>
+              <p className="text-sm font-medium">{variant.product.name}</p>
               <p className="text-xs text-gray-500">
                 {variant.name} — {variant.sku}
               </p>

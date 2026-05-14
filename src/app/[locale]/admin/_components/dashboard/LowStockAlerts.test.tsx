@@ -9,14 +9,14 @@ const mockVariants = [
     name: "EU 42",
     sku: "SHOE-42",
     stockQuantity: 1,
-    productName: "Asics Gel",
+    product: { id: "p1", name: "Asics Gel" },
   },
   {
     id: "2",
     name: "Limited",
     sku: "RACKET-LTD",
     stockQuantity: 0,
-    productName: "Bullpadel Vertex",
+    product: { id: "p2", name: "Bullpadel Vertex" },
   },
 ];
 

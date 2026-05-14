@@ -2,18 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { AdminDashboardQuery } from "@/gql/graphql";
 import { StatusBadge } from "./StatusBadge";
 
-type Order = {
-  id: string;
-  number: string;
-  status: string;
-  totalCents: number;
-  createdAt: string;
-};
-
 type RecentOrdersTableProps = {
-  orders: Order[];
+  orders: AdminDashboardQuery["adminDashboard"]["recentOrders"];
 };
 
 export const RecentOrdersTable = (props: RecentOrdersTableProps) => {

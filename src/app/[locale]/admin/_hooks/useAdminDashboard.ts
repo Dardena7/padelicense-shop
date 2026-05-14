@@ -27,7 +27,10 @@ const ADMIN_DASHBOARD_QUERY = graphql(`
         name
         sku
         stockQuantity
-        productName
+        product {
+          id
+          name
+        }
       }
     }
   }
