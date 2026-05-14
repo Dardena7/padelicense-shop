@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { AdminDashboardQuery } from "@/gql/graphql";
+import { formatPrice, formatDate } from "@/lib/utils";
 import { StatusBadge } from "./StatusBadge";
 
 type RecentOrdersTableProps = {
@@ -13,18 +13,6 @@ export const RecentOrdersTable = (props: RecentOrdersTableProps) => {
   const { orders } = props;
   const t = useTranslations("admin.dashboard");
   const locale = useLocale();
-
-  const formatPrice = (cents: number) =>
-    new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EUR",
-    }).format(cents / 100);
-
-  const formatDate = (iso: string) =>
-    new Intl.DateTimeFormat(locale, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(iso));
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white">
@@ -51,10 +39,10 @@ export const RecentOrdersTable = (props: RecentOrdersTableProps) => {
                 <StatusBadge status={order.status} />
               </td>
               <td className="px-6 py-3 text-sm">
-                {formatPrice(order.totalCents)}
+                {formatPrice(order.totalCents, locale)}
               </td>
               <td className="px-6 py-3 text-sm text-gray-500">
-                {formatDate(order.createdAt)}
+                {formatDate(order.createdAt, locale)}
               </td>
             </tr>
           ))}

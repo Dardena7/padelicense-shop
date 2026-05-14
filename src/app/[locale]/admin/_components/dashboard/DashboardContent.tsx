@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useAdminDashboard } from "../../_hooks/useAdminDashboard";
+import { formatPrice } from "@/lib/utils";
 import { StatsCard } from "./StatsCard";
 import { RecentOrdersTable } from "./RecentOrdersTable";
 import { LowStockAlerts } from "./LowStockAlerts";
@@ -22,12 +22,6 @@ export const DashboardContent = () => {
 
   if (!dashboard) return null;
 
-  const formatPrice = (cents: number) =>
-    new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EUR",
-    }).format(cents / 100);
-
   const totalOrders = dashboard.orderCountsByStatus.reduce(
     (sum, s) => sum + s.count,
     0,
@@ -45,17 +39,18 @@ export const DashboardContent = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           label={t("revenueToday")}
-          value={formatPrice(dashboard.revenueTodayCents)}
+          value={formatPrice(dashboard.revenueTodayCents, locale)}
         />
         <StatsCard
           label={t("revenueWeek")}
-          value={formatPrice(dashboard.revenueThisWeekCents)}
+          value={formatPrice(dashboard.revenueThisWeekCents, locale)}
         />
         <StatsCard
           label={t("revenueMonth")}
-          value={formatPrice(dashboard.revenueThisMonthCents)}
+          value={formatPrice(dashboard.revenueThisMonthCents, locale)}
         />
         <StatsCard label={t("totalOrders")} value={String(totalOrders)} />
+        <StatsCard label={t("totalProducts")} value={String(totalProducts)} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
