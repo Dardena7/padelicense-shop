@@ -114,6 +114,8 @@
       "status": "Statut",
       "total": "Total",
       "items": "Articles",
+      "notFound": "Commande introuvable.",
+      "shippingAddress": "Adresse de livraison",
       "statuses": {
         "PENDING": "En attente",
         "PAID": "Payée",
@@ -160,7 +162,34 @@
       "title": "Catégories"
     },
     "orders": {
-      "title": "Commandes"
+      "title": "Commandes",
+      "all": "Toutes",
+      "orderNumber": "Commande",
+      "customer": "Client",
+      "status": "Statut",
+      "total": "Total",
+      "date": "Date",
+      "notFound": "Commande introuvable.",
+      "shippingAddress": "Adresse de livraison",
+      "lineItems": "Articles",
+      "product": "Produit",
+      "variant": "Variante",
+      "unitPrice": "Prix unitaire",
+      "quantity": "Qté",
+      "subtotal": "Sous-total",
+      "createdAt": "Créée le",
+      "statuses": {
+        "PENDING": "En attente",
+        "PAID": "Payée",
+        "SHIPPED": "Expédiée",
+        "DELIVERED": "Livrée",
+        "CANCELLED": "Annulée"
+      },
+      "transitionTo": {
+        "SHIPPED": "Marquer expédiée",
+        "DELIVERED": "Marquer livrée",
+        "CANCELLED": "Annuler la commande"
+      }
     },
     "guard": {
       "unauthorized": "Vous devez être administrateur pour accéder à cette page."

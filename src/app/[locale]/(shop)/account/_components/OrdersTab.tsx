@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useMyOrders } from "../_hooks";
 import { Badge } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
@@ -40,9 +41,10 @@ export const OrdersTab = () => {
   return (
     <div className="flex flex-col gap-4">
       {orders.map((order) => (
-        <div
+        <Link
           key={order.id}
-          className="border border-border rounded-xl p-4 flex flex-col gap-3"
+          href={`/account/orders/${order.id}`}
+          className="border border-border rounded-xl p-4 flex flex-col gap-3 hover:border-gray-400 transition-colors"
         >
           <div className="flex justify-between items-center">
             <h3 className="font-medium text-foreground">
@@ -80,7 +82,7 @@ export const OrdersTab = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
