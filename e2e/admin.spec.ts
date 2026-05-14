@@ -94,15 +94,35 @@ test.describe("Admin back-office", () => {
     // Verify header shows admin name
     await expect(page.getByText("Admin Padelicense")).toBeVisible();
 
+    // --- 7. Verify dashboard data loaded ---
+    await expect(page.getByText("Revenue today")).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.getByText("Revenue this week")).toBeVisible();
+    await expect(page.getByText("Revenue this month")).toBeVisible();
+    await expect(page.getByText("Total orders")).toBeVisible();
+    await expect(page.getByText("Recent orders")).toBeVisible();
+    await expect(page.getByText("Low stock alerts")).toBeVisible();
+
+    // Verify actual data from seeds
+    // Recent orders table should have order numbers (PAD-YYYYMMDD-XXXX format)
+    await expect(page.locator("text=/PAD-/").first()).toBeVisible();
+
+    // Status badges should be present
+    await expect(
+      page.locator("text=/pending|paid|shipped|delivered/i").first(),
+    ).toBeVisible();
+
+    // Revenue should show € amounts (not €0.00 since seeds have orders)
+    await expect(page.locator("text=/€[1-9]/").first()).toBeVisible();
+
     // --- 7. Navigate through all admin pages via sidebar ---
     await clickAndWaitForURL(
       page,
       page.getByRole("navigation").getByRole("link", { name: "Products" }),
       /\/admin\/products/,
     );
-    await expect(
-      page.getByRole("heading", { name: "Products" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Products" })).toBeVisible();
 
     await clickAndWaitForURL(
       page,
@@ -118,9 +138,7 @@ test.describe("Admin back-office", () => {
       page.getByRole("navigation").getByRole("link", { name: "Orders" }),
       /\/admin\/orders/,
     );
-    await expect(
-      page.getByRole("heading", { name: "Orders" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Orders" })).toBeVisible();
 
     // Navigate back to dashboard
     await clickAndWaitForURL(

@@ -140,7 +140,18 @@
       "logout": "Se déconnecter"
     },
     "dashboard": {
-      "title": "Tableau de bord"
+      "title": "Tableau de bord",
+      "revenueToday": "Revenu aujourd'hui",
+      "revenueWeek": "Revenu cette semaine",
+      "revenueMonth": "Revenu ce mois",
+      "totalOrders": "Commandes totales",
+      "totalProducts": "Produits totaux",
+      "recentOrders": "Commandes récentes",
+      "orderNumber": "Commande",
+      "status": "Statut",
+      "total": "Total",
+      "date": "Date",
+      "lowStock": "Alertes stock bas"
     },
     "products": {
       "title": "Produits"

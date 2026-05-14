@@ -15,9 +15,9 @@ export const fillStripeCardAndPay = async (page: Page) => {
   );
 
   // Find the accessory-target frame
-  const paymentFrame = page.frames().find((f) =>
-    f.url().includes("elements-inner-accessory-target"),
-  );
+  const paymentFrame = page
+    .frames()
+    .find((f) => f.url().includes("elements-inner-accessory-target"));
   if (!paymentFrame) throw new Error("Stripe payment frame not found");
 
   // Click on Card accordion button

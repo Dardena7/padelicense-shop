@@ -140,7 +140,18 @@
       "logout": "Uitloggen"
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "revenueToday": "Omzet vandaag",
+      "revenueWeek": "Omzet deze week",
+      "revenueMonth": "Omzet deze maand",
+      "totalOrders": "Totaal bestellingen",
+      "totalProducts": "Totaal producten",
+      "recentOrders": "Recente bestellingen",
+      "orderNumber": "Bestelling",
+      "status": "Status",
+      "total": "Totaal",
+      "date": "Datum",
+      "lowStock": "Lage voorraad waarschuwingen"
     },
     "products": {
       "title": "Producten"

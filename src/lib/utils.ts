@@ -8,3 +8,10 @@ export const formatPrice = (cents: number, locale: string): string => {
     currency: "EUR",
   }).format(cents / 100);
 };
+
+export const formatDate = (iso: string, locale: string): string => {
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(iso));
+};

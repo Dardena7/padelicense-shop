@@ -58,9 +58,7 @@ test.describe("Guest checkout", () => {
       page.getByRole("link", { name: "Proceed to checkout" }),
       /\/checkout/,
     );
-    await expect(
-      page.getByRole("heading", { name: "Checkout" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Checkout" })).toBeVisible();
 
     // --- Fill guest email + address ---
     await page.getByLabel("Email").fill("guest-checkout@e2e-test.com");
