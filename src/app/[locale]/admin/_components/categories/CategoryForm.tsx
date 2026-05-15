@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { SupportedLocale, CategoryTranslation } from "@/gql/graphql";
@@ -10,12 +13,26 @@ import { useAdminCategories } from "../../_hooks/useAdminCategories";
 import { LanguageTabs } from "../LanguageTabs";
 
 const LOCALES = [SupportedLocale.En, SupportedLocale.Fr, SupportedLocale.Nl];
+const MAX_DEPTH = 3;
 
-type TranslationFields = {
-  name: string;
-  slug: string;
-  description: string;
-};
+const translationSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z.string().min(1, t("validation.nameRequired")),
+    slug: z.string().min(1, t("validation.slugRequired")),
+    description: z.string().optional(),
+  });
+
+const categorySchema = (t: (key: string) => string) =>
+  z.object({
+    parentId: z.string().optional(),
+    translations: z.object({
+      [SupportedLocale.En]: translationSchema(t),
+      [SupportedLocale.Fr]: translationSchema(t),
+      [SupportedLocale.Nl]: translationSchema(t),
+    }),
+  });
+
+type FormValues = z.infer<ReturnType<typeof categorySchema>>;
 
 type SubmitData = {
   translations: {
@@ -35,25 +52,49 @@ type CategoryFormProps = {
   loading: boolean;
 };
 
-const emptyTranslations = (): Record<SupportedLocale, TranslationFields> => ({
-  [SupportedLocale.En]: { name: "", slug: "", description: "" },
-  [SupportedLocale.Fr]: { name: "", slug: "", description: "" },
-  [SupportedLocale.Nl]: { name: "", slug: "", description: "" },
-});
+type CategoryNode = {
+  id: string;
+  name: string;
+  subcategories?: CategoryNode[];
+};
 
-const fromExisting = (
-  translations: CategoryTranslation[],
-): Record<SupportedLocale, TranslationFields> => {
-  const result = emptyTranslations();
-  translations.forEach((t) => {
-    result[t.locale] = {
+const buildDefaultValues = (
+  initialTranslations?: CategoryTranslation[],
+  parentId?: string | null,
+): FormValues => {
+  const empty = { name: "", slug: "", description: "" };
+  const translations = {
+    [SupportedLocale.En]: { ...empty },
+    [SupportedLocale.Fr]: { ...empty },
+    [SupportedLocale.Nl]: { ...empty },
+  };
+
+  initialTranslations?.forEach((t) => {
+    translations[t.locale] = {
       name: t.name,
       slug: t.slug,
       description: t.description ?? "",
     };
   });
-  return result;
+
+  return { parentId: parentId ?? "", translations };
 };
+
+const flattenCategories = (
+  cats: CategoryNode[],
+  depth: number,
+  excludeId?: string,
+): { id: string; label: string }[] =>
+  cats.flatMap((cat) => {
+    if (cat.id === excludeId) return [];
+    if (depth >= MAX_DEPTH - 1) return [];
+    const indent = "\u00A0\u00A0\u00A0".repeat(depth);
+    const prefix = depth > 0 ? `${indent}└ ` : "";
+    const children = cat.subcategories
+      ? flattenCategories(cat.subcategories, depth + 1, excludeId)
+      : [];
+    return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
+  });
 
 export const CategoryForm = (props: CategoryFormProps) => {
   const { initialTranslations, parentId, categoryId, onSubmit, loading } =
@@ -61,107 +102,61 @@ export const CategoryForm = (props: CategoryFormProps) => {
   const t = useTranslations("admin.categories");
   const router = useRouter();
   const { categories } = useAdminCategories();
+  const isEditing = !!initialTranslations;
 
-  const [fields, setFields] = useState<
-    Record<SupportedLocale, TranslationFields>
-  >(
-    initialTranslations
-      ? fromExisting(initialTranslations)
-      : emptyTranslations(),
-  );
-  const [selectedParentId, setSelectedParentId] = useState<string>(
-    parentId ?? "",
-  );
-  const [slugTouched, setSlugTouched] = useState<
-    Record<SupportedLocale, boolean>
-  >({
-    [SupportedLocale.En]: !!initialTranslations,
-    [SupportedLocale.Fr]: !!initialTranslations,
-    [SupportedLocale.Nl]: !!initialTranslations,
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, touchedFields },
+  } = useForm<FormValues>({
+    resolver: zodResolver(categorySchema(t)),
+    defaultValues: buildDefaultValues(initialTranslations, parentId),
   });
-  const [error, setError] = useState<string | null>(null);
 
-  // Flatten categories recursively, excluding self
-  const MAX_DEPTH = 3;
-  type FlatOption = { id: string; label: string };
-  type CategoryNode = {
-    id: string;
-    name: string;
-    subcategories?: CategoryNode[];
+  const parentOptions = flattenCategories(categories, 0, categoryId);
+
+  // Auto-generate slug from name in creation mode
+  const watchedNames = {
+    [SupportedLocale.En]: watch(`translations.${SupportedLocale.En}.name`),
+    [SupportedLocale.Fr]: watch(`translations.${SupportedLocale.Fr}.name`),
+    [SupportedLocale.Nl]: watch(`translations.${SupportedLocale.Nl}.name`),
   };
 
-  const flattenCategories = (
-    cats: CategoryNode[],
-    depth: number,
-  ): FlatOption[] =>
-    cats.flatMap((cat) => {
-      if (cat.id === categoryId) return [];
-      // Don't show categories at max depth — they can't be parents
-      if (depth >= MAX_DEPTH - 1) return [];
-      const indent = "\u00A0\u00A0\u00A0".repeat(depth);
-      const prefix = depth > 0 ? `${indent}└ ` : "";
-      const children = cat.subcategories
-        ? flattenCategories(cat.subcategories, depth + 1)
-        : [];
-      return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
+  useEffect(() => {
+    if (isEditing) return;
+
+    const setSlug = setValue as (path: string, value: string) => void;
+
+    LOCALES.forEach((locale) => {
+      if (touchedFields.translations?.[locale]?.slug) return;
+      setSlug(`translations.${locale}.slug`, slugify(watchedNames[locale]));
     });
+  }, [watchedNames.EN, watchedNames.FR, watchedNames.NL]);
 
-  const parentOptions = flattenCategories(categories, 0);
-
-  const updateField = (
-    locale: string,
-    field: keyof TranslationFields,
-    value: string,
-  ) => {
-    const loc = locale as SupportedLocale;
-
-    setFields((prev) => {
-      const updated = { ...prev[loc], [field]: value };
-
-      if (field === "name" && !slugTouched[loc]) {
-        updated.slug = slugify(value);
-      }
-
-      return { ...prev, [loc]: updated };
-    });
-
-    if (field === "slug") {
-      setSlugTouched((prev) => ({ ...prev, [loc]: true }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
+  const onFormSubmit = async (data: FormValues) => {
     const translations = LOCALES.map((locale) => ({
       locale,
-      name: fields[locale].name,
-      slug: fields[locale].slug,
-      description: fields[locale].description || undefined,
+      name: data.translations[locale].name,
+      slug: data.translations[locale].slug,
+      description: data.translations[locale].description || undefined,
     }));
 
     try {
       await onSubmit({
         translations,
-        parentId: selectedParentId || undefined,
+        parentId: data.parentId || undefined,
       });
       router.push("/admin/categories");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t("saveError"));
+    } catch {
+      // Error handled by parent via GraphQL
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && <p className="text-sm text-red-600">{error}</p>}
-
-      <Select
-        id="parentId"
-        label={t("parent")}
-        value={selectedParentId}
-        onChange={(e) => setSelectedParentId(e.target.value)}
-      >
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+      <Select id="parentId" label={t("parent")} {...register("parentId")}>
         <option value="">{t("noParent")}</option>
         {parentOptions.map((opt) => (
           <option key={opt.id} value={opt.id}>
@@ -171,32 +166,32 @@ export const CategoryForm = (props: CategoryFormProps) => {
       </Select>
 
       <LanguageTabs>
-        {(locale) => (
-          <div className="space-y-4">
-            <Input
-              id={`name-${locale}`}
-              label={t("name")}
-              value={fields[locale as SupportedLocale].name}
-              onChange={(e) => updateField(locale, "name", e.target.value)}
-              required
-            />
-            <Input
-              id={`slug-${locale}`}
-              label={t("slug")}
-              value={fields[locale as SupportedLocale].slug}
-              onChange={(e) => updateField(locale, "slug", e.target.value)}
-              required
-            />
-            <Input
-              id={`description-${locale}`}
-              label={t("description")}
-              value={fields[locale as SupportedLocale].description}
-              onChange={(e) =>
-                updateField(locale, "description", e.target.value)
-              }
-            />
-          </div>
-        )}
+        {(locale) => {
+          const loc = locale as SupportedLocale;
+          const locErrors = errors.translations?.[loc];
+
+          return (
+            <div className="space-y-4">
+              <Input
+                id={`name-${loc}`}
+                label={t("name")}
+                error={locErrors?.name?.message}
+                {...register(`translations.${loc}.name`)}
+              />
+              <Input
+                id={`slug-${loc}`}
+                label={t("slug")}
+                error={locErrors?.slug?.message}
+                {...register(`translations.${loc}.slug`)}
+              />
+              <Input
+                id={`description-${loc}`}
+                label={t("description")}
+                {...register(`translations.${loc}.description`)}
+              />
+            </div>
+          );
+        }}
       </LanguageTabs>
 
       <div className="flex gap-3">

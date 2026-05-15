@@ -178,7 +178,11 @@
       "saveError": "Échec de l'enregistrement.",
       "productsCount": "{count} produits",
       "parent": "Catégorie parente",
-      "noParent": "Aucune (catégorie racine)"
+      "noParent": "Aucune (catégorie racine)",
+      "validation": {
+        "nameRequired": "Le nom est requis",
+        "slugRequired": "Le slug est requis"
+      }
     },
     "orders": {
       "title": "Commandes",

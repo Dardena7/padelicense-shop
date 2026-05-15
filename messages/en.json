@@ -178,7 +178,11 @@
       "saveError": "Failed to save category.",
       "productsCount": "{count} products",
       "parent": "Parent category",
-      "noParent": "None (root category)"
+      "noParent": "None (root category)",
+      "validation": {
+        "nameRequired": "Name is required",
+        "slugRequired": "Slug is required"
+      }
     },
     "orders": {
       "title": "Orders",

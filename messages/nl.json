@@ -178,7 +178,11 @@
       "saveError": "Opslaan mislukt.",
       "productsCount": "{count} producten",
       "parent": "Bovenliggende categorie",
-      "noParent": "Geen (hoofdcategorie)"
+      "noParent": "Geen (hoofdcategorie)",
+      "validation": {
+        "nameRequired": "Naam is verplicht",
+        "slugRequired": "Slug is verplicht"
+      }
     },
     "orders": {
       "title": "Bestellingen",
