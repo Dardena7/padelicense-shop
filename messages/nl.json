@@ -176,7 +176,9 @@
       "confirmDelete": "Weet u zeker dat u deze categorie wilt verwijderen?",
       "deleteError": "Verwijderen mislukt.",
       "saveError": "Opslaan mislukt.",
-      "productsCount": "{count} producten"
+      "productsCount": "{count} producten",
+      "parent": "Bovenliggende categorie",
+      "noParent": "Geen (hoofdcategorie)"
     },
     "orders": {
       "title": "Bestellingen",

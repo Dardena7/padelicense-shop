@@ -4,7 +4,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { SupportedLocale, CategoryTranslation } from "@/gql/graphql";
-import { Input } from "@/components/ui";
+import { Input, Select } from "@/components/ui";
+import { slugify } from "@/lib/utils";
+import { useAdminCategories } from "../../_hooks/useAdminCategories";
 import { LanguageTabs } from "../LanguageTabs";
 
 const LOCALES = [SupportedLocale.En, SupportedLocale.Fr, SupportedLocale.Nl];
@@ -15,17 +17,21 @@ type TranslationFields = {
   description: string;
 };
 
+type SubmitData = {
+  translations: {
+    locale: SupportedLocale;
+    name: string;
+    slug: string;
+    description?: string;
+  }[];
+  parentId?: string;
+};
+
 type CategoryFormProps = {
   initialTranslations?: CategoryTranslation[];
   parentId?: string | null;
-  onSubmit: (
-    translations: {
-      locale: SupportedLocale;
-      name: string;
-      slug: string;
-      description?: string;
-    }[],
-  ) => Promise<void>;
+  categoryId?: string;
+  onSubmit: (data: SubmitData) => Promise<void>;
   loading: boolean;
 };
 
@@ -50,9 +56,11 @@ const fromExisting = (
 };
 
 export const CategoryForm = (props: CategoryFormProps) => {
-  const { initialTranslations, onSubmit, loading } = props;
+  const { initialTranslations, parentId, categoryId, onSubmit, loading } =
+    props;
   const t = useTranslations("admin.categories");
   const router = useRouter();
+  const { categories } = useAdminCategories();
 
   const [fields, setFields] = useState<
     Record<SupportedLocale, TranslationFields>
@@ -61,17 +69,65 @@ export const CategoryForm = (props: CategoryFormProps) => {
       ? fromExisting(initialTranslations)
       : emptyTranslations(),
   );
+  const [selectedParentId, setSelectedParentId] = useState<string>(
+    parentId ?? "",
+  );
+  const [slugTouched, setSlugTouched] = useState<
+    Record<SupportedLocale, boolean>
+  >({
+    [SupportedLocale.En]: !!initialTranslations,
+    [SupportedLocale.Fr]: !!initialTranslations,
+    [SupportedLocale.Nl]: !!initialTranslations,
+  });
   const [error, setError] = useState<string | null>(null);
+
+  // Flatten categories recursively, excluding self
+  const MAX_DEPTH = 3;
+  type FlatOption = { id: string; label: string };
+  type CategoryNode = {
+    id: string;
+    name: string;
+    subcategories?: CategoryNode[];
+  };
+
+  const flattenCategories = (
+    cats: CategoryNode[],
+    depth: number,
+  ): FlatOption[] =>
+    cats.flatMap((cat) => {
+      if (cat.id === categoryId) return [];
+      // Don't show categories at max depth — they can't be parents
+      if (depth >= MAX_DEPTH - 1) return [];
+      const indent = "\u00A0\u00A0\u00A0".repeat(depth);
+      const prefix = depth > 0 ? `${indent}└ ` : "";
+      const children = cat.subcategories
+        ? flattenCategories(cat.subcategories, depth + 1)
+        : [];
+      return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
+    });
+
+  const parentOptions = flattenCategories(categories, 0);
 
   const updateField = (
     locale: string,
     field: keyof TranslationFields,
     value: string,
   ) => {
-    setFields((prev) => ({
-      ...prev,
-      [locale]: { ...prev[locale as SupportedLocale], [field]: value },
-    }));
+    const loc = locale as SupportedLocale;
+
+    setFields((prev) => {
+      const updated = { ...prev[loc], [field]: value };
+
+      if (field === "name" && !slugTouched[loc]) {
+        updated.slug = slugify(value);
+      }
+
+      return { ...prev, [loc]: updated };
+    });
+
+    if (field === "slug") {
+      setSlugTouched((prev) => ({ ...prev, [loc]: true }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,7 +142,10 @@ export const CategoryForm = (props: CategoryFormProps) => {
     }));
 
     try {
-      await onSubmit(translations);
+      await onSubmit({
+        translations,
+        parentId: selectedParentId || undefined,
+      });
       router.push("/admin/categories");
     } catch (err) {
       setError(err instanceof Error ? err.message : t("saveError"));
@@ -96,6 +155,20 @@ export const CategoryForm = (props: CategoryFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && <p className="text-sm text-red-600">{error}</p>}
+
+      <Select
+        id="parentId"
+        label={t("parent")}
+        value={selectedParentId}
+        onChange={(e) => setSelectedParentId(e.target.value)}
+      >
+        <option value="">{t("noParent")}</option>
+        {parentOptions.map((opt) => (
+          <option key={opt.id} value={opt.id}>
+            {opt.label}
+          </option>
+        ))}
+      </Select>
 
       <LanguageTabs>
         {(locale) => (

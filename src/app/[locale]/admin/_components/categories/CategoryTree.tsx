@@ -47,23 +47,13 @@ export const CategoryTree = () => {
         ) : (
           <ul className="divide-y divide-gray-100">
             {categories.map((category) => (
-              <li key={category.id}>
-                <CategoryRow
-                  category={category}
-                  depth={0}
-                  onDelete={handleDelete}
-                  deleting={deleting}
-                />
-                {category.subcategories.map((sub) => (
-                  <CategoryRow
-                    key={sub.id}
-                    category={sub}
-                    depth={1}
-                    onDelete={handleDelete}
-                    deleting={deleting}
-                  />
-                ))}
-              </li>
+              <CategoryBranch
+                key={category.id}
+                category={category}
+                depth={0}
+                onDelete={handleDelete}
+                deleting={deleting}
+              />
             ))}
           </ul>
         )}
@@ -72,54 +62,72 @@ export const CategoryTree = () => {
   );
 };
 
-type CategoryRowProps = {
-  category: {
-    id: string;
-    name: string;
-    productsCount: number;
-  };
+type CategoryNode = {
+  id: string;
+  name: string;
+  productsCount: number;
+  subcategories?: CategoryNode[];
+};
+
+type CategoryBranchProps = {
+  category: CategoryNode;
   depth: number;
   onDelete: (id: string) => void;
   deleting: boolean;
 };
 
-const CategoryRow = (props: CategoryRowProps) => {
+const CategoryBranch = (props: CategoryBranchProps) => {
   const { category, depth, onDelete, deleting } = props;
   const t = useTranslations("admin.categories");
 
   return (
-    <div
-      className="flex items-center justify-between px-6 py-3"
-      style={{ paddingLeft: `${1.5 + depth * 1.5}rem` }}
-    >
-      <div>
-        <Link
-          href={`/admin/categories/${category.id}/edit`}
-          className="text-sm font-medium hover:underline"
-        >
-          {depth > 0 && "└ "}
-          {category.name}
-        </Link>
-        <span className="ml-2 text-xs text-gray-400">
-          {t("productsCount", { count: category.productsCount })}
-        </span>
+    <li>
+      <div
+        className="flex items-center justify-between px-6 py-3"
+        style={{ paddingLeft: `${1.5 + depth * 1.5}rem` }}
+      >
+        <div>
+          <Link
+            href={`/admin/categories/${category.id}/edit`}
+            className="text-sm font-medium hover:underline"
+          >
+            {depth > 0 && "└ "}
+            {category.name}
+          </Link>
+          <span className="ml-2 text-xs text-gray-400">
+            {t("productsCount", { count: category.productsCount })}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          <Link
+            href={`/admin/categories/${category.id}/edit`}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            {t("edit")}
+          </Link>
+          <button
+            type="button"
+            onClick={() => onDelete(category.id)}
+            disabled={deleting}
+            className="text-sm text-red-600 hover:underline disabled:opacity-50"
+          >
+            {t("delete")}
+          </button>
+        </div>
       </div>
-      <div className="flex gap-2">
-        <Link
-          href={`/admin/categories/${category.id}/edit`}
-          className="text-sm text-blue-600 hover:underline"
-        >
-          {t("edit")}
-        </Link>
-        <button
-          type="button"
-          onClick={() => onDelete(category.id)}
-          disabled={deleting}
-          className="text-sm text-red-600 hover:underline disabled:opacity-50"
-        >
-          {t("delete")}
-        </button>
-      </div>
-    </div>
+      {category.subcategories && category.subcategories.length > 0 && (
+        <ul>
+          {category.subcategories.map((sub) => (
+            <CategoryBranch
+              key={sub.id}
+              category={sub}
+              depth={depth + 1}
+              onDelete={onDelete}
+              deleting={deleting}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
   );
 };

@@ -25,6 +25,18 @@ const ADMIN_CATEGORIES_QUERY = graphql(`
           slug
           description
         }
+        subcategories {
+          id
+          name
+          position
+          productsCount
+          translations {
+            locale
+            name
+            slug
+            description
+          }
+        }
       }
     }
   }

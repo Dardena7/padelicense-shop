@@ -26,9 +26,10 @@ const EditCategoryPage = () => {
       <CategoryForm
         initialTranslations={category.translations}
         parentId={category.parent?.id}
-        onSubmit={async (translations) => {
+        categoryId={id}
+        onSubmit={async ({ translations, parentId }) => {
           await updateCategory({
-            variables: { input: { categoryId: id, translations } },
+            variables: { input: { categoryId: id, translations, parentId } },
           });
         }}
         loading={updating}

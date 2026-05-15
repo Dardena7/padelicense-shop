@@ -12,8 +12,10 @@ const NewCategoryPage = () => {
     <div className="mx-auto max-w-2xl space-y-6">
       <h2 className="text-2xl font-bold">{t("addTitle")}</h2>
       <CategoryForm
-        onSubmit={async (translations) => {
-          await createCategory({ variables: { input: { translations } } });
+        onSubmit={async ({ translations, parentId }) => {
+          await createCategory({
+            variables: { input: { translations, parentId } },
+          });
         }}
         loading={loading}
       />
