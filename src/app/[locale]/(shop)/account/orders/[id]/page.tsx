@@ -1,9 +1,5 @@
 import { MyOrderDetail } from "../../_components/MyOrderDetail";
 
-export const metadata = {
-  robots: { index: false },
-};
-
 type OrderPageProps = {
   params: Promise<{ id: string }>;
 };

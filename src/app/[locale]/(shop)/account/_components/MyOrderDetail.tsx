@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { useAuthContext } from "@/lib/auth";
 import { useMyOrder } from "../_hooks";
 import { Badge, type BadgeVariant } from "@/components/ui";
 import { formatPrice, formatDate } from "@/lib/utils";
@@ -31,17 +28,9 @@ export const MyOrderDetail = (props: MyOrderDetailProps) => {
   const { orderId } = props;
   const t = useTranslations("account.orders");
   const locale = useLocale();
-  const { user, isLoading: authLoading } = useAuthContext();
-  const router = useRouter();
   const { order, loading } = useMyOrder(orderId);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace("/login");
-    }
-  }, [authLoading, user, router]);
-
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <main className="flex flex-1 items-center justify-center">
         <p className="text-muted">...</p>
