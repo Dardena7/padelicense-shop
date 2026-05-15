@@ -2,6 +2,7 @@ import { OrderStatus, ProductStatus } from "@/gql/graphql";
 
 type StatusBadgeProps = {
   status: OrderStatus | ProductStatus;
+  label?: string;
 };
 
 const STATUS_COLORS: Record<OrderStatus | ProductStatus, string> = {
@@ -16,7 +17,7 @@ const STATUS_COLORS: Record<OrderStatus | ProductStatus, string> = {
 };
 
 export const StatusBadge = (props: StatusBadgeProps) => {
-  const { status } = props;
+  const { status, label } = props;
 
   const colorClass = STATUS_COLORS[status] ?? "bg-gray-100 text-gray-800";
 
@@ -24,7 +25,7 @@ export const StatusBadge = (props: StatusBadgeProps) => {
     <span
       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClass}`}
     >
-      {status}
+      {label ?? status}
     </span>
   );
 };

@@ -114,6 +114,8 @@
       "status": "Status",
       "total": "Totaal",
       "items": "Artikelen",
+      "notFound": "Bestelling niet gevonden.",
+      "shippingAddress": "Verzendadres",
       "statuses": {
         "PENDING": "In afwachting",
         "PAID": "Betaald",
@@ -160,7 +162,34 @@
       "title": "Categorieën"
     },
     "orders": {
-      "title": "Bestellingen"
+      "title": "Bestellingen",
+      "all": "Alle",
+      "orderNumber": "Bestelling",
+      "customer": "Klant",
+      "status": "Status",
+      "total": "Totaal",
+      "date": "Datum",
+      "notFound": "Bestelling niet gevonden.",
+      "shippingAddress": "Verzendadres",
+      "lineItems": "Artikelen",
+      "product": "Product",
+      "variant": "Variant",
+      "unitPrice": "Eenheidsprijs",
+      "quantity": "Aantal",
+      "subtotal": "Subtotaal",
+      "createdAt": "Aangemaakt op",
+      "statuses": {
+        "PENDING": "In afwachting",
+        "PAID": "Betaald",
+        "SHIPPED": "Verzonden",
+        "DELIVERED": "Geleverd",
+        "CANCELLED": "Geannuleerd"
+      },
+      "transitionTo": {
+        "SHIPPED": "Markeer als verzonden",
+        "DELIVERED": "Markeer als geleverd",
+        "CANCELLED": "Bestelling annuleren"
+      }
     },
     "guard": {
       "unauthorized": "U moet een beheerder zijn om deze pagina te openen."

@@ -140,7 +140,35 @@ test.describe("Admin back-office", () => {
     );
     await expect(page.getByRole("heading", { name: "Orders" })).toBeVisible();
 
-    // Navigate back to dashboard
+    // --- 8. Verify orders list loaded ---
+    // Should show the "All" filter button as active
+    await expect(page.getByRole("button", { name: "All" })).toBeVisible();
+
+    // Should have order rows from seeds
+    await expect(page.locator("text=/PAD-/").first()).toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 9. Filter by status ---
+    await page.getByRole("button", { name: "Paid" }).click();
+    await expect(page.locator("text=/PAD-/").first()).toBeVisible({
+      timeout: 10000,
+    });
+
+    // Reset filter
+    await page.getByRole("button", { name: "All" }).click();
+
+    // --- 10. Click on an order to see detail ---
+    const firstOrderLink = page.locator("a[href*='/admin/orders/']").first();
+    await firstOrderLink.click();
+    await expect(page).toHaveURL(/\/admin\/orders\//, { timeout: 10000 });
+
+    // Order detail should show order number, items, and shipping address
+    await expect(page.locator("text=/PAD-/").first()).toBeVisible();
+    await expect(page.getByText("Items")).toBeVisible();
+    await expect(page.getByText("Shipping address")).toBeVisible();
+
+    // --- 11. Navigate back to dashboard ---
     await clickAndWaitForURL(
       page,
       page.getByRole("navigation").getByRole("link", { name: "Dashboard" }),

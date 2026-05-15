@@ -12,6 +12,7 @@ type RecentOrdersTableProps = {
 export const RecentOrdersTable = (props: RecentOrdersTableProps) => {
   const { orders } = props;
   const t = useTranslations("admin.dashboard");
+  const tStatus = useTranslations("admin.orders.statuses");
   const locale = useLocale();
 
   return (
@@ -36,7 +37,10 @@ export const RecentOrdersTable = (props: RecentOrdersTableProps) => {
             >
               <td className="px-6 py-3 text-sm font-medium">{order.number}</td>
               <td className="px-6 py-3">
-                <StatusBadge status={order.status} />
+                <StatusBadge
+                  status={order.status}
+                  label={tStatus(order.status)}
+                />
               </td>
               <td className="px-6 py-3 text-sm">
                 {formatPrice(order.totalCents, locale)}

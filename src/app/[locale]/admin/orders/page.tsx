@@ -1,9 +1,7 @@
-import { getTranslations } from "next-intl/server";
+import { OrderList } from "../_components/orders";
 
-const AdminOrdersPage = async () => {
-  const t = await getTranslations("admin.orders");
-
-  return <h2 className="text-2xl font-bold">{t("title")}</h2>;
+const AdminOrdersPage = () => {
+  return <OrderList />;
 };
 
 export default AdminOrdersPage;

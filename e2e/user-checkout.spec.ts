@@ -124,5 +124,15 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
     await expect(page.getByText(`Order #${orderNumber}`)).toBeVisible();
     await expect(page.getByText("Paid")).toBeVisible();
     await expect(page.getByText("Head Speed Pro")).toBeVisible();
+
+    // --- Click on order to see detail page ---
+    await page.getByText(`Order #${orderNumber}`).click();
+    await expect(page).toHaveURL(/\/account\/orders\//, { timeout: 10000 });
+
+    // Order detail should show order info
+    await expect(page.getByText(`Order #${orderNumber}`)).toBeVisible();
+    await expect(page.getByText("Grand Place 1")).toBeVisible();
+    await expect(page.getByText("Head Speed Pro")).toBeVisible();
+    await expect(page.getByText("Asics Gel-Padel Pro 5")).toBeVisible();
   });
 });

@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
@@ -27,11 +28,12 @@ export const AdminSidebar = () => {
             <Link
               key={item.key}
               href={item.href}
-              className={`block rounded-md px-3 py-2 text-sm font-medium ${
+              className={clsx(
+                "block rounded-md px-3 py-2 text-sm font-medium",
                 isActive
                   ? "bg-gray-900 text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
+                  : "text-gray-700 hover:bg-gray-200",
+              )}
             >
               {t(item.key)}
             </Link>

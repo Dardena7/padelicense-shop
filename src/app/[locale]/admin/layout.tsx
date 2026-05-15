@@ -1,5 +1,9 @@
 import { AdminGuard, AdminSidebar, AdminHeader } from "./_components";
 
+export const metadata = {
+  robots: { index: false },
+};
+
 type AdminLayoutProps = {
   children: React.ReactNode;
 };

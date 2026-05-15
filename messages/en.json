@@ -114,6 +114,8 @@
       "status": "Status",
       "total": "Total",
       "items": "Items",
+      "notFound": "Order not found.",
+      "shippingAddress": "Shipping address",
       "statuses": {
         "PENDING": "Pending",
         "PAID": "Paid",
@@ -160,7 +162,34 @@
       "title": "Categories"
     },
     "orders": {
-      "title": "Orders"
+      "title": "Orders",
+      "all": "All",
+      "orderNumber": "Order",
+      "customer": "Customer",
+      "status": "Status",
+      "total": "Total",
+      "date": "Date",
+      "notFound": "Order not found.",
+      "shippingAddress": "Shipping address",
+      "lineItems": "Items",
+      "product": "Product",
+      "variant": "Variant",
+      "unitPrice": "Unit price",
+      "quantity": "Qty",
+      "subtotal": "Subtotal",
+      "createdAt": "Created",
+      "statuses": {
+        "PENDING": "Pending",
+        "PAID": "Paid",
+        "SHIPPED": "Shipped",
+        "DELIVERED": "Delivered",
+        "CANCELLED": "Cancelled"
+      },
+      "transitionTo": {
+        "SHIPPED": "Mark as shipped",
+        "DELIVERED": "Mark as delivered",
+        "CANCELLED": "Cancel order"
+      }
     },
     "guard": {
       "unauthorized": "You must be an admin to access this page."
