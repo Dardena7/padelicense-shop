@@ -159,7 +159,24 @@
       "title": "Produits"
     },
     "categories": {
-      "title": "Catégories"
+      "title": "Catégories",
+      "add": "Ajouter une catégorie",
+      "addTitle": "Nouvelle catégorie",
+      "editTitle": "Modifier la catégorie",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "cancel": "Annuler",
+      "name": "Nom",
+      "slug": "Slug",
+      "description": "Description",
+      "empty": "Aucune catégorie.",
+      "notFound": "Catégorie introuvable.",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
+      "deleteError": "Échec de la suppression.",
+      "saveError": "Échec de l'enregistrement.",
+      "productsCount": "{count} produits"
     },
     "orders": {
       "title": "Commandes",

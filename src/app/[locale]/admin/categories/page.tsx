@@ -1,9 +1,7 @@
-import { getTranslations } from "next-intl/server";
+import { CategoryTree } from "../_components/categories";
 
-const AdminCategoriesPage = async () => {
-  const t = await getTranslations("admin.categories");
-
-  return <h2 className="text-2xl font-bold">{t("title")}</h2>;
+const AdminCategoriesPage = () => {
+  return <CategoryTree />;
 };
 
 export default AdminCategoriesPage;

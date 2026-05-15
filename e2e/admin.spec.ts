@@ -168,7 +168,85 @@ test.describe("Admin back-office", () => {
     await expect(page.getByText("Items")).toBeVisible();
     await expect(page.getByText("Shipping address")).toBeVisible();
 
-    // --- 11. Navigate back to dashboard ---
+    // --- 11. Navigate to categories ---
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("navigation").getByRole("link", { name: "Categories" }),
+      /\/admin\/categories/,
+    );
+    await expect(
+      page.getByRole("heading", { name: "Categories" }),
+    ).toBeVisible();
+
+    // Should show seeded categories
+    await expect(page.getByText("Rackets")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Balls")).toBeVisible();
+
+    // --- 12. Create a new category ---
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("link", { name: "Add category" }),
+      /\/admin\/categories\/new/,
+    );
+    await expect(
+      page.getByRole("heading", { name: "New category" }),
+    ).toBeVisible();
+
+    // Fill EN fields (default tab)
+    await page.getByLabel("Name").fill("Bags");
+    await page.getByLabel("Slug").fill("bags");
+    await page.getByLabel("Description").fill("Padel bags and backpacks");
+
+    // Switch to FR tab and fill
+    await page.getByRole("button", { name: "FR" }).click();
+    await page.getByLabel("Name").fill("Sacs");
+    await page.getByLabel("Slug").fill("sacs");
+    await page.getByLabel("Description").fill("Sacs et sacs à dos de padel");
+
+    // Switch to NL tab and fill
+    await page.getByRole("button", { name: "NL" }).click();
+    await page.getByLabel("Name").fill("Tassen");
+    await page.getByLabel("Slug").fill("tassen");
+    await page.getByLabel("Description").fill("Padel tassen en rugzakken");
+
+    // Submit
+    await page.getByRole("button", { name: "Save" }).click();
+
+    // Should redirect to categories list with new category
+    await expect(page).toHaveURL(/\/admin\/categories$/, { timeout: 10000 });
+    await expect(page.getByText("Bags")).toBeVisible({ timeout: 10000 });
+
+    // --- 13. Edit the category ---
+    const bagsRow = page.getByText("Bags").locator("../..");
+    await bagsRow.getByRole("link", { name: "Edit" }).click();
+    await expect(page).toHaveURL(/\/admin\/categories\/.*\/edit/, {
+      timeout: 10000,
+    });
+
+    // EN tab should be pre-filled
+    await expect(page.getByLabel("Name")).toHaveValue("Bags");
+
+    // Update the name
+    await page.getByLabel("Name").fill("Bags & Cases");
+    await page.getByRole("button", { name: "Save" }).click();
+
+    // Should redirect to list with updated name
+    await expect(page).toHaveURL(/\/admin\/categories$/, { timeout: 10000 });
+    await expect(page.getByText("Bags & Cases")).toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 14. Delete the category ---
+    const updatedRow = page.getByText("Bags & Cases").locator("../..");
+    page.on("dialog", (dialog) => dialog.accept());
+    await updatedRow.getByRole("button", { name: "Delete" }).click();
+
+    // Category should disappear
+    await expect(page.getByText("Bags & Cases")).not.toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 15. Navigate back to dashboard ---
     await clickAndWaitForURL(
       page,
       page.getByRole("navigation").getByRole("link", { name: "Dashboard" }),
