@@ -30,7 +30,10 @@ export const OrderDetail = (props: OrderDetailProps) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">{order.number}</h2>
-        <StatusBadge status={order.status} />
+        <StatusBadge
+          status={order.status}
+          label={t(`statuses.${order.status}`)}
+        />
       </div>
 
       <StatusTransition

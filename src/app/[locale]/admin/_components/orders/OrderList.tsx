@@ -55,7 +55,10 @@ export const OrderList = () => {
                       : order.guestEmail}
                   </td>
                   <td className="px-6 py-3">
-                    <StatusBadge status={order.status} />
+                    <StatusBadge
+                      status={order.status}
+                      label={t(`statuses.${order.status}`)}
+                    />
                   </td>
                   <td className="px-6 py-3 text-sm">
                     {formatPrice(order.totalCents, locale)}
