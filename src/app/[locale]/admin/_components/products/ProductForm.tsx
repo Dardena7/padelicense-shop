@@ -20,16 +20,16 @@ import {
 
 type ProductFormProps = {
   product?: AdminProduct | null;
+  isEditing?: boolean;
   onSubmit: (data: ProductFormValues) => Promise<void>;
   loading: boolean;
 };
 
 export const ProductForm = (props: ProductFormProps) => {
-  const { product, onSubmit, loading } = props;
+  const { product, isEditing = false, onSubmit, loading } = props;
   const t = useTranslations("admin.products");
   const tCommon = useTranslations("admin.common");
   const router = useRouter();
-  const isEditing = product != null;
   const [error, setError] = useState<string | null>(null);
 
   const {

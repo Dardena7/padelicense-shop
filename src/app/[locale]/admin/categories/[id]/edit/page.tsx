@@ -27,6 +27,7 @@ const EditCategoryPage = () => {
         initialTranslations={category.translations}
         parentId={category.parent?.id}
         categoryId={id}
+        isEditing
         onSubmit={async ({ translations, parentId }) => {
           await updateCategory({
             variables: { input: { categoryId: id, translations, parentId } },

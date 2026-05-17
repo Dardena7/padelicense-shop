@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { SupportedLocale, ProductStatus } from "@/gql/graphql";
 import type { useAdminProduct } from "../../_hooks/useAdminProduct";
-import type { useAdminCategories } from "../../_hooks/useAdminCategories";
 
 // --- Constants ---
 
@@ -92,20 +91,3 @@ export const buildDefaultValues = (
     translations,
   };
 };
-
-// --- Flatten categories for product category select ---
-
-type CategoryTree = ReturnType<typeof useAdminCategories>["categories"][number];
-
-export const flattenAllCategories = (
-  cats: CategoryTree[],
-  depth = 0,
-): { id: string; label: string }[] =>
-  cats.flatMap((cat) => {
-    const indent = "\u00A0\u00A0\u00A0".repeat(depth);
-    const prefix = depth > 0 ? `${indent}└ ` : "";
-    const children = cat.subcategories
-      ? flattenAllCategories(cat.subcategories as CategoryTree[], depth + 1)
-      : [];
-    return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
-  });

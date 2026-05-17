@@ -70,9 +70,7 @@ export const VariantSection = (props: VariantSectionProps) => {
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white">
-      {error && (
-        <p className="px-6 py-3 text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="px-6 py-3 text-sm text-red-600">{error}</p>}
       <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
         <h3 className="text-sm font-semibold">{t("variants")}</h3>
         {!adding && (

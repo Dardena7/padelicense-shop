@@ -5,11 +5,8 @@ import { useTranslations } from "next-intl";
 import { ProductStatus } from "@/gql/graphql";
 import { Input, Select } from "@/components/ui";
 import { useAdminCategories } from "../../_hooks/useAdminCategories";
-import {
-  PRODUCT_STATUSES,
-  flattenAllCategories,
-  type ProductFormValues,
-} from "./utils";
+import { PRODUCT_STATUSES, type ProductFormValues } from "./utils";
+import { flattenCategories } from "../../_utils/categories";
 
 type ProductFieldsProps = {
   register: UseFormRegister<ProductFormValues>;
@@ -23,7 +20,7 @@ export const ProductFields = (props: ProductFieldsProps) => {
   const { register, errors } = props;
   const t = useTranslations("admin.products");
   const { categories } = useAdminCategories();
-  const categoryOptions = flattenAllCategories(categories);
+  const categoryOptions = flattenCategories(categories);
 
   return (
     <div className="space-y-4">

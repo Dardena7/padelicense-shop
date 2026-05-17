@@ -91,21 +91,3 @@ export const buildDefaultValues = (
 
   return { parentId: parentId ?? "", translations };
 };
-
-// --- Flatten categories for parent select ---
-
-export const flattenCategories = (
-  cats: CategoryNode[],
-  depth: number,
-  excludeId?: string,
-): { id: string; label: string }[] =>
-  cats.flatMap((cat) => {
-    if (cat.id === excludeId) return [];
-    if (depth >= MAX_DEPTH - 1) return [];
-    const indent = "\u00A0\u00A0\u00A0".repeat(depth);
-    const prefix = depth > 0 ? `${indent}└ ` : "";
-    const children = cat.subcategories
-      ? flattenCategories(cat.subcategories, depth + 1, excludeId)
-      : [];
-    return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
-  });

@@ -12,28 +12,35 @@ import { useAdminCategories } from "../../_hooks/useAdminCategories";
 import { LanguageTabs } from "../LanguageTabs";
 import {
   LOCALES,
+  MAX_DEPTH,
   categorySchema,
   buildDefaultValues,
-  flattenCategories,
   type CategoryFormValues,
   type CategorySubmitData,
 } from "./utils";
+import { flattenCategories } from "../../_utils/categories";
 
 type CategoryFormProps = {
   initialTranslations?: CategoryTranslation[];
   parentId?: string | null;
   categoryId?: string;
+  isEditing?: boolean;
   onSubmit: (data: CategorySubmitData) => Promise<void>;
   loading: boolean;
 };
 
 export const CategoryForm = (props: CategoryFormProps) => {
-  const { initialTranslations, parentId, categoryId, onSubmit, loading } =
-    props;
+  const {
+    initialTranslations,
+    parentId,
+    categoryId,
+    isEditing = false,
+    onSubmit,
+    loading,
+  } = props;
   const t = useTranslations("admin.categories");
   const router = useRouter();
   const { categories } = useAdminCategories();
-  const isEditing = initialTranslations != null;
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -46,7 +53,10 @@ export const CategoryForm = (props: CategoryFormProps) => {
     defaultValues: buildDefaultValues(initialTranslations, parentId),
   });
 
-  const parentOptions = flattenCategories(categories, 0, categoryId);
+  const parentOptions = flattenCategories(categories, {
+    excludeId: categoryId,
+    maxDepth: MAX_DEPTH - 1,
+  });
 
   const setSlug = setValue as (
     path: string,

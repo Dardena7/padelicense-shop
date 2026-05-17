@@ -53,6 +53,7 @@ const EditProductPage = () => {
       <h2 className="text-2xl font-bold">{t("editTitle")}</h2>
       <ProductForm
         product={product}
+        isEditing
         onSubmit={handleSubmit}
         loading={updating}
       />
