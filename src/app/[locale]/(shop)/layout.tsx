@@ -11,7 +11,7 @@ const ShopLayout = (props: ShopLayoutProps) => {
   return (
     <CartProvider>
       <Navbar />
-      {children}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6">{children}</div>
       <Footer />
     </CartProvider>
   );

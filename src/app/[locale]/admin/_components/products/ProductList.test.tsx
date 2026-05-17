@@ -64,12 +64,14 @@ describe("ProductList", () => {
     mockDeleting = false;
   });
 
-  it("shows a loading indicator while fetching", () => {
+  it("shows reduced opacity while fetching", () => {
     mockLoading = true;
+    mockProducts = sampleProducts;
 
-    render(<ProductList />);
+    const { container } = render(<ProductList />);
 
-    expect(screen.getByText("...")).toBeInTheDocument();
+    const wrapper = container.querySelector(".opacity-50");
+    expect(wrapper).toBeInTheDocument();
   });
 
   it("shows an empty message when there are no products", () => {

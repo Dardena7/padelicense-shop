@@ -1,1 +1,2 @@
-export { ProductFilters } from "./ProductFilters";
+export { ProductFilters, type Filters } from "./ProductFilters";
+export { useUrlFilters } from "./useUrlFilters";

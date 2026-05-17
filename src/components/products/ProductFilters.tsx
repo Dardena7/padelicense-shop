@@ -3,8 +3,6 @@
 import { useCallback, useRef } from "react";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
-import { useRouter, usePathname } from "@/i18n/navigation";
-import { useSearchParams } from "next/navigation";
 import { ProductOrderBy, ProductStatus } from "@/gql/graphql";
 import { Input, Select } from "@/components/ui";
 
@@ -12,77 +10,68 @@ const ORDER_OPTIONS = Object.values(ProductOrderBy);
 const STATUS_OPTIONS = Object.values(ProductStatus);
 const DEBOUNCE_MS = 300;
 
+export type Filters = {
+  search?: string;
+  orderBy?: ProductOrderBy;
+  status?: ProductStatus;
+  minPrice?: number;
+  maxPrice?: number;
+};
+
 type ProductFiltersProps = {
   showStatusFilter?: boolean;
+  filters: Filters;
+  onFiltersChange: (filters: Filters) => void;
 };
 
 export const ProductFilters = (props: ProductFiltersProps) => {
-  const { showStatusFilter = false } = props;
+  const { showStatusFilter = false, filters, onFiltersChange } = props;
   const t = useTranslations("filters");
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const debounceTimer = useRef<ReturnType<typeof setTimeout>>(null);
-  const pendingUpdates = useRef<Record<string, string>>({});
+  const pendingUpdates = useRef<Partial<Filters>>({});
+  const filtersRef = useRef(filters);
+  filtersRef.current = filters;
 
-  const currentOrderBy = searchParams.get("orderBy") ?? "";
-  const currentStatus = searchParams.get("status") ?? "";
-
-  const flushParams = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    Object.entries(pendingUpdates.current).forEach(([key, value]) => {
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-    });
-    pendingUpdates.current = {};
-    router.push(`${pathname}?${params.toString()}`);
-  }, [router, pathname, searchParams]);
-
-  const updateParams = useCallback(
-    (updates: Record<string, string>) => {
-      const params = new URLSearchParams(searchParams.toString());
-      Object.entries(updates).forEach(([key, value]) => {
-        if (value) {
-          params.set(key, value);
-        } else {
-          params.delete(key);
-        }
-      });
-      router.push(`${pathname}?${params.toString()}`);
+  const update = useCallback(
+    (updates: Partial<Filters>) => {
+      onFiltersChange({ ...filtersRef.current, ...updates });
     },
-    [router, pathname, searchParams],
+    [onFiltersChange],
   );
 
-  const debouncedUpdateParams = useCallback(
-    (updates: Record<string, string>) => {
+  const debouncedUpdate = useCallback(
+    (updates: Partial<Filters>) => {
       pendingUpdates.current = { ...pendingUpdates.current, ...updates };
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
-      debounceTimer.current = setTimeout(flushParams, DEBOUNCE_MS);
+      debounceTimer.current = setTimeout(() => {
+        onFiltersChange({ ...filtersRef.current, ...pendingUpdates.current });
+        pendingUpdates.current = {};
+      }, DEBOUNCE_MS);
     },
-    [flushParams],
+    [onFiltersChange],
   );
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-full sm:w-64">
         <Input
           id="search"
           placeholder={t("searchPlaceholder")}
-          defaultValue={searchParams.get("search") ?? ""}
-          onChange={(e) => debouncedUpdateParams({ search: e.target.value })}
+          defaultValue={filters.search ?? ""}
+          onChange={(e) =>
+            debouncedUpdate({ search: e.target.value || undefined })
+          }
         />
       </div>
 
       <Select
         id="orderBy"
-        label={t("sortBy")}
-        value={currentOrderBy}
-        onChange={(e) => updateParams({ orderBy: e.target.value })}
+        value={filters.orderBy ?? ""}
+        onChange={(e) =>
+          update({ orderBy: (e.target.value as ProductOrderBy) || undefined })
+        }
       >
-        <option value="">{t("sortDefault")}</option>
+        <option value="">{t("sortBy")}</option>
         {ORDER_OPTIONS.map((option) => (
           <option key={option} value={option}>
             {t(`sort.${option}`)}
@@ -95,16 +84,24 @@ export const ProductFilters = (props: ProductFiltersProps) => {
           id="minPrice"
           type="number"
           placeholder={t("minPrice")}
-          defaultValue={searchParams.get("minPrice") ?? ""}
-          onChange={(e) => debouncedUpdateParams({ minPrice: e.target.value })}
+          defaultValue={filters.minPrice ?? ""}
+          onChange={(e) =>
+            debouncedUpdate({
+              minPrice: e.target.value ? parseInt(e.target.value) : undefined,
+            })
+          }
           className="w-28"
         />
         <Input
           id="maxPrice"
           type="number"
           placeholder={t("maxPrice")}
-          defaultValue={searchParams.get("maxPrice") ?? ""}
-          onChange={(e) => debouncedUpdateParams({ maxPrice: e.target.value })}
+          defaultValue={filters.maxPrice ?? ""}
+          onChange={(e) =>
+            debouncedUpdate({
+              maxPrice: e.target.value ? parseInt(e.target.value) : undefined,
+            })
+          }
           className="w-28"
         />
       </div>
@@ -113,10 +110,10 @@ export const ProductFilters = (props: ProductFiltersProps) => {
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => updateParams({ status: "" })}
+            onClick={() => update({ status: undefined })}
             className={clsx("rounded-md px-3 py-1.5 text-sm", {
-              "bg-gray-900 text-white": !currentStatus,
-              "bg-gray-100 text-gray-700 hover:bg-gray-200": currentStatus,
+              "bg-gray-900 text-white": !filters.status,
+              "bg-gray-100 text-gray-700 hover:bg-gray-200": filters.status,
             })}
           >
             {t("all")}
@@ -125,11 +122,11 @@ export const ProductFilters = (props: ProductFiltersProps) => {
             <button
               key={status}
               type="button"
-              onClick={() => updateParams({ status })}
+              onClick={() => update({ status })}
               className={clsx("rounded-md px-3 py-1.5 text-sm", {
-                "bg-gray-900 text-white": currentStatus === status,
+                "bg-gray-900 text-white": filters.status === status,
                 "bg-gray-100 text-gray-700 hover:bg-gray-200":
-                  currentStatus !== status,
+                  filters.status !== status,
               })}
             >
               {t(`statuses.${status}`)}

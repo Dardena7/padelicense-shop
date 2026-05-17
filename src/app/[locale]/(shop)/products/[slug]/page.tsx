@@ -101,7 +101,7 @@ const ProductPage = async (props: ProductPageProps) => {
   };
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-12">
+    <main className="py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -114,6 +114,8 @@ const ProductPage = async (props: ProductPageProps) => {
               src={mainImage.imageUrl}
               alt={mainImage.altText || product.name}
               fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           ) : (

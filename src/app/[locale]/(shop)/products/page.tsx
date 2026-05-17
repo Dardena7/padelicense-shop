@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ProductCatalog } from "./_components/ProductCatalog";
@@ -40,12 +39,10 @@ const ProductsPage = async (props: ProductsPageProps) => {
   const t = await getTranslations("products");
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <main className="py-12">
       <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
 
-      <Suspense>
-        <ProductCatalog />
-      </Suspense>
+      <ProductCatalog />
     </main>
   );
 };

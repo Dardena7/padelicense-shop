@@ -46,7 +46,7 @@ test.describe("Catalog search and filters", () => {
     });
 
     // --- 4. Sort by price low to high ---
-    await page.getByLabel("Sort by").selectOption("PRICE_ASC");
+    await page.locator("#orderBy").selectOption("PRICE_ASC");
 
     // Cheapest seeded product (Head Pro S balls at 699 cents) should appear first
     const allProducts = page.locator("a[href*='/products/']");
@@ -55,7 +55,7 @@ test.describe("Catalog search and filters", () => {
     });
 
     // --- 5. Sort by price high to low ---
-    await page.getByLabel("Sort by").selectOption("PRICE_DESC");
+    await page.locator("#orderBy").selectOption("PRICE_DESC");
 
     // Most expensive seeded product (Bullpadel Vertex at 34990 cents)
     await expect(allProducts.first()).toContainText("Bullpadel Vertex", {
@@ -63,14 +63,14 @@ test.describe("Catalog search and filters", () => {
     });
 
     // --- 6. Sort by name A to Z ---
-    await page.getByLabel("Sort by").selectOption("NAME_ASC");
+    await page.locator("#orderBy").selectOption("NAME_ASC");
 
     await expect(allProducts.first()).toContainText("Adidas Metalbone", {
       timeout: 10000,
     });
 
     // Reset sort
-    await page.getByLabel("Sort by").selectOption("");
+    await page.locator("#orderBy").selectOption("");
 
     // --- 7. Filter by min price ---
     await page.getByPlaceholder("Min (cents)").fill("20000");
