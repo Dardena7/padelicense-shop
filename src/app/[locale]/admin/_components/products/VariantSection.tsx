@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui";
 import { useCreateVariant } from "../../_hooks/useCreateVariant";
@@ -10,12 +12,14 @@ import { useDeleteVariant } from "../../_hooks/useDeleteVariant";
 import { VariantRow } from "./VariantRow";
 import { type AdminVariant } from "./utils";
 
-type NewVariantValues = {
-  name: string;
-  sku: string;
-  stockQuantity: number;
-  priceCents: number | null;
-};
+const variantSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  sku: z.string().min(1, "SKU is required"),
+  stockQuantity: z.number().int().min(0),
+  priceCents: z.number().int().positive().nullable(),
+});
+
+type NewVariantValues = z.infer<typeof variantSchema>;
 
 type VariantSectionProps = {
   productId: string;
@@ -30,26 +34,45 @@ export const VariantSection = (props: VariantSectionProps) => {
   const { createVariant, loading: creating } = useCreateVariant();
   const { updateVariant, loading: updating } = useUpdateVariant();
   const { deleteVariant, loading: deleting } = useDeleteVariant();
+  const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, reset } = useForm<NewVariantValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors: formErrors },
+  } = useForm<NewVariantValues>({
+    resolver: zodResolver(variantSchema),
     defaultValues: { name: "", sku: "", stockQuantity: 0, priceCents: null },
   });
 
   const onAdd = async (data: NewVariantValues) => {
-    await createVariant({
-      variables: {
-        input: {
-          productId,
-          attributes: data,
+    setError(null);
+    try {
+      await createVariant({
+        variables: {
+          input: {
+            productId,
+            attributes: data,
+          },
         },
-      },
-    });
-    reset();
-    setAdding(false);
+      });
+      reset();
+      setAdding(false);
+    } catch {
+      setError(t("saveError"));
+    }
+  };
+
+  const handleError = () => {
+    setError(t("saveError"));
   };
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white">
+      {error && (
+        <p className="px-6 py-3 text-sm text-red-600">{error}</p>
+      )}
       <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
         <h3 className="text-sm font-semibold">{t("variants")}</h3>
         {!adding && (
@@ -79,16 +102,26 @@ export const VariantSection = (props: VariantSectionProps) => {
               key={variant.id}
               variant={variant}
               onUpdate={async (data) => {
-                await updateVariant({
-                  variables: {
-                    input: { variantId: variant.id, attributes: data },
-                  },
-                });
+                setError(null);
+                try {
+                  await updateVariant({
+                    variables: {
+                      input: { variantId: variant.id, attributes: data },
+                    },
+                  });
+                } catch {
+                  handleError();
+                }
               }}
               onDelete={async () => {
-                await deleteVariant({
-                  variables: { input: { variantId: variant.id } },
-                });
+                setError(null);
+                try {
+                  await deleteVariant({
+                    variables: { input: { variantId: variant.id } },
+                  });
+                } catch {
+                  handleError();
+                }
               }}
               loading={updating || deleting}
             />
@@ -99,6 +132,7 @@ export const VariantSection = (props: VariantSectionProps) => {
                 <Input
                   id="new-name"
                   placeholder={t("variantName")}
+                  error={formErrors.name?.message}
                   {...register("name")}
                 />
               </td>
@@ -106,6 +140,7 @@ export const VariantSection = (props: VariantSectionProps) => {
                 <Input
                   id="new-sku"
                   placeholder={t("variantSku")}
+                  error={formErrors.sku?.message}
                   {...register("sku")}
                 />
               </td>

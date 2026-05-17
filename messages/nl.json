@@ -206,7 +206,8 @@
       "validation": {
         "categoryRequired": "Categorie is verplicht",
         "priceRequired": "Prijs moet groter zijn dan 0"
-      }
+      },
+      "saveError": "Opslaan mislukt. Probeer het opnieuw."
     },
     "categories": {
       "title": "Categorieën",

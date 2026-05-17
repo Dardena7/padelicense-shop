@@ -206,7 +206,8 @@
       "validation": {
         "categoryRequired": "Category is required",
         "priceRequired": "Price must be greater than 0"
-      }
+      },
+      "saveError": "Failed to save product. Please try again."
     },
     "categories": {
       "title": "Categories",

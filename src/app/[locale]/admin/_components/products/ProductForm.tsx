@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -28,7 +29,8 @@ export const ProductForm = (props: ProductFormProps) => {
   const t = useTranslations("admin.products");
   const tCommon = useTranslations("admin.common");
   const router = useRouter();
-  const isEditing = !!product;
+  const isEditing = product != null;
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -63,16 +65,18 @@ export const ProductForm = (props: ProductFormProps) => {
   };
 
   const onFormSubmit = async (data: ProductFormValues) => {
+    setError(null);
     try {
       await onSubmit(data);
       router.push("/admin/products");
     } catch {
-      // Error handled by parent via GraphQL
+      setError(t("saveError"));
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <ProductFields register={register} errors={errors} />
 
       <LanguageTabs>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -32,7 +33,8 @@ export const CategoryForm = (props: CategoryFormProps) => {
   const t = useTranslations("admin.categories");
   const router = useRouter();
   const { categories } = useAdminCategories();
-  const isEditing = !!initialTranslations;
+  const isEditing = initialTranslations != null;
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -71,6 +73,7 @@ export const CategoryForm = (props: CategoryFormProps) => {
       description: data.translations[locale].description || undefined,
     }));
 
+    setError(null);
     try {
       await onSubmit({
         translations,
@@ -78,12 +81,13 @@ export const CategoryForm = (props: CategoryFormProps) => {
       });
       router.push("/admin/categories");
     } catch {
-      // Error handled by parent via GraphQL
+      setError(t("saveError"));
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <Select id="parentId" label={t("parent")} {...register("parentId")}>
         <option value="">{t("noParent")}</option>
         {parentOptions.map((opt) => (

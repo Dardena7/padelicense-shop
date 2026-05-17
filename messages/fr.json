@@ -206,7 +206,8 @@
       "validation": {
         "categoryRequired": "La catégorie est requise",
         "priceRequired": "Le prix doit être supérieur à 0"
-      }
+      },
+      "saveError": "Échec de l'enregistrement. Veuillez réessayer."
     },
     "categories": {
       "title": "Catégories",
