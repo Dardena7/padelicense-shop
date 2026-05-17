@@ -82,10 +82,7 @@ describe("ProductDetails", () => {
       />,
     );
 
-    const mainPrice = screen.getByTestId
-      ? screen.getByText(/199\.90/, { selector: "p" })
-      : screen.getByText(/199\.90/);
-    expect(mainPrice).toBeInTheDocument();
+    expect(screen.getByText(/199\.90/, { selector: "p" })).toBeInTheDocument();
 
     await userEvent.click(screen.getByText("Premium"));
 

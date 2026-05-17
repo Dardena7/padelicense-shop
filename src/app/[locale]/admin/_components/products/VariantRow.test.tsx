@@ -35,12 +35,12 @@ const renderInTable = (ui: React.ReactElement) =>
 // --- Tests ---
 
 describe("VariantRow", () => {
-  let onUpdate: ReturnType<typeof vi.fn>;
-  let onDelete: ReturnType<typeof vi.fn>;
+  let onUpdate: ReturnType<typeof vi.fn<() => Promise<void>>>;
+  let onDelete: ReturnType<typeof vi.fn<() => Promise<void>>>;
 
   beforeEach(() => {
-    onUpdate = vi.fn().mockResolvedValue(undefined);
-    onDelete = vi.fn().mockResolvedValue(undefined);
+    onUpdate = vi.fn<() => Promise<void>>().mockResolvedValue(undefined);
+    onDelete = vi.fn<() => Promise<void>>().mockResolvedValue(undefined);
   });
 
   it("displays variant name, sku, stock, and price", () => {
