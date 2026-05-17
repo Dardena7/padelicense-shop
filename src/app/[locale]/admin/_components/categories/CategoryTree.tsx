@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAdminCategories } from "../../_hooks/useAdminCategories";
 import { useDeleteCategory } from "../../_hooks/useDeleteCategory";
+import { type CategoryNode } from "./utils";
 
 export const CategoryTree = () => {
   const t = useTranslations("admin.categories");
@@ -62,13 +63,6 @@ export const CategoryTree = () => {
   );
 };
 
-type CategoryNode = {
-  id: string;
-  name: string;
-  productsCount: number;
-  subcategories?: CategoryNode[];
-};
-
 type CategoryBranchProps = {
   category: CategoryNode;
   depth: number;
@@ -94,9 +88,11 @@ const CategoryBranch = (props: CategoryBranchProps) => {
             {depth > 0 && "└ "}
             {category.name}
           </Link>
-          <span className="ml-2 text-xs text-gray-400">
-            {t("productsCount", { count: category.productsCount })}
-          </span>
+          {category.productsCount !== undefined && (
+            <span className="ml-2 text-xs text-gray-400">
+              {t("productsCount", { count: category.productsCount })}
+            </span>
+          )}
         </div>
         <div className="flex gap-2">
           <Link

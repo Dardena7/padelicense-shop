@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import clsx from "clsx";
+import { SupportedLocale } from "@/gql/graphql";
 
-const LOCALES = ["EN", "FR", "NL"] as const;
+const LOCALES = Object.values(SupportedLocale);
 
 type LanguageTabsProps = {
-  children: (locale: string) => React.ReactNode;
+  children: (locale: SupportedLocale) => React.ReactNode;
 };
 
 export const LanguageTabs = (props: LanguageTabsProps) => {
   const { children } = props;
-  const [activeLocale, setActiveLocale] = useState<string>("EN");
+  const [activeLocale, setActiveLocale] = useState<SupportedLocale>(
+    SupportedLocale.En,
+  );
 
   return (
     <div>
