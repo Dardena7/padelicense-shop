@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ProductCatalog } from "./_components/ProductCatalog";
+import { getInitialProducts } from "./_queries/products";
 
 export const dynamic = "force-dynamic";
 
@@ -37,12 +38,13 @@ const ProductsPage = async (props: ProductsPageProps) => {
   const { locale } = await props.params;
   setRequestLocale(locale);
   const t = await getTranslations("products");
+  const initialProducts = await getInitialProducts(locale);
 
   return (
     <main className="py-12">
       <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
 
-      <ProductCatalog />
+      <ProductCatalog initialProducts={initialProducts} />
     </main>
   );
 };

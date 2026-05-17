@@ -2,19 +2,34 @@
 
 import { useTranslations } from "next-intl";
 import { ProductCard, AddToCartAction } from "@/components/ui";
-import { ProductFilters, useUrlFilters } from "@/components/products";
+import {
+  ProductFilters,
+  useUrlFilters,
+  type Filters,
+} from "@/components/products";
 import { useProducts } from "../_hooks/useProducts";
+import { type getInitialProducts } from "../_queries/products";
+
+type Product = Awaited<ReturnType<typeof getInitialProducts>>[number];
 
 type ProductCatalogProps = {
+  initialProducts?: Product[];
   categorySlug?: string;
 };
 
+const hasActiveFilters = (filters: Filters) =>
+  Object.values(filters).some((v) => v != null && v !== "");
+
 export const ProductCatalog = (props: ProductCatalogProps) => {
-  const { categorySlug } = props;
+  const { initialProducts = [], categorySlug } = props;
   const t = useTranslations("common");
   const { filters, updateFilters } = useUrlFilters();
 
-  const { products, loading } = useProducts({ categorySlug, ...filters });
+  const filtersActive = hasActiveFilters(filters);
+  const { products: filteredProducts, loading } = useProducts(
+    filtersActive ? { categorySlug, ...filters } : { categorySlug },
+  );
+  const products = filtersActive ? filteredProducts : initialProducts;
 
   return (
     <div className="w-full">

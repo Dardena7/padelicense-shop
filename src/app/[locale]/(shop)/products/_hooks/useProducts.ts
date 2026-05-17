@@ -1,25 +1,11 @@
 import { useQuery } from "@apollo/client/react";
 import { graphql } from "@/gql";
-import { ProductOrderBy } from "@/gql/graphql";
+import { type ProductSearchInput } from "@/gql/graphql";
 import { nonNullable } from "@/lib/utils";
 
 const PRODUCTS_QUERY = graphql(`
-  query ShopProducts(
-    $first: Int
-    $categorySlug: String
-    $search: String
-    $orderBy: ProductOrderBy
-    $minPrice: Int
-    $maxPrice: Int
-  ) {
-    products(
-      first: $first
-      categorySlug: $categorySlug
-      search: $search
-      orderBy: $orderBy
-      minPrice: $minPrice
-      maxPrice: $maxPrice
-    ) {
+  query ShopProducts($filters: ProductSearchInput) {
+    products(filters: $filters) {
       nodes {
         id
         name
@@ -47,23 +33,9 @@ const PRODUCTS_QUERY = graphql(`
   }
 `);
 
-type ProductsFilters = {
-  categorySlug?: string;
-  search?: string;
-  orderBy?: ProductOrderBy;
-  minPrice?: number;
-  maxPrice?: number;
-};
-
-export const useProducts = (filters: ProductsFilters = {}) => {
+export const useProducts = (filters: ProductSearchInput = {}) => {
   const { data, loading } = useQuery(PRODUCTS_QUERY, {
-    variables: {
-      categorySlug: filters.categorySlug || null,
-      search: filters.search || null,
-      orderBy: filters.orderBy ?? null,
-      minPrice: filters.minPrice ?? null,
-      maxPrice: filters.maxPrice ?? null,
-    },
+    variables: { filters },
   });
 
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
