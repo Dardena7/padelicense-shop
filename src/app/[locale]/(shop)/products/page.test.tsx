@@ -17,7 +17,10 @@ vi.mock("next/image", () => ({
   default: ({ alt, ...props }: { alt: string }) => <img alt={alt} {...props} />,
 }));
 
-const mockParams = { params: Promise.resolve({ locale: "en" }) };
+const mockParams = {
+  params: Promise.resolve({ locale: "en" }),
+  searchParams: Promise.resolve({}),
+};
 
 const mockProducts = (products: object[]) => {
   mockQuery.mockResolvedValue({

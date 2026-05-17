@@ -5,17 +5,10 @@ import { AdminGuard } from "./AdminGuard";
 
 const mockReplace = vi.fn();
 
-vi.mock("@/i18n/navigation", async () => {
-  const actual =
-    await vi.importActual<typeof import("@/i18n/navigation")>(
-      "@/i18n/navigation",
-    );
-  return {
-    ...actual,
-    useRouter: () => ({ push: vi.fn(), replace: mockReplace }),
-    usePathname: () => "/admin",
-  };
-});
+vi.mock("@/i18n/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: mockReplace }),
+  usePathname: () => "/admin",
+}));
 
 const mockUseAuthContext = vi.fn();
 

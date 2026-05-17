@@ -5,17 +5,10 @@ import { AuthGuard } from "./AuthGuard";
 
 const mockReplace = vi.fn();
 
-vi.mock("@/i18n/navigation", async () => {
-  const actual =
-    await vi.importActual<typeof import("@/i18n/navigation")>(
-      "@/i18n/navigation",
-    );
-  return {
-    ...actual,
-    useRouter: () => ({ push: vi.fn(), replace: mockReplace }),
-    usePathname: () => "/account",
-  };
-});
+vi.mock("@/i18n/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: mockReplace }),
+  usePathname: () => "/account",
+}));
 
 const mockUseAuthContext = vi.fn();
 

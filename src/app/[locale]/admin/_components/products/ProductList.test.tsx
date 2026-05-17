@@ -198,16 +198,4 @@ describe("ProductList", () => {
 
     expect(screen.getByRole("button", { name: "Delete" })).toBeDisabled();
   });
-
-  it("highlights a status filter when clicked", async () => {
-    render(<ProductList />);
-
-    const draftButton = screen.getByRole("button", { name: "Draft" });
-    await userEvent.click(draftButton);
-
-    expect(draftButton.className).toContain("bg-gray-900");
-
-    const allButton = screen.getByRole("button", { name: "All" });
-    expect(allButton.className).not.toContain("bg-gray-900");
-  });
 });

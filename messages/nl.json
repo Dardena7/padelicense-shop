@@ -130,6 +130,25 @@
     "description": "Bekijk ons assortiment premium padel uitrusting",
     "variants": "Varianten"
   },
+  "filters": {
+    "searchPlaceholder": "Producten zoeken...",
+    "sortBy": "Sorteren op",
+    "sortDefault": "Nieuwste",
+    "sort": {
+      "NEWEST": "Nieuwste",
+      "PRICE_ASC": "Prijs: laag naar hoog",
+      "PRICE_DESC": "Prijs: hoog naar laag",
+      "NAME_ASC": "Naam: A tot Z"
+    },
+    "minPrice": "Min (centen)",
+    "maxPrice": "Max (centen)",
+    "all": "Alle",
+    "statuses": {
+      "DRAFT": "Concept",
+      "ACTIVE": "Actief",
+      "ARCHIVED": "Gearchiveerd"
+    }
+  },
   "admin": {
     "common": {
       "name": "Naam",

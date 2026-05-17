@@ -1,14 +1,18 @@
+import { Suspense } from "react";
 import { getClient, localizedContext } from "@/lib/apollo";
 import { GET_PRODUCTS } from "./_queries/products";
 import { nonNullable } from "@/lib/utils";
 import { ProductCard, AddToCartAction } from "@/components/ui";
+import { ProductFilters } from "@/components/products";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { ProductOrderBy } from "@/gql/graphql";
 
 export const dynamic = "force-dynamic";
 
 type ProductsPageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 };
 
 export const generateMetadata = async (props: ProductsPageProps) => {
@@ -38,12 +42,19 @@ export const generateMetadata = async (props: ProductsPageProps) => {
 
 const ProductsPage = async (props: ProductsPageProps) => {
   const { locale } = await props.params;
+  const sp = await props.searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("products");
   const tCommon = await getTranslations("common");
 
   const { data } = await getClient().query({
     query: GET_PRODUCTS,
+    variables: {
+      search: sp.search || undefined,
+      orderBy: (sp.orderBy as ProductOrderBy) || undefined,
+      minPrice: sp.minPrice ? parseInt(sp.minPrice) : undefined,
+      maxPrice: sp.maxPrice ? parseInt(sp.maxPrice) : undefined,
+    },
     ...localizedContext(locale),
   });
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
@@ -51,6 +62,12 @@ const ProductsPage = async (props: ProductsPageProps) => {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
+
+      <Suspense>
+        <div className="mb-8">
+          <ProductFilters />
+        </div>
+      </Suspense>
 
       {products.length === 0 ? (
         <p className="text-muted">{tCommon("noProductsFound")}</p>

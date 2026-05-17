@@ -1,22 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { ProductStatus } from "@/gql/graphql";
-import clsx from "clsx";
+import { ProductStatus, ProductOrderBy } from "@/gql/graphql";
+import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/utils";
+import { ProductFilters } from "@/components/products";
 import { useAdminProducts } from "../../_hooks/useAdminProducts";
 import { useDeleteProduct } from "../../_hooks/useDeleteProduct";
 import { StatusBadge } from "../";
-import { PRODUCT_STATUSES } from "./utils";
 
 export const ProductList = () => {
   const t = useTranslations("admin.products");
   const locale = useLocale();
-  const [statusFilter, setStatusFilter] = useState<ProductStatus | undefined>();
-  const { products, loading } = useAdminProducts(statusFilter);
+  const searchParams = useSearchParams();
   const { deleteProduct, loading: deleting } = useDeleteProduct();
+
+  const filters = {
+    status: (searchParams.get("status") as ProductStatus) || undefined,
+    search: searchParams.get("search") || undefined,
+    orderBy: (searchParams.get("orderBy") as ProductOrderBy) || undefined,
+    minPrice: searchParams.get("minPrice")
+      ? parseInt(searchParams.get("minPrice")!)
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? parseInt(searchParams.get("maxPrice")!)
+      : undefined,
+  };
+
+  const { products, loading } = useAdminProducts(filters);
 
   const handleDelete = async (productId: string) => {
     if (!confirm(t("confirmDelete"))) return;
@@ -35,33 +47,7 @@ export const ProductList = () => {
         </Link>
       </div>
 
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setStatusFilter(undefined)}
-          className={clsx("rounded-md px-3 py-1.5 text-sm", {
-            "bg-gray-900 text-white": statusFilter === undefined,
-            "bg-gray-100 text-gray-700 hover:bg-gray-200":
-              statusFilter !== undefined,
-          })}
-        >
-          {t("all")}
-        </button>
-        {PRODUCT_STATUSES.map((status) => (
-          <button
-            key={status}
-            type="button"
-            onClick={() => setStatusFilter(status)}
-            className={clsx("rounded-md px-3 py-1.5 text-sm", {
-              "bg-gray-900 text-white": statusFilter === status,
-              "bg-gray-100 text-gray-700 hover:bg-gray-200":
-                statusFilter !== status,
-            })}
-          >
-            {t(`statuses.${status}`)}
-          </button>
-        ))}
-      </div>
+      <ProductFilters showStatusFilter />
 
       {loading ? (
         <p className="text-gray-500">...</p>

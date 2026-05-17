@@ -29,6 +29,13 @@ beforeAll(async () => {
   await Promise.all(dynamicLoaders);
 });
 
+vi.mock("next/navigation", () => ({
+  useSearchParams: vi.fn(() => new URLSearchParams()),
+  useParams: vi.fn(() => ({})),
+  useRouter: vi.fn(() => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() })),
+  usePathname: vi.fn(() => "/"),
+}));
+
 vi.mock("@/i18n/navigation", () => ({
   Link: (props: Record<string, unknown>) =>
     createElement("a", { href: props.href }, props.children as React.ReactNode),

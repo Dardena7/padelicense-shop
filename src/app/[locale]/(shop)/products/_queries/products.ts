@@ -1,8 +1,24 @@
 import { graphql } from "@/gql";
 
 export const GET_PRODUCTS = graphql(`
-  query GetProducts($first: Int, $categorySlug: String, $featured: Boolean) {
-    products(first: $first, categorySlug: $categorySlug, featured: $featured) {
+  query GetProducts(
+    $first: Int
+    $categorySlug: String
+    $featured: Boolean
+    $search: String
+    $orderBy: ProductOrderBy
+    $minPrice: Int
+    $maxPrice: Int
+  ) {
+    products(
+      first: $first
+      categorySlug: $categorySlug
+      featured: $featured
+      search: $search
+      orderBy: $orderBy
+      minPrice: $minPrice
+      maxPrice: $maxPrice
+    ) {
       nodes {
         id
         name
