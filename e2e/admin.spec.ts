@@ -271,6 +271,22 @@ test.describe("Admin back-office", () => {
     // Reset filter
     await page.getByRole("button", { name: "All" }).click();
 
+    // --- 16b. Search products ---
+    await page.getByPlaceholder("Search products...").fill("Head Speed");
+    await expect(page.getByText("Head Speed Pro")).toBeVisible({
+      timeout: 10000,
+    });
+    // Other products should not be visible
+    await expect(page.getByText("Bullpadel Vertex 04")).not.toBeVisible({
+      timeout: 5000,
+    });
+
+    // Clear search
+    await page.getByPlaceholder("Search products...").fill("");
+    await expect(page.getByText("Bullpadel Vertex 04")).toBeVisible({
+      timeout: 10000,
+    });
+
     // --- 17. Create a new product ---
     await clickAndWaitForURL(
       page,
