@@ -1,15 +1,22 @@
 import { z } from "zod";
 import { SupportedLocale, CategoryTranslation } from "@/gql/graphql";
+import { type useAdminCategories } from "../../_hooks/useAdminCategories";
 
 export const LOCALES = Object.values(SupportedLocale);
 export const MAX_DEPTH = 3;
 
 // --- Types ---
 
-export type CategoryNode = {
-  id: string;
-  name: string;
-  productsCount?: number;
+// Recursive type for tree rendering and flattening.
+// Derived from useAdminCategories return type but simplified for recursion.
+type AdminCategory = ReturnType<
+  typeof useAdminCategories
+>["categories"][number];
+
+export type CategoryNode = Pick<
+  AdminCategory,
+  "id" | "name" | "productsCount"
+> & {
   subcategories?: CategoryNode[];
 };
 
