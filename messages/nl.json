@@ -131,6 +131,20 @@
     "variants": "Varianten"
   },
   "admin": {
+    "common": {
+      "name": "Naam",
+      "slug": "Slug",
+      "description": "Beschrijving",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "cancel": "Annuleren",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "validation": {
+        "nameRequired": "Naam is verplicht",
+        "slugRequired": "Slug is verplicht"
+      }
+    },
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Producten",
@@ -156,7 +170,43 @@
       "lowStock": "Lage voorraad waarschuwingen"
     },
     "products": {
-      "title": "Producten"
+      "title": "Producten",
+      "add": "Product toevoegen",
+      "addTitle": "Nieuw product",
+      "editTitle": "Product bewerken",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "all": "Alle",
+      "empty": "Nog geen producten.",
+      "notFound": "Product niet gevonden.",
+      "confirmDelete": "Weet u zeker dat u dit product wilt verwijderen?",
+      "productName": "Product",
+      "category": "Categorie",
+      "selectCategory": "Selecteer een categorie",
+      "price": "Prijs",
+      "basePrice": "Basisprijs (centen)",
+      "brand": "Merk",
+      "status": "Status",
+      "featured": "Uitgelicht",
+      "variants": "Varianten",
+      "addVariant": "Variant toevoegen",
+      "variantName": "Naam",
+      "variantSku": "SKU",
+      "variantStock": "Voorraad",
+      "variantPrice": "Prijs (centen)",
+      "variantEdit": "Bewerken",
+      "variantDelete": "Verwijderen",
+      "variantSave": "Opslaan",
+      "variantCancel": "Annuleren",
+      "statuses": {
+        "DRAFT": "Concept",
+        "ACTIVE": "Actief",
+        "ARCHIVED": "Gearchiveerd"
+      },
+      "validation": {
+        "categoryRequired": "Categorie is verplicht",
+        "priceRequired": "Prijs moet groter zijn dan 0"
+      }
     },
     "categories": {
       "title": "Categorieën",

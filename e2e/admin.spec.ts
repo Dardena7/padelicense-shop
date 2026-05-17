@@ -5,6 +5,7 @@ const ADMIN_EMAIL = "admin@padelicense.com";
 const ADMIN_PASSWORD = "password123";
 const CUSTOMER_PASSWORD = "Password123!";
 const uniqueEmail = () => `admin-e2e-${Date.now()}@e2e-test.com`;
+const uniqueSuffix = () => Date.now().toString().slice(-6);
 
 test.describe("Admin back-office", () => {
   test("guard, role check, admin access, and sidebar navigation", async ({
@@ -246,7 +247,129 @@ test.describe("Admin back-office", () => {
       timeout: 10000,
     });
 
-    // --- 15. Navigate back to dashboard ---
+    // --- 15. Navigate to products ---
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("navigation").getByRole("link", { name: "Products" }),
+      /\/admin\/products/,
+    );
+    await expect(
+      page.getByRole("heading", { name: "Products" }),
+    ).toBeVisible();
+
+    // Should show seeded products
+    await expect(page.getByText("Head Speed Pro")).toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 16. Filter products by status ---
+    await page.getByRole("button", { name: "Draft" }).click();
+    await expect(page.getByText("Babolat Counter Viper")).toBeVisible({
+      timeout: 10000,
+    });
+
+    // Reset filter
+    await page.getByRole("button", { name: "All" }).click();
+
+    // --- 17. Create a new product ---
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("link", { name: "Add product" }),
+      /\/admin\/products\/new/,
+    );
+    await expect(
+      page.getByRole("heading", { name: "New product" }),
+    ).toBeVisible();
+
+    // Fill product fields
+    const suffix = uniqueSuffix();
+    const productName = `Test Product ${suffix}`;
+
+    await page.getByLabel("Category").selectOption({ index: 1 });
+    await page.getByLabel("Base price (cents)").fill("15990");
+    await page.getByLabel("Brand").fill("TestBrand");
+
+    // Fill EN translations (default tab)
+    await page.getByLabel("Name").fill(productName);
+    // Slug should auto-fill
+    await expect(page.getByLabel("Slug")).toHaveValue(
+      `test-product-${suffix}`,
+    );
+
+    // Switch to FR tab
+    await page.getByRole("button", { name: "FR" }).click();
+    await page.getByLabel("Name").fill(`Produit Test ${suffix}`);
+
+    // Switch to NL tab
+    await page.getByRole("button", { name: "NL" }).click();
+    await page.getByLabel("Name").fill(`Test Product ${suffix} NL`);
+
+    // Submit
+    await page.getByRole("button", { name: "Save" }).click();
+
+    // Should redirect to products list
+    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+    await expect(page.getByText(`Test Product ${suffix}`)).toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 18. Edit the product ---
+    const productRow = page.getByText(`Test Product ${suffix}`).locator("../..");
+    await productRow.getByRole("link", { name: "Edit" }).click();
+    await expect(page).toHaveURL(/\/admin\/products\/.*\/edit/, {
+      timeout: 10000,
+    });
+
+    // EN tab should be pre-filled
+    await expect(page.getByLabel("Name")).toHaveValue(`Test Product ${suffix}`);
+
+    // Update the brand
+    await page.getByLabel("Brand").fill("UpdatedBrand");
+    await page.getByRole("button", { name: "Save" }).click();
+
+    // Should redirect to list
+    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+
+    // --- 19. Go back to edit to manage variants ---
+    const updatedProductRow = page
+      .getByText(`Test Product ${suffix}`)
+      .locator("../..");
+    await updatedProductRow.getByRole("link", { name: "Edit" }).click();
+    await expect(page).toHaveURL(/\/admin\/products\/.*\/edit/, {
+      timeout: 10000,
+    });
+
+    // --- 20. Add a variant ---
+    await page.getByText("Add variant").click();
+
+    // Fill variant fields in the new row
+    await page.getByPlaceholder("Name").fill("Large");
+    await page.getByPlaceholder("SKU").fill(`TEST-E2E-${suffix}`);
+    await page.getByPlaceholder("Stock").fill("10");
+
+    await page.locator("tr").last().getByText("Save").click();
+
+    // Variant should appear in the table
+    await expect(page.getByText("Large")).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(`TEST-E2E-${suffix}`)).toBeVisible();
+
+    // --- 21. Delete the product ---
+    await clickAndWaitForURL(
+      page,
+      page.getByRole("navigation").getByRole("link", { name: "Products" }),
+      /\/admin\/products/,
+    );
+
+    const productToDelete = page
+      .getByText(`Test Product ${suffix}`)
+      .locator("../..");
+    await productToDelete.getByRole("button", { name: "Delete" }).click();
+
+    await expect(page.getByText(`Test Product ${suffix}`)).not.toBeVisible({
+      timeout: 10000,
+    });
+
+    // --- 22. Navigate back to dashboard ---
     await clickAndWaitForURL(
       page,
       page.getByRole("navigation").getByRole("link", { name: "Dashboard" }),

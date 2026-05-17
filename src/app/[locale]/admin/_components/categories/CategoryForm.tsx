@@ -46,14 +46,20 @@ export const CategoryForm = (props: CategoryFormProps) => {
 
   const parentOptions = flattenCategories(categories, 0, categoryId);
 
-  const setSlug = setValue as (path: string, value: string) => void;
+  const setSlug = setValue as (
+    path: string,
+    value: string,
+    options?: { shouldValidate?: boolean },
+  ) => void;
 
   const handleNameChange = (
     locale: SupportedLocale,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (!isEditing && !touchedFields.translations?.[locale]?.slug) {
-      setSlug(`translations.${locale}.slug`, slugify(e.target.value));
+      setSlug(`translations.${locale}.slug`, slugify(e.target.value), {
+        shouldValidate: true,
+      });
     }
   };
 

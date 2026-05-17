@@ -22,10 +22,17 @@ export type CategoryNode = Pick<
 
 // --- Zod schema ---
 
-const translationSchema = (t: (key: string) => string) =>
+const requiredTranslationSchema = (t: (key: string) => string) =>
   z.object({
     name: z.string().min(1, t("validation.nameRequired")),
     slug: z.string().min(1, t("validation.slugRequired")),
+    description: z.string().optional(),
+  });
+
+const optionalTranslationSchema = () =>
+  z.object({
+    name: z.string().optional().default(""),
+    slug: z.string().optional().default(""),
     description: z.string().optional(),
   });
 
@@ -34,8 +41,16 @@ export const categorySchema = (t: (key: string) => string) =>
     parentId: z.string().optional(),
     translations: z.object(
       Object.fromEntries(
-        LOCALES.map((locale) => [locale, translationSchema(t)]),
-      ) as Record<SupportedLocale, ReturnType<typeof translationSchema>>,
+        LOCALES.map((locale) => [
+          locale,
+          locale === SupportedLocale.En
+            ? requiredTranslationSchema(t)
+            : optionalTranslationSchema(),
+        ]),
+      ) as Record<
+        SupportedLocale,
+        ReturnType<typeof requiredTranslationSchema>
+      >,
     ),
   });
 
