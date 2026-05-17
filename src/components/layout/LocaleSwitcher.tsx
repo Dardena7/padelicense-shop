@@ -5,7 +5,8 @@ import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { useLocalizationContext } from "@/lib/localization";
 
-const localeLabels: Record<string, string> = {
+// [LOCALE] Update this mapping when adding a new locale
+const localeLabels: Record<(typeof routing.locales)[number], string> = {
   en: "EN",
   fr: "FR",
   nl: "NL",

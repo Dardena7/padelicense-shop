@@ -159,7 +159,30 @@
       "title": "Products"
     },
     "categories": {
-      "title": "Categories"
+      "title": "Categories",
+      "add": "Add category",
+      "addTitle": "New category",
+      "editTitle": "Edit category",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "name": "Name",
+      "slug": "Slug",
+      "description": "Description",
+      "empty": "No categories yet.",
+      "notFound": "Category not found.",
+      "confirmDelete": "Are you sure you want to delete this category?",
+      "deleteError": "Failed to delete category.",
+      "saveError": "Failed to save category.",
+      "productsCount": "{count} products",
+      "parent": "Parent category",
+      "noParent": "None (root category)",
+      "validation": {
+        "nameRequired": "Name is required",
+        "slugRequired": "Slug is required"
+      }
     },
     "orders": {
       "title": "Orders",

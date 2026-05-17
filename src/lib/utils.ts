@@ -15,3 +15,11 @@ export const formatDate = (iso: string, locale: string): string => {
     timeStyle: "short",
   }).format(new Date(iso));
 };
+
+export const slugify = (text: string): string =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
