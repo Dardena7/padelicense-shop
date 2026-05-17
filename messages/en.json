@@ -131,6 +131,20 @@
     "variants": "Variants"
   },
   "admin": {
+    "common": {
+      "name": "Name",
+      "slug": "Slug",
+      "description": "Description",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "validation": {
+        "nameRequired": "Name is required",
+        "slugRequired": "Slug is required"
+      }
+    },
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
@@ -156,7 +170,44 @@
       "lowStock": "Low stock alerts"
     },
     "products": {
-      "title": "Products"
+      "title": "Products",
+      "add": "Add product",
+      "addTitle": "New product",
+      "editTitle": "Edit product",
+      "edit": "Edit",
+      "delete": "Delete",
+      "all": "All",
+      "empty": "No products yet.",
+      "notFound": "Product not found.",
+      "confirmDelete": "Are you sure you want to delete this product?",
+      "productName": "Product",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "price": "Price",
+      "basePrice": "Base price (cents)",
+      "brand": "Brand",
+      "status": "Status",
+      "featured": "Featured",
+      "variants": "Variants",
+      "addVariant": "Add variant",
+      "variantName": "Name",
+      "variantSku": "SKU",
+      "variantStock": "Stock",
+      "variantPrice": "Price (cents)",
+      "variantEdit": "Edit",
+      "variantDelete": "Delete",
+      "variantSave": "Save",
+      "variantCancel": "Cancel",
+      "statuses": {
+        "DRAFT": "Draft",
+        "ACTIVE": "Active",
+        "ARCHIVED": "Archived"
+      },
+      "validation": {
+        "categoryRequired": "Category is required",
+        "priceRequired": "Price must be greater than 0"
+      },
+      "saveError": "Failed to save product. Please try again."
     },
     "categories": {
       "title": "Categories",

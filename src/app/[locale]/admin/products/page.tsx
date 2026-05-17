@@ -1,9 +1,7 @@
-import { getTranslations } from "next-intl/server";
+import { ProductList } from "../_components/products";
 
-const AdminProductsPage = async () => {
-  const t = await getTranslations("admin.products");
-
-  return <h2 className="text-2xl font-bold">{t("title")}</h2>;
+const AdminProductsPage = () => {
+  return <ProductList />;
 };
 
 export default AdminProductsPage;

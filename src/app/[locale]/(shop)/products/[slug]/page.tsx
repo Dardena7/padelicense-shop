@@ -1,8 +1,7 @@
 import { getProduct } from "./_queries/product";
 import Image from "next/image";
-import { Badge } from "@/components/ui";
 import { AlternateUrlsSync } from "@/components/layout";
-import { AddToCartButton } from "./_components/AddToCartButton";
+import { ProductDetails } from "./_components/ProductDetails";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { formatPrice } from "@/lib/utils";
@@ -58,7 +57,6 @@ const ProductPage = async (props: ProductPageProps) => {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
   const t = await getTranslations("common");
-  const tProducts = await getTranslations("products");
 
   const product = await getProduct(slug, locale);
 
@@ -78,7 +76,10 @@ const ProductPage = async (props: ProductPageProps) => {
     ]),
   );
 
-  const defaultVariant = product.variants?.[0];
+  const variants = (product.variants ?? []).filter(
+    (v): v is NonNullable<typeof v> => v != null,
+  );
+  const defaultVariant = variants[0];
   const inStock = defaultVariant ? defaultVariant.stockQuantity > 0 : false;
 
   const jsonLd = {
@@ -122,64 +123,14 @@ const ProductPage = async (props: ProductPageProps) => {
           )}
         </div>
 
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium uppercase tracking-wider text-muted">
-              {product.brand}
-            </p>
-            <h1 className="text-3xl font-bold text-foreground">
-              {product.name}
-            </h1>
-            <div className="flex gap-2">
-              {product.featured && (
-                <Badge variant="accent">{t("featured")}</Badge>
-              )}
-            </div>
-          </div>
-
-          <p className="text-3xl font-bold text-foreground">
-            {formatPrice(product.basePriceCents, locale)}
-          </p>
-
-          {product.description && (
-            <p className="text-muted leading-relaxed">{product.description}</p>
-          )}
-
-          {defaultVariant && (
-            <AddToCartButton
-              productVariantId={defaultVariant.id}
-              inStock={inStock}
-            />
-          )}
-
-          {product.variants && product.variants.length > 1 && (
-            <div className="flex flex-col gap-3">
-              <h2 className="text-sm font-medium text-foreground">
-                {tProducts("variants")}
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {product.variants.map((variant) =>
-                  variant ? (
-                    <div
-                      key={variant.id}
-                      className="border border-border rounded-lg px-4 py-2 text-sm"
-                    >
-                      <span className="font-medium">{variant.name}</span>
-                      {variant.effectivePrice !== product.basePriceCents && (
-                        <span className="text-muted ml-2">
-                          {formatPrice(variant.effectivePrice, locale)}
-                        </span>
-                      )}
-                      {variant.stockQuantity === 0 && (
-                        <Badge variant="danger">{t("outOfStock")}</Badge>
-                      )}
-                    </div>
-                  ) : null,
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        <ProductDetails
+          name={product.name}
+          brand={product.brand}
+          description={product.description}
+          basePriceCents={product.basePriceCents}
+          featured={product.featured}
+          variants={variants}
+        />
       </div>
     </main>
   );

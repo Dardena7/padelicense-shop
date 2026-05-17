@@ -131,6 +131,20 @@
     "variants": "Variantes"
   },
   "admin": {
+    "common": {
+      "name": "Nom",
+      "slug": "Slug",
+      "description": "Description",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "cancel": "Annuler",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "validation": {
+        "nameRequired": "Le nom est requis",
+        "slugRequired": "Le slug est requis"
+      }
+    },
     "sidebar": {
       "dashboard": "Tableau de bord",
       "products": "Produits",
@@ -156,7 +170,44 @@
       "lowStock": "Alertes stock bas"
     },
     "products": {
-      "title": "Produits"
+      "title": "Produits",
+      "add": "Ajouter un produit",
+      "addTitle": "Nouveau produit",
+      "editTitle": "Modifier le produit",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "all": "Tous",
+      "empty": "Aucun produit.",
+      "notFound": "Produit introuvable.",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce produit ?",
+      "productName": "Produit",
+      "category": "Catégorie",
+      "selectCategory": "Sélectionner une catégorie",
+      "price": "Prix",
+      "basePrice": "Prix de base (centimes)",
+      "brand": "Marque",
+      "status": "Statut",
+      "featured": "En vedette",
+      "variants": "Variantes",
+      "addVariant": "Ajouter une variante",
+      "variantName": "Nom",
+      "variantSku": "SKU",
+      "variantStock": "Stock",
+      "variantPrice": "Prix (centimes)",
+      "variantEdit": "Modifier",
+      "variantDelete": "Supprimer",
+      "variantSave": "Enregistrer",
+      "variantCancel": "Annuler",
+      "statuses": {
+        "DRAFT": "Brouillon",
+        "ACTIVE": "Actif",
+        "ARCHIVED": "Archivé"
+      },
+      "validation": {
+        "categoryRequired": "La catégorie est requise",
+        "priceRequired": "Le prix doit être supérieur à 0"
+      },
+      "saveError": "Échec de l'enregistrement. Veuillez réessayer."
     },
     "categories": {
       "title": "Catégories",

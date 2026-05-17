@@ -22,10 +22,17 @@ export type CategoryNode = Pick<
 
 // --- Zod schema ---
 
-const translationSchema = (t: (key: string) => string) =>
+const requiredTranslationSchema = (t: (key: string) => string) =>
   z.object({
     name: z.string().min(1, t("validation.nameRequired")),
     slug: z.string().min(1, t("validation.slugRequired")),
+    description: z.string().optional(),
+  });
+
+const optionalTranslationSchema = () =>
+  z.object({
+    name: z.string().optional().default(""),
+    slug: z.string().optional().default(""),
     description: z.string().optional(),
   });
 
@@ -34,8 +41,16 @@ export const categorySchema = (t: (key: string) => string) =>
     parentId: z.string().optional(),
     translations: z.object(
       Object.fromEntries(
-        LOCALES.map((locale) => [locale, translationSchema(t)]),
-      ) as Record<SupportedLocale, ReturnType<typeof translationSchema>>,
+        LOCALES.map((locale) => [
+          locale,
+          locale === SupportedLocale.En
+            ? requiredTranslationSchema(t)
+            : optionalTranslationSchema(),
+        ]),
+      ) as Record<
+        SupportedLocale,
+        ReturnType<typeof requiredTranslationSchema>
+      >,
     ),
   });
 
@@ -76,21 +91,3 @@ export const buildDefaultValues = (
 
   return { parentId: parentId ?? "", translations };
 };
-
-// --- Flatten categories for parent select ---
-
-export const flattenCategories = (
-  cats: CategoryNode[],
-  depth: number,
-  excludeId?: string,
-): { id: string; label: string }[] =>
-  cats.flatMap((cat) => {
-    if (cat.id === excludeId) return [];
-    if (depth >= MAX_DEPTH - 1) return [];
-    const indent = "\u00A0\u00A0\u00A0".repeat(depth);
-    const prefix = depth > 0 ? `${indent}└ ` : "";
-    const children = cat.subcategories
-      ? flattenCategories(cat.subcategories, depth + 1, excludeId)
-      : [];
-    return [{ id: cat.id, label: `${prefix}${cat.name}` }, ...children];
-  });
