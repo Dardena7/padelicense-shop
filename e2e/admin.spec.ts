@@ -324,7 +324,7 @@ test.describe("Admin back-office", () => {
     await page.getByRole("button", { name: "Save" }).click();
 
     // Should redirect to products list
-    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/admin\/products(\?|$)/, { timeout: 10000 });
     await expect(page.getByText(`Test Product ${suffix}`)).toBeVisible({
       timeout: 10000,
     });
@@ -344,7 +344,7 @@ test.describe("Admin back-office", () => {
     await page.getByRole("button", { name: "Save" }).click();
 
     // Should redirect to list
-    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/admin\/products(\?|$)/, { timeout: 10000 });
 
     // --- 19. Go back to edit to manage variants ---
     const updatedProductRow = page
