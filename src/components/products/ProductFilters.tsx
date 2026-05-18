@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { ProductOrderBy, ProductStatus } from "@/gql/graphql";
@@ -30,7 +30,9 @@ export const ProductFilters = (props: ProductFiltersProps) => {
   const debounceTimer = useRef<ReturnType<typeof setTimeout>>(null);
   const pendingUpdates = useRef<Partial<Filters>>({});
   const filtersRef = useRef(filters);
-  filtersRef.current = filters;
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
 
   const update = useCallback(
     (updates: Partial<Filters>) => {

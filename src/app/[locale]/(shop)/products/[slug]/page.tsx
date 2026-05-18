@@ -4,7 +4,6 @@ import { AlternateUrlsSync } from "@/components/layout";
 import { ProductDetails } from "./_components/ProductDetails";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { formatPrice } from "@/lib/utils";
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
 
