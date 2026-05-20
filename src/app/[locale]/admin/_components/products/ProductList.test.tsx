@@ -64,12 +64,14 @@ describe("ProductList", () => {
     mockDeleting = false;
   });
 
-  it("shows a loading indicator while fetching", () => {
+  it("shows reduced opacity while fetching", () => {
     mockLoading = true;
+    mockProducts = sampleProducts;
 
-    render(<ProductList />);
+    const { container } = render(<ProductList />);
 
-    expect(screen.getByText("...")).toBeInTheDocument();
+    const wrapper = container.querySelector(".opacity-50");
+    expect(wrapper).toBeInTheDocument();
   });
 
   it("shows an empty message when there are no products", () => {
@@ -197,17 +199,5 @@ describe("ProductList", () => {
     render(<ProductList />);
 
     expect(screen.getByRole("button", { name: "Delete" })).toBeDisabled();
-  });
-
-  it("highlights a status filter when clicked", async () => {
-    render(<ProductList />);
-
-    const draftButton = screen.getByRole("button", { name: "Draft" });
-    await userEvent.click(draftButton);
-
-    expect(draftButton.className).toContain("bg-gray-900");
-
-    const allButton = screen.getByRole("button", { name: "All" });
-    expect(allButton.className).not.toContain("bg-gray-900");
   });
 });

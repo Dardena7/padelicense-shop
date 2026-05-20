@@ -271,6 +271,22 @@ test.describe("Admin back-office", () => {
     // Reset filter
     await page.getByRole("button", { name: "All" }).click();
 
+    // --- 16b. Search products ---
+    await page.getByPlaceholder("Search products...").fill("Head Speed");
+    await expect(page.getByText("Head Speed Pro")).toBeVisible({
+      timeout: 10000,
+    });
+    // Other products should not be visible
+    await expect(page.getByText("Bullpadel Vertex 04")).not.toBeVisible({
+      timeout: 5000,
+    });
+
+    // Clear search
+    await page.getByPlaceholder("Search products...").fill("");
+    await expect(page.getByText("Bullpadel Vertex 04")).toBeVisible({
+      timeout: 10000,
+    });
+
     // --- 17. Create a new product ---
     await clickAndWaitForURL(
       page,
@@ -298,17 +314,17 @@ test.describe("Admin back-office", () => {
 
     // Switch to FR tab
     await page.getByRole("button", { name: "FR" }).click();
-    await page.getByLabel("Name").fill(`Produit Test ${suffix}`);
+    await page.locator("#name-FR").fill(`Produit Test ${suffix}`);
 
     // Switch to NL tab
     await page.getByRole("button", { name: "NL" }).click();
-    await page.getByLabel("Name").fill(`Test Product ${suffix} NL`);
+    await page.locator("#name-NL").fill(`Test Product ${suffix} NL`);
 
     // Submit
     await page.getByRole("button", { name: "Save" }).click();
 
     // Should redirect to products list
-    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/admin\/products(\?|$)/, { timeout: 10000 });
     await expect(page.getByText(`Test Product ${suffix}`)).toBeVisible({
       timeout: 10000,
     });
@@ -328,7 +344,7 @@ test.describe("Admin back-office", () => {
     await page.getByRole("button", { name: "Save" }).click();
 
     // Should redirect to list
-    await expect(page).toHaveURL(/\/admin\/products$/, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/admin\/products(\?|$)/, { timeout: 10000 });
 
     // --- 19. Go back to edit to manage variants ---
     const updatedProductRow = page

@@ -11,7 +11,6 @@ import { LanguageTabs } from "../LanguageTabs";
 import { TranslationFields } from "../TranslationFields";
 import { ProductFields } from "./ProductFields";
 import {
-  LOCALES,
   productSchema,
   buildDefaultValues,
   type ProductFormValues,

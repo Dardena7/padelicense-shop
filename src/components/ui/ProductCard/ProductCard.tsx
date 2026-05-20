@@ -13,6 +13,7 @@ type ProductCardProps = {
   imageAlt?: string;
   featured?: boolean;
   inStock?: boolean;
+  priority?: boolean;
   action?: React.ReactNode;
 };
 
@@ -26,6 +27,7 @@ export const ProductCard = (props: ProductCardProps) => {
     imageAlt,
     featured = false,
     inStock = true,
+    priority = false,
     action,
   } = props;
 
@@ -41,6 +43,8 @@ export const ProductCard = (props: ProductCardProps) => {
               src={imageUrl}
               alt={imageAlt || name}
               fill
+              priority={priority}
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
           ) : (

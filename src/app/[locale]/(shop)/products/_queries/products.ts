@@ -1,8 +1,10 @@
 import { graphql } from "@/gql";
+import { getClient, localizedContext } from "@/lib/apollo";
+import { nonNullable } from "@/lib/utils";
 
-export const GET_PRODUCTS = graphql(`
-  query GetProducts($first: Int, $categorySlug: String, $featured: Boolean) {
-    products(first: $first, categorySlug: $categorySlug, featured: $featured) {
+const GET_PRODUCTS = graphql(`
+  query GetInitialProducts {
+    products {
       nodes {
         id
         name
@@ -26,10 +28,15 @@ export const GET_PRODUCTS = graphql(`
           position
         }
       }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
     }
   }
 `);
+
+export const getInitialProducts = async (locale: string) => {
+  const { data } = await getClient().query({
+    query: GET_PRODUCTS,
+    ...localizedContext(locale),
+  });
+
+  return (data?.products?.nodes ?? []).filter(nonNullable);
+};

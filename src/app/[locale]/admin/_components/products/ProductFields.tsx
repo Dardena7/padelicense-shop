@@ -2,7 +2,6 @@
 
 import { UseFormRegister } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { ProductStatus } from "@/gql/graphql";
 import { Input, Select } from "@/components/ui";
 import { useAdminCategories } from "../../_hooks/useAdminCategories";
 import { PRODUCT_STATUSES, type ProductFormValues } from "./utils";

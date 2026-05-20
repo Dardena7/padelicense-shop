@@ -1,11 +1,11 @@
 import { useQuery } from "@apollo/client/react";
 import { graphql } from "@/gql";
-import { ProductStatus } from "@/gql/graphql";
+import { type ProductSearchInput } from "@/gql/graphql";
 import { nonNullable } from "@/lib/utils";
 
 const ADMIN_PRODUCTS_QUERY = graphql(`
-  query AdminProducts($status: ProductStatus) {
-    products(status: $status) {
+  query AdminProducts($filters: ProductSearchInput) {
+    products(filters: $filters) {
       nodes {
         id
         name
@@ -34,9 +34,9 @@ const ADMIN_PRODUCTS_QUERY = graphql(`
   }
 `);
 
-export const useAdminProducts = (status?: ProductStatus) => {
+export const useAdminProducts = (filters: ProductSearchInput = {}) => {
   const { data, loading } = useQuery(ADMIN_PRODUCTS_QUERY, {
-    variables: { status: status ?? null },
+    variables: { filters },
     fetchPolicy: "cache-and-network",
   });
 

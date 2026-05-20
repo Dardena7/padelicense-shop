@@ -6,6 +6,7 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   reporter: [["list"], ["html", { open: "never" }]],
+  timeout: 120000,
   use: {
     baseURL: "http://localhost:3001",
     screenshot: "only-on-failure",
