@@ -314,11 +314,11 @@ test.describe("Admin back-office", () => {
 
     // Switch to FR tab
     await page.getByRole("button", { name: "FR" }).click();
-    await page.getByLabel("Name").fill(`Produit Test ${suffix}`);
+    await page.locator("#name-FR").fill(`Produit Test ${suffix}`);
 
     // Switch to NL tab
     await page.getByRole("button", { name: "NL" }).click();
-    await page.getByLabel("Name").fill(`Test Product ${suffix} NL`);
+    await page.locator("#name-NL").fill(`Test Product ${suffix} NL`);
 
     // Submit
     await page.getByRole("button", { name: "Save" }).click();
