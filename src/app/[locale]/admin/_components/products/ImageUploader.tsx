@@ -5,12 +5,19 @@ import { useTranslations } from "next-intl";
 import { useDirectUpload } from "../../_hooks/useDirectUpload";
 import { useCreateProductImage } from "../../_hooks/useCreateProductImage";
 
+type ProductImage = {
+  id: string;
+  imageUrl: string;
+  position: number;
+};
+
 type ImageUploaderProps = {
   productId: string;
+  onImageCreated: (image: ProductImage) => void;
 };
 
 export const ImageUploader = (props: ImageUploaderProps) => {
-  const { productId } = props;
+  const { productId, onImageCreated } = props;
   const t = useTranslations("admin.products");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { upload, uploading } = useDirectUpload();
@@ -25,11 +32,14 @@ export const ImageUploader = (props: ImageUploaderProps) => {
 
     try {
       const signedId = await upload(file);
-      await createImage({
+      const result = await createImage({
         variables: {
           input: { productId, blobSignedId: signedId },
         },
       });
+
+      const image = result.data?.adminCreateProductImage?.image;
+      if (image) onImageCreated(image);
     } catch {
       setError(t("imageUploadError"));
     }

@@ -19,11 +19,9 @@ export const LocaleSwitcher = () => {
   const { alternateUrls } = useLocalizationContext();
 
   const handleChange = (newLocale: string) => {
-    if (alternateUrls[newLocale]) {
-      router.replace(alternateUrls[newLocale], { locale: newLocale });
-    } else {
-      router.replace(pathname, { locale: newLocale });
-    }
+    const search = typeof window !== "undefined" ? window.location.search : "";
+    const basePath = alternateUrls[newLocale] || pathname;
+    router.replace(`${basePath}${search}`, { locale: newLocale });
   };
 
   return (

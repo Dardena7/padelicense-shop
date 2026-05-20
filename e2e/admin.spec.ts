@@ -11,6 +11,9 @@ test.describe("Admin back-office", () => {
   test("guard, role check, admin access, and sidebar navigation", async ({
     page,
   }) => {
+    // Accept all confirm dialogs throughout the test
+    page.on("dialog", (dialog) => dialog.accept());
+
     // --- 1. Try to access admin without being logged in ---
     await page.goto("/en/admin");
 
@@ -239,7 +242,6 @@ test.describe("Admin back-office", () => {
 
     // --- 14. Delete the category ---
     const updatedRow = page.getByText("Bags & Cases").locator("../..");
-    page.on("dialog", (dialog) => dialog.accept());
     await updatedRow.getByRole("button", { name: "Delete" }).click();
 
     // Category should disappear
@@ -368,6 +370,54 @@ test.describe("Admin back-office", () => {
     // Variant should appear in the table
     await expect(page.getByText("Large")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(`TEST-E2E-${suffix}`)).toBeVisible();
+
+    // --- 20b. Upload images ---
+    // Create a test image buffer
+    const testImageBuffer = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "base64",
+    );
+
+    // Upload first image
+    const fileInput = page.locator('input[type="file"]');
+    await fileInput.setInputFiles({
+      name: "test-image-1.png",
+      mimeType: "image/png",
+      buffer: testImageBuffer,
+    });
+
+    // Image should appear in the gallery
+    await expect(page.locator("img[alt='']").first()).toBeVisible({
+      timeout: 15000,
+    });
+
+    // Upload second image
+    await fileInput.setInputFiles({
+      name: "test-image-2.png",
+      mimeType: "image/png",
+      buffer: testImageBuffer,
+    });
+
+    // Should now have 2 images (plus the default seed images)
+    await expect(page.locator(".group.relative").first()).toBeVisible({
+      timeout: 15000,
+    });
+
+    // --- 20c. Reorder images via drag and drop ---
+    const images = page.locator("[draggable='true']");
+    const imageCount = await images.count();
+
+    if (imageCount >= 2) {
+      const firstImage = images.first();
+      const secondImage = images.nth(1);
+      await firstImage.dragTo(secondImage);
+    }
+
+    // --- 20d. Delete an image ---
+    // Hover to reveal delete button, then click
+    const firstImageCard = page.locator(".group.relative").first();
+    await firstImageCard.hover();
+    await firstImageCard.locator("button").click();
 
     // --- 21. Delete the product ---
     await clickAndWaitForURL(

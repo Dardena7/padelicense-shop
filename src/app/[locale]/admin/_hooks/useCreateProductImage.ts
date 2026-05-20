@@ -15,10 +15,7 @@ const CREATE_PRODUCT_IMAGE_MUTATION = graphql(`
 `);
 
 export const useCreateProductImage = () => {
-  const [mutate, { loading }] = useMutation(CREATE_PRODUCT_IMAGE_MUTATION, {
-    refetchQueries: ["AdminProduct"],
-    awaitRefetchQueries: true,
-  });
+  const [mutate, { loading }] = useMutation(CREATE_PRODUCT_IMAGE_MUTATION);
 
   return { createImage: mutate, loading };
 };

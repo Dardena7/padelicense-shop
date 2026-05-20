@@ -10,10 +10,7 @@ const DELETE_PRODUCT_IMAGE_MUTATION = graphql(`
 `);
 
 export const useDeleteProductImage = () => {
-  const [mutate, { loading }] = useMutation(DELETE_PRODUCT_IMAGE_MUTATION, {
-    refetchQueries: ["AdminProduct"],
-    awaitRefetchQueries: true,
-  });
+  const [mutate, { loading }] = useMutation(DELETE_PRODUCT_IMAGE_MUTATION);
 
   return { deleteImage: mutate, loading };
 };

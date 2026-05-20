@@ -1,25 +1,21 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { type Filters } from "./ProductFilters";
 import { ProductOrderBy, ProductStatus } from "@/gql/graphql";
 
-const parseFiltersFromUrl = (): Filters => {
-  if (typeof window === "undefined") return {};
-
-  const params = new URLSearchParams(window.location.search);
-  return {
-    search: params.get("search") || undefined,
-    orderBy: (params.get("orderBy") as ProductOrderBy) || undefined,
-    status: (params.get("status") as ProductStatus) || undefined,
-    minPrice: params.get("minPrice")
-      ? parseInt(params.get("minPrice")!)
-      : undefined,
-    maxPrice: params.get("maxPrice")
-      ? parseInt(params.get("maxPrice")!)
-      : undefined,
-  };
-};
+const parseFromSearchParams = (params: URLSearchParams): Filters => ({
+  search: params.get("search") || undefined,
+  orderBy: (params.get("orderBy") as ProductOrderBy) || undefined,
+  status: (params.get("status") as ProductStatus) || undefined,
+  minPrice: params.get("minPrice")
+    ? parseInt(params.get("minPrice")!)
+    : undefined,
+  maxPrice: params.get("maxPrice")
+    ? parseInt(params.get("maxPrice")!)
+    : undefined,
+});
 
 const syncFiltersToUrl = (filters: Filters) => {
   const params = new URLSearchParams();
@@ -37,25 +33,29 @@ const syncFiltersToUrl = (filters: Filters) => {
 };
 
 export const useUrlFilters = () => {
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<Filters>({});
+  const [resetCount, setResetCount] = useState(0);
 
-  // Sync URL filters after hydration to avoid SSR mismatch.
-  // setState is deferred via requestAnimationFrame to avoid React's
-  // "cascading renders" warning when setting state synchronously in an effect.
+  // Sync filters when URL search params change (navigation, back/forward)
   useEffect(() => {
-    const urlFilters = parseFiltersFromUrl();
+    const urlFilters = parseFromSearchParams(searchParams);
     const hasFilters = Object.values(urlFilters).some(
       (v) => v != null && v !== "",
     );
-    if (hasFilters) {
-      requestAnimationFrame(() => setFilters(urlFilters));
-    }
-  }, []);
+    requestAnimationFrame(() => {
+      setFilters(hasFilters ? urlFilters : {});
+      setResetCount((c) => c + 1);
+    });
+  }, [searchParams]);
 
   const updateFilters = useCallback((newFilters: Filters) => {
     setFilters(newFilters);
     syncFiltersToUrl(newFilters);
   }, []);
 
-  return { filters, updateFilters };
+  // Key changes on every URL sync — forces re-mount of uncontrolled inputs
+  const filterKey = `${searchParams.toString()}-${resetCount}`;
+
+  return { filters, updateFilters, filterKey };
 };
