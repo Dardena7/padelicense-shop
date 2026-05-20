@@ -2,7 +2,11 @@
 
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ProductForm, VariantSection } from "../../../_components/products";
+import {
+  ProductForm,
+  VariantSection,
+  ImageSection,
+} from "../../../_components/products";
 import { useAdminProduct } from "../../../_hooks/useAdminProduct";
 import { useUpdateProduct } from "../../../_hooks/useUpdateProduct";
 import {
@@ -57,6 +61,7 @@ const EditProductPage = () => {
         onSubmit={handleSubmit}
         loading={updating}
       />
+      <ImageSection productId={id} images={product.images} />
       <VariantSection productId={id} variants={product.variants} />
     </div>
   );
