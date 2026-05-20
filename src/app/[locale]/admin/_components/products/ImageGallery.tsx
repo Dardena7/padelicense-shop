@@ -87,9 +87,12 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             onDragOver={(e) => handleDragOver(e, image.id)}
             onDrop={() => handleDrop(image.id)}
             onDragEnd={handleDragEnd}
-            className={clsx("group relative cursor-grab active:cursor-grabbing", {
-              "ring-2 ring-blue-400 rounded-lg": dragOverId === image.id,
-            })}
+            className={clsx(
+              "group relative cursor-grab active:cursor-grabbing",
+              {
+                "ring-2 ring-blue-400 rounded-lg": dragOverId === image.id,
+              },
+            )}
           >
             <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
               <Image

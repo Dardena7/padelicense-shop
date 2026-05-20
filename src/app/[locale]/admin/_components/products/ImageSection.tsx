@@ -52,7 +52,10 @@ export const ImageSection = (props: ImageSectionProps) => {
         onImageDeleted={handleImageDeleted}
         onReorder={handleReorder}
       />
-      <ImageUploader productId={productId} onImageCreated={handleImageCreated} />
+      <ImageUploader
+        productId={productId}
+        onImageCreated={handleImageCreated}
+      />
     </div>
   );
 };

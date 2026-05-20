@@ -2,9 +2,7 @@ import { useMutation } from "@apollo/client/react";
 import { graphql } from "@/gql";
 
 const REORDER_PRODUCT_IMAGES_MUTATION = graphql(`
-  mutation AdminReorderProductImages(
-    $input: AdminReorderProductImagesInput!
-  ) {
+  mutation AdminReorderProductImages($input: AdminReorderProductImagesInput!) {
     adminReorderProductImages(input: $input) {
       images {
         id
