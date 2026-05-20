@@ -226,7 +226,13 @@
         "categoryRequired": "Category is required",
         "priceRequired": "Price must be greater than 0"
       },
-      "saveError": "Failed to save product. Please try again."
+      "saveError": "Failed to save product. Please try again.",
+      "images": "Images",
+      "imageAdd": "Add image",
+      "imageUploading": "Uploading...",
+      "imageUploadError": "Failed to upload image.",
+      "imageDeleteConfirm": "Delete this image?",
+      "imageDeleteError": "Failed to delete image."
     },
     "categories": {
       "title": "Categories",

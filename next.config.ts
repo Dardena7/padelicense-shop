@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     tsconfigPath: "./tsconfig.build.json",
   },
   images: {
+    dangerouslyAllowLocalIP:
+      process.env.NODE_ENV === "development" || process.env.CI === "true",
     remotePatterns: [
       {
         protocol: "https",
@@ -14,6 +16,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "picsum.photos",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
       },
     ],
   },

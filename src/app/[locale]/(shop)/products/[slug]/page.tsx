@@ -1,7 +1,7 @@
 import { getProduct } from "./_queries/product";
-import Image from "next/image";
 import { AlternateUrlsSync } from "@/components/layout";
 import { ProductDetails } from "./_components/ProductDetails";
+import { ProductGallery } from "./_components/ProductGallery";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -107,22 +107,7 @@ const ProductPage = async (props: ProductPageProps) => {
       />
       <AlternateUrlsSync urls={alternateUrls} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="relative aspect-square bg-foreground-light rounded-xl overflow-hidden">
-          {mainImage ? (
-            <Image
-              src={mainImage.imageUrl}
-              alt={mainImage.altText || product.name}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-muted">
-              {t("noImageAvailable")}
-            </div>
-          )}
-        </div>
+        <ProductGallery images={images} productName={product.name} />
 
         <ProductDetails
           name={product.name}

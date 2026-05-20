@@ -37,7 +37,7 @@ const ADMIN_PRODUCTS_QUERY = graphql(`
 export const useAdminProducts = (filters: ProductSearchInput = {}) => {
   const { data, loading } = useQuery(ADMIN_PRODUCTS_QUERY, {
     variables: { filters },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "network-only",
   });
 
   const products = (data?.products?.nodes ?? []).filter(nonNullable);

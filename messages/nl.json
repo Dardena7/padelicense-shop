@@ -226,7 +226,13 @@
         "categoryRequired": "Categorie is verplicht",
         "priceRequired": "Prijs moet groter zijn dan 0"
       },
-      "saveError": "Opslaan mislukt. Probeer het opnieuw."
+      "saveError": "Opslaan mislukt. Probeer het opnieuw.",
+      "images": "Afbeeldingen",
+      "imageAdd": "Afbeelding toevoegen",
+      "imageUploading": "Uploaden...",
+      "imageUploadError": "Uploaden mislukt.",
+      "imageDeleteConfirm": "Deze afbeelding verwijderen?",
+      "imageDeleteError": "Verwijderen mislukt."
     },
     "categories": {
       "title": "Categorieën",

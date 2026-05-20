@@ -37,10 +37,13 @@ type Documents = {
     "\n  query AdminProducts($filters: ProductSearchInput) {\n    products(filters: $filters) {\n      nodes {\n        id\n        name\n        slug\n        brand\n        basePriceCents\n        status\n        featured\n        createdAt\n        category {\n          id\n          name\n        }\n        variants {\n          id\n          name\n          sku\n          stockQuantity\n        }\n        images {\n          id\n          imageUrl\n        }\n      }\n    }\n  }\n": typeof types.AdminProductsDocument,
     "\n  mutation AdminCreateCategory($input: AdminCreateCategoryInput!) {\n    adminCreateCategory(input: $input) {\n      category {\n        id\n        name\n      }\n    }\n  }\n": typeof types.AdminCreateCategoryDocument,
     "\n  mutation AdminCreateProduct($input: AdminCreateProductInput!) {\n    adminCreateProduct(input: $input) {\n      product {\n        id\n        name\n      }\n    }\n  }\n": typeof types.AdminCreateProductDocument,
+    "\n  mutation AdminCreateProductImage($input: AdminCreateProductImageInput!) {\n    adminCreateProductImage(input: $input) {\n      image {\n        id\n        imageUrl\n        position\n        altText\n      }\n    }\n  }\n": typeof types.AdminCreateProductImageDocument,
     "\n  mutation AdminCreateVariant($input: AdminCreateVariantInput!) {\n    adminCreateVariant(input: $input) {\n      variant {\n        id\n        name\n        sku\n        priceCents\n        stockQuantity\n      }\n    }\n  }\n": typeof types.AdminCreateVariantDocument,
     "\n  mutation AdminDeleteCategory($input: AdminDeleteCategoryInput!) {\n    adminDeleteCategory(input: $input) {\n      deletedId\n    }\n  }\n": typeof types.AdminDeleteCategoryDocument,
     "\n  mutation AdminDeleteProduct($input: AdminDeleteProductInput!) {\n    adminDeleteProduct(input: $input) {\n      deletedId\n    }\n  }\n": typeof types.AdminDeleteProductDocument,
+    "\n  mutation AdminDeleteProductImage($input: AdminDeleteProductImageInput!) {\n    adminDeleteProductImage(input: $input) {\n      deletedId\n    }\n  }\n": typeof types.AdminDeleteProductImageDocument,
     "\n  mutation AdminDeleteVariant($input: AdminDeleteVariantInput!) {\n    adminDeleteVariant(input: $input) {\n      deletedId\n    }\n  }\n": typeof types.AdminDeleteVariantDocument,
+    "\n  mutation AdminReorderProductImages($input: AdminReorderProductImagesInput!) {\n    adminReorderProductImages(input: $input) {\n      images {\n        id\n        position\n      }\n    }\n  }\n": typeof types.AdminReorderProductImagesDocument,
     "\n  mutation AdminUpdateCategory($input: AdminUpdateCategoryInput!) {\n    adminUpdateCategory(input: $input) {\n      category {\n        id\n        name\n        translations {\n          locale\n          name\n          slug\n          description\n        }\n      }\n    }\n  }\n": typeof types.AdminUpdateCategoryDocument,
     "\n  mutation AdminUpdateOrderStatus($input: AdminUpdateOrderStatusInput!) {\n    adminUpdateOrderStatus(input: $input) {\n      order {\n        id\n        status\n      }\n    }\n  }\n": typeof types.AdminUpdateOrderStatusDocument,
     "\n  mutation AdminUpdateProduct($input: AdminUpdateProductInput!) {\n    adminUpdateProduct(input: $input) {\n      product {\n        id\n        name\n        translations {\n          locale\n          name\n          slug\n          description\n        }\n      }\n    }\n  }\n": typeof types.AdminUpdateProductDocument,
@@ -75,10 +78,13 @@ const documents: Documents = {
     "\n  query AdminProducts($filters: ProductSearchInput) {\n    products(filters: $filters) {\n      nodes {\n        id\n        name\n        slug\n        brand\n        basePriceCents\n        status\n        featured\n        createdAt\n        category {\n          id\n          name\n        }\n        variants {\n          id\n          name\n          sku\n          stockQuantity\n        }\n        images {\n          id\n          imageUrl\n        }\n      }\n    }\n  }\n": types.AdminProductsDocument,
     "\n  mutation AdminCreateCategory($input: AdminCreateCategoryInput!) {\n    adminCreateCategory(input: $input) {\n      category {\n        id\n        name\n      }\n    }\n  }\n": types.AdminCreateCategoryDocument,
     "\n  mutation AdminCreateProduct($input: AdminCreateProductInput!) {\n    adminCreateProduct(input: $input) {\n      product {\n        id\n        name\n      }\n    }\n  }\n": types.AdminCreateProductDocument,
+    "\n  mutation AdminCreateProductImage($input: AdminCreateProductImageInput!) {\n    adminCreateProductImage(input: $input) {\n      image {\n        id\n        imageUrl\n        position\n        altText\n      }\n    }\n  }\n": types.AdminCreateProductImageDocument,
     "\n  mutation AdminCreateVariant($input: AdminCreateVariantInput!) {\n    adminCreateVariant(input: $input) {\n      variant {\n        id\n        name\n        sku\n        priceCents\n        stockQuantity\n      }\n    }\n  }\n": types.AdminCreateVariantDocument,
     "\n  mutation AdminDeleteCategory($input: AdminDeleteCategoryInput!) {\n    adminDeleteCategory(input: $input) {\n      deletedId\n    }\n  }\n": types.AdminDeleteCategoryDocument,
     "\n  mutation AdminDeleteProduct($input: AdminDeleteProductInput!) {\n    adminDeleteProduct(input: $input) {\n      deletedId\n    }\n  }\n": types.AdminDeleteProductDocument,
+    "\n  mutation AdminDeleteProductImage($input: AdminDeleteProductImageInput!) {\n    adminDeleteProductImage(input: $input) {\n      deletedId\n    }\n  }\n": types.AdminDeleteProductImageDocument,
     "\n  mutation AdminDeleteVariant($input: AdminDeleteVariantInput!) {\n    adminDeleteVariant(input: $input) {\n      deletedId\n    }\n  }\n": types.AdminDeleteVariantDocument,
+    "\n  mutation AdminReorderProductImages($input: AdminReorderProductImagesInput!) {\n    adminReorderProductImages(input: $input) {\n      images {\n        id\n        position\n      }\n    }\n  }\n": types.AdminReorderProductImagesDocument,
     "\n  mutation AdminUpdateCategory($input: AdminUpdateCategoryInput!) {\n    adminUpdateCategory(input: $input) {\n      category {\n        id\n        name\n        translations {\n          locale\n          name\n          slug\n          description\n        }\n      }\n    }\n  }\n": types.AdminUpdateCategoryDocument,
     "\n  mutation AdminUpdateOrderStatus($input: AdminUpdateOrderStatusInput!) {\n    adminUpdateOrderStatus(input: $input) {\n      order {\n        id\n        status\n      }\n    }\n  }\n": types.AdminUpdateOrderStatusDocument,
     "\n  mutation AdminUpdateProduct($input: AdminUpdateProductInput!) {\n    adminUpdateProduct(input: $input) {\n      product {\n        id\n        name\n        translations {\n          locale\n          name\n          slug\n          description\n        }\n      }\n    }\n  }\n": types.AdminUpdateProductDocument,
@@ -199,6 +205,10 @@ export function graphql(source: "\n  mutation AdminCreateProduct($input: AdminCr
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation AdminCreateProductImage($input: AdminCreateProductImageInput!) {\n    adminCreateProductImage(input: $input) {\n      image {\n        id\n        imageUrl\n        position\n        altText\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation AdminCreateProductImage($input: AdminCreateProductImageInput!) {\n    adminCreateProductImage(input: $input) {\n      image {\n        id\n        imageUrl\n        position\n        altText\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation AdminCreateVariant($input: AdminCreateVariantInput!) {\n    adminCreateVariant(input: $input) {\n      variant {\n        id\n        name\n        sku\n        priceCents\n        stockQuantity\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation AdminCreateVariant($input: AdminCreateVariantInput!) {\n    adminCreateVariant(input: $input) {\n      variant {\n        id\n        name\n        sku\n        priceCents\n        stockQuantity\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -211,7 +221,15 @@ export function graphql(source: "\n  mutation AdminDeleteProduct($input: AdminDe
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation AdminDeleteProductImage($input: AdminDeleteProductImageInput!) {\n    adminDeleteProductImage(input: $input) {\n      deletedId\n    }\n  }\n"): (typeof documents)["\n  mutation AdminDeleteProductImage($input: AdminDeleteProductImageInput!) {\n    adminDeleteProductImage(input: $input) {\n      deletedId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation AdminDeleteVariant($input: AdminDeleteVariantInput!) {\n    adminDeleteVariant(input: $input) {\n      deletedId\n    }\n  }\n"): (typeof documents)["\n  mutation AdminDeleteVariant($input: AdminDeleteVariantInput!) {\n    adminDeleteVariant(input: $input) {\n      deletedId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AdminReorderProductImages($input: AdminReorderProductImagesInput!) {\n    adminReorderProductImages(input: $input) {\n      images {\n        id\n        position\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation AdminReorderProductImages($input: AdminReorderProductImagesInput!) {\n    adminReorderProductImages(input: $input) {\n      images {\n        id\n        position\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

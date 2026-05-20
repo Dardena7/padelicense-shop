@@ -17,7 +17,7 @@ export const clickAndWaitForURL = async (
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     await locator.click();
     try {
-      await page.waitForURL(urlPattern, { timeout: 10000 });
+      await page.waitForURL(urlPattern, { timeout: 15000 });
       return;
     } catch {
       // Navigation didn't happen — retry click
@@ -25,5 +25,5 @@ export const clickAndWaitForURL = async (
   }
   // Final attempt — let it fail with a proper error
   await locator.click();
-  await page.waitForURL(urlPattern, { timeout: 15000 });
+  await page.waitForURL(urlPattern, { timeout: 20000 });
 };

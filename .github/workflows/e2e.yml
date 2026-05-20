@@ -65,6 +65,12 @@ jobs:
       - name: Install Playwright
         run: npx playwright install chromium --with-deps
 
+      - name: Build frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3000/graphql
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+        run: npm run build
+
       - name: Run E2E tests
         env:
           NEXT_PUBLIC_API_URL: http://localhost:3000/graphql

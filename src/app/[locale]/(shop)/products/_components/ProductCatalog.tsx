@@ -23,7 +23,7 @@ const hasActiveFilters = (filters: Filters) =>
 export const ProductCatalog = (props: ProductCatalogProps) => {
   const { initialProducts = [], categorySlug } = props;
   const t = useTranslations("common");
-  const { filters, updateFilters } = useUrlFilters();
+  const { filters, updateFilters, filterKey } = useUrlFilters();
 
   const filtersActive = hasActiveFilters(filters);
   const { products: filteredProducts, loading } = useProducts(
@@ -34,7 +34,11 @@ export const ProductCatalog = (props: ProductCatalogProps) => {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <ProductFilters filters={filters} onFiltersChange={updateFilters} />
+        <ProductFilters
+          key={filterKey}
+          filters={filters}
+          onFiltersChange={updateFilters}
+        />
       </div>
 
       <div

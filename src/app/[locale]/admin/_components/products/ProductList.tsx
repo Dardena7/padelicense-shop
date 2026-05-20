@@ -11,7 +11,7 @@ import { StatusBadge } from "../";
 export const ProductList = () => {
   const t = useTranslations("admin.products");
   const locale = useLocale();
-  const { filters, updateFilters } = useUrlFilters();
+  const { filters, updateFilters, filterKey } = useUrlFilters();
   const { deleteProduct, loading: deleting } = useDeleteProduct();
 
   const { products, loading } = useAdminProducts(filters);
@@ -34,6 +34,7 @@ export const ProductList = () => {
       </div>
 
       <ProductFilters
+        key={filterKey}
         showStatusFilter
         filters={filters}
         onFiltersChange={updateFilters}

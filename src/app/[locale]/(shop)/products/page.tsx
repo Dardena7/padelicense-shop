@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ProductCatalog } from "./_components/ProductCatalog";
@@ -44,7 +45,9 @@ const ProductsPage = async (props: ProductsPageProps) => {
     <main className="py-12">
       <h1 className="text-3xl font-bold text-foreground mb-8">{t("title")}</h1>
 
-      <ProductCatalog initialProducts={initialProducts} />
+      <Suspense>
+        <ProductCatalog initialProducts={initialProducts} />
+      </Suspense>
     </main>
   );
 };

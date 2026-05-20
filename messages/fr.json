@@ -226,7 +226,13 @@
         "categoryRequired": "La catégorie est requise",
         "priceRequired": "Le prix doit être supérieur à 0"
       },
-      "saveError": "Échec de l'enregistrement. Veuillez réessayer."
+      "saveError": "Échec de l'enregistrement. Veuillez réessayer.",
+      "images": "Images",
+      "imageAdd": "Ajouter une image",
+      "imageUploading": "Envoi en cours...",
+      "imageUploadError": "Échec de l'envoi de l'image.",
+      "imageDeleteConfirm": "Supprimer cette image ?",
+      "imageDeleteError": "Échec de la suppression."
     },
     "categories": {
       "title": "Catégories",
