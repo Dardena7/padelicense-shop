@@ -37,7 +37,20 @@ const syncFiltersToUrl = (filters: Filters) => {
 };
 
 export const useUrlFilters = () => {
-  const [filters, setFilters] = useState<Filters>(parseFiltersFromUrl);
+  const [filters, setFilters] = useState<Filters>({});
+
+  // Sync URL filters after hydration to avoid SSR mismatch.
+  // setState is deferred via requestAnimationFrame to avoid React's
+  // "cascading renders" warning when setting state synchronously in an effect.
+  useEffect(() => {
+    const urlFilters = parseFiltersFromUrl();
+    const hasFilters = Object.values(urlFilters).some(
+      (v) => v != null && v !== "",
+    );
+    if (hasFilters) {
+      requestAnimationFrame(() => setFilters(urlFilters));
+    }
+  }, []);
 
   const updateFilters = useCallback((newFilters: Filters) => {
     setFilters(newFilters);
