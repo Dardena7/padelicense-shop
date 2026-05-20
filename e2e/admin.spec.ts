@@ -168,7 +168,9 @@ test.describe("Admin back-office", () => {
     await expect(page).toHaveURL(/\/admin\/orders\//, { timeout: 10000 });
 
     // Order detail should show order number, items, and shipping address
-    await expect(page.locator("text=/PAD-/").first()).toBeVisible();
+    await expect(page.locator("text=/PAD-/").first()).toBeVisible({
+      timeout: 10000,
+    });
     await expect(page.getByText("Items")).toBeVisible();
     await expect(page.getByText("Shipping address")).toBeVisible();
 

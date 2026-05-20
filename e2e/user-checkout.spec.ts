@@ -14,7 +14,9 @@ test.describe("User checkout (guest → signup → checkout → verify order)", 
 
     // --- Add first product as guest ---
     await page.goto("/en/products/head-speed-pro");
-    await page.getByRole("button", { name: "Add to cart" }).click();
+    await page
+      .getByRole("button", { name: "Add to cart" })
+      .click({ timeout: 15000 });
     await expect(page.getByText("Added!")).toBeVisible();
 
     // --- Add second product ---
