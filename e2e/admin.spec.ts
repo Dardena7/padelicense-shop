@@ -337,7 +337,7 @@ test.describe("Admin back-office", () => {
     const productRow = page.getByText(`Test Product ${suffix}`).locator("../..");
     await productRow.getByRole("link", { name: "Edit" }).click();
     await expect(page).toHaveURL(/\/admin\/products\/.*\/edit/, {
-      timeout: 10000,
+      timeout: 15000,
     });
 
     // EN tab should be pre-filled

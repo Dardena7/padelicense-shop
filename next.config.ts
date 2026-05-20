@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
     tsconfigPath: "./tsconfig.build.json",
   },
   images: {
-    dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
+    dangerouslyAllowLocalIP:
+      process.env.NODE_ENV === "development" || process.env.CI === "true",
     remotePatterns: [
       {
         protocol: "https",
