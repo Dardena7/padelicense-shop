@@ -1,11 +1,14 @@
 import { useQuery } from "@apollo/client/react";
+import { useCallback } from "react";
 import { graphql } from "@/gql";
 import { type ProductSearchInput } from "@/gql/graphql";
 import { nonNullable } from "@/lib/utils";
 
+export const PAGE_SIZE = 12;
+
 const PRODUCTS_QUERY = graphql(`
-  query ShopProducts($filters: ProductSearchInput) {
-    products(filters: $filters) {
+  query ShopProducts($filters: ProductSearchInput, $first: Int, $after: String) {
+    products(filters: $filters, first: $first, after: $after) {
       nodes {
         id
         name
@@ -29,16 +32,29 @@ const PRODUCTS_QUERY = graphql(`
           position
         }
       }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `);
 
 export const useProducts = (filters: ProductSearchInput = {}) => {
-  const { data, loading } = useQuery(PRODUCTS_QUERY, {
-    variables: { filters },
+  const { data, loading, fetchMore } = useQuery(PRODUCTS_QUERY, {
+    variables: { filters, first: PAGE_SIZE },
   });
 
   const products = (data?.products?.nodes ?? []).filter(nonNullable);
+  const pageInfo = data?.products?.pageInfo;
+  const hasNextPage = pageInfo?.hasNextPage ?? false;
 
-  return { products, loading };
+  const loadMore = useCallback(() => {
+    if (!pageInfo?.endCursor) return;
+    fetchMore({
+      variables: { after: pageInfo.endCursor },
+    });
+  }, [fetchMore, pageInfo?.endCursor]);
+
+  return { products, loading, hasNextPage, loadMore };
 };

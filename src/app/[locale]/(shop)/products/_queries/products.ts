@@ -1,10 +1,11 @@
 import { graphql } from "@/gql";
 import { getClient, localizedContext } from "@/lib/apollo";
 import { nonNullable } from "@/lib/utils";
+import { PAGE_SIZE } from "../_hooks/useProducts";
 
 const GET_PRODUCTS = graphql(`
-  query GetInitialProducts {
-    products {
+  query GetInitialProducts($first: Int) {
+    products(first: $first) {
       nodes {
         id
         name
@@ -28,6 +29,10 @@ const GET_PRODUCTS = graphql(`
           position
         }
       }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `);
@@ -35,8 +40,12 @@ const GET_PRODUCTS = graphql(`
 export const getInitialProducts = async (locale: string) => {
   const { data } = await getClient().query({
     query: GET_PRODUCTS,
+    variables: { first: PAGE_SIZE },
     ...localizedContext(locale),
   });
 
-  return (data?.products?.nodes ?? []).filter(nonNullable);
+  return {
+    products: (data?.products?.nodes ?? []).filter(nonNullable),
+    pageInfo: data?.products?.pageInfo ?? { hasNextPage: false, endCursor: null },
+  };
 };

@@ -16,16 +16,30 @@ export type Filters = {
   status?: ProductStatus;
   minPrice?: number;
   maxPrice?: number;
+  categorySlug?: string;
+};
+
+type CategoryOption = {
+  slug: string;
+  name: string;
 };
 
 type ProductFiltersProps = {
   showStatusFilter?: boolean;
+  showCategoryFilter?: boolean;
+  categories?: CategoryOption[];
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 };
 
 export const ProductFilters = (props: ProductFiltersProps) => {
-  const { showStatusFilter = false, filters, onFiltersChange } = props;
+  const {
+    showStatusFilter = false,
+    showCategoryFilter = false,
+    categories = [],
+    filters,
+    onFiltersChange,
+  } = props;
   const t = useTranslations("filters");
   const debounceTimer = useRef<ReturnType<typeof setTimeout>>(null);
   const pendingUpdates = useRef<Partial<Filters>>({});
@@ -80,6 +94,23 @@ export const ProductFilters = (props: ProductFiltersProps) => {
           </option>
         ))}
       </Select>
+
+      {showCategoryFilter && categories.length > 0 && (
+        <Select
+          id="categorySlug"
+          value={filters.categorySlug ?? ""}
+          onChange={(e) =>
+            update({ categorySlug: e.target.value || undefined })
+          }
+        >
+          <option value="">{t("allCategories")}</option>
+          {categories.map((cat) => (
+            <option key={cat.slug} value={cat.slug}>
+              {cat.name}
+            </option>
+          ))}
+        </Select>
+      )}
 
       <div className="flex gap-2 items-end">
         <Input
