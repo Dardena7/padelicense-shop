@@ -8,6 +8,7 @@
     "inStock": "Op voorraad",
     "noImageAvailable": "Geen afbeelding beschikbaar",
     "noProductsFound": "Geen producten gevonden.",
+    "loadMore": "Meer laden",
     "addToCart": "In winkelwagen",
     "itemAdded": "Toegevoegd!",
     "viewDetails": "Bekijk details"
@@ -15,6 +16,7 @@
   "nav": {
     "home": "Home",
     "products": "Producten",
+    "categories": "Categorieën",
     "cart": "Winkelwagen",
     "account": "Account",
     "login": "Inloggen",
@@ -130,7 +132,16 @@
     "description": "Bekijk ons assortiment premium padel uitrusting",
     "variants": "Varianten"
   },
+  "categories": {
+    "productsCount": "{count, plural, =0 {Geen producten} =1 {1 product} other {# producten}}",
+    "subcategories": "Subcategorieën",
+    "noProducts": "Nog geen producten in deze categorie."
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
   "filters": {
+    "allCategories": "Alle categorieën",
     "searchPlaceholder": "Producten zoeken...",
     "sortBy": "Sorteren op",
     "sortDefault": "Nieuwste",

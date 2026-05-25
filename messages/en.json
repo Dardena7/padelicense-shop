@@ -8,6 +8,7 @@
     "inStock": "In stock",
     "noImageAvailable": "No image available",
     "noProductsFound": "No products found.",
+    "loadMore": "Load more",
     "addToCart": "Add to cart",
     "itemAdded": "Added!",
     "viewDetails": "View details"
@@ -15,6 +16,7 @@
   "nav": {
     "home": "Home",
     "products": "Products",
+    "categories": "Categories",
     "cart": "Cart",
     "account": "Account",
     "login": "Log in",
@@ -130,7 +132,16 @@
     "description": "Browse our selection of premium padel equipment",
     "variants": "Variants"
   },
+  "categories": {
+    "productsCount": "{count, plural, =0 {No products} =1 {1 product} other {# products}}",
+    "subcategories": "Subcategories",
+    "noProducts": "No products in this category yet."
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
   "filters": {
+    "allCategories": "All categories",
     "searchPlaceholder": "Search products...",
     "sortBy": "Sort by",
     "sortDefault": "Newest",
