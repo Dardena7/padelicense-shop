@@ -1,10 +1,16 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Breadcrumb } from "./Breadcrumb";
 
 vi.mock("@/i18n/navigation", () => ({
-  Link: (props: { href: string; children: React.ReactNode; className?: string }) => (
-    <a href={props.href} className={props.className}>{props.children}</a>
+  Link: (props: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <a href={props.href} className={props.className}>
+      {props.children}
+    </a>
   ),
 }));
 
@@ -36,18 +42,23 @@ describe("Breadcrumb", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: "Rackets" })).toHaveAttribute("href", "/categories/rackets");
-    expect(screen.queryByRole("link", { name: "Control" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+    expect(screen.getByRole("link", { name: "Rackets" })).toHaveAttribute(
+      "href",
+      "/categories/rackets",
+    );
+    expect(
+      screen.queryByRole("link", { name: "Control" }),
+    ).not.toBeInTheDocument();
   });
 
   it("renders JSON-LD structured data", () => {
     render(
       <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Rackets" },
-        ]}
+        items={[{ label: "Home", href: "/" }, { label: "Rackets" }]}
       />,
     );
 

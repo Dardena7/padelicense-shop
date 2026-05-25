@@ -65,7 +65,9 @@ const fetchCategories = async (): Promise<CategoryNode[]> => {
     const json = await res.json();
     const roots: CategoryNode[] = json.data?.categories?.filter(Boolean) ?? [];
 
-    const flatten = (cats: (CategoryNode & { subcategories?: CategoryNode[] })[]): CategoryNode[] =>
+    const flatten = (
+      cats: (CategoryNode & { subcategories?: CategoryNode[] })[],
+    ): CategoryNode[] =>
       cats.flatMap((cat) => [
         { slug: cat.slug, alternateSlugs: cat.alternateSlugs },
         ...flatten(cat.subcategories ?? []),

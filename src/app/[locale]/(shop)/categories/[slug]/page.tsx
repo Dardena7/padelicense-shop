@@ -55,7 +55,14 @@ export const generateMetadata = async (
 };
 
 const buildBreadcrumbItems = (
-  category: { name: string; parent?: { name: string; slug: string; parent?: { name: string; slug: string } | null } | null },
+  category: {
+    name: string;
+    parent?: {
+      name: string;
+      slug: string;
+      parent?: { name: string; slug: string } | null;
+    } | null;
+  },
   productsLabel: string,
 ) => {
   const items: { label: string; href?: string }[] = [

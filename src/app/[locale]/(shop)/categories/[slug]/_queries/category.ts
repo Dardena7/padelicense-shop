@@ -86,6 +86,9 @@ export const getCategoryProducts = async (slug: string, locale: string) => {
   });
   return {
     products: (data?.products?.nodes ?? []).filter(nonNullable),
-    pageInfo: data?.products?.pageInfo ?? { hasNextPage: false, endCursor: null },
+    pageInfo: data?.products?.pageInfo ?? {
+      hasNextPage: false,
+      endCursor: null,
+    },
   };
 };

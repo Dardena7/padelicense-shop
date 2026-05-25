@@ -45,34 +45,34 @@ export const NavbarCategories = (props: NavbarCategoriesProps) => {
       {open && (
         <div className="absolute top-full left-0 pt-2 w-64 z-50">
           <div className="rounded-lg border border-border bg-white shadow-lg">
-          <ul className="py-2">
-            {categories.map((category) => (
-              <li key={category.id}>
-                <Link
-                  href={`/categories/${category.slug}`}
-                  className="block px-4 py-2 text-sm font-medium text-foreground hover:bg-foreground-light transition-colors"
-                  onClick={() => setOpen(false)}
-                >
-                  {category.name}
-                </Link>
-                {category.subcategories.length > 0 && (
-                  <ul>
-                    {category.subcategories.map((sub) => (
-                      <li key={sub.id}>
-                        <Link
-                          href={`/categories/${sub.slug}`}
-                          className="block px-8 py-1.5 text-sm text-muted hover:text-foreground hover:bg-foreground-light transition-colors"
-                          onClick={() => setOpen(false)}
-                        >
-                          {sub.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
+            <ul className="py-2">
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={`/categories/${category.slug}`}
+                    className="block px-4 py-2 text-sm font-medium text-foreground hover:bg-foreground-light transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {category.name}
+                  </Link>
+                  {category.subcategories.length > 0 && (
+                    <ul>
+                      {category.subcategories.map((sub) => (
+                        <li key={sub.id}>
+                          <Link
+                            href={`/categories/${sub.slug}`}
+                            className="block px-8 py-1.5 text-sm text-muted hover:text-foreground hover:bg-foreground-light transition-colors"
+                            onClick={() => setOpen(false)}
+                          >
+                            {sub.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}

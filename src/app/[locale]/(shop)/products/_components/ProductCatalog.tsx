@@ -10,7 +10,9 @@ import {
 import { useProducts } from "../_hooks/useProducts";
 import { type getInitialProducts } from "../_queries/products";
 
-type Product = Awaited<ReturnType<typeof getInitialProducts>>["products"][number];
+type Product = Awaited<
+  ReturnType<typeof getInitialProducts>
+>["products"][number];
 
 type CategoryOption = {
   slug: string;
@@ -44,7 +46,8 @@ export const ProductCatalog = (props: ProductCatalogProps) => {
     loadMore,
   } = useProducts({ categorySlug, ...filters });
   const products = queryProducts.length > 0 ? queryProducts : initialProducts;
-  const showLoadMore = queryProducts.length > 0 ? hasNextPage : initialHasNextPage;
+  const showLoadMore =
+    queryProducts.length > 0 ? hasNextPage : initialHasNextPage;
 
   return (
     <div className="w-full">

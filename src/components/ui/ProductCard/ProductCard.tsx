@@ -69,9 +69,7 @@ export const ProductCard = (props: ProductCardProps) => {
               {brand}
             </p>
             {category && (
-              <span className="text-xs text-muted">
-                {category.name}
-              </span>
+              <span className="text-xs text-muted">{category.name}</span>
             )}
           </div>
 

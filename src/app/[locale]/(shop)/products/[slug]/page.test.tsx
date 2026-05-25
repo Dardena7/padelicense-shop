@@ -22,15 +22,24 @@ vi.mock("@/components/layout", () => ({
 }));
 
 class NotFoundError extends Error {}
+class RedirectError extends Error {
+  constructor(public url: string) {
+    super(`Redirect to ${url}`);
+  }
+}
 
 vi.mock("next/navigation", () => ({
   notFound: vi.fn(() => {
     throw new NotFoundError();
   }),
+  redirect: vi.fn((url: string) => {
+    throw new RedirectError(url);
+  }),
 }));
 
-const { notFound } = await import("next/navigation");
+const { notFound, redirect } = await import("next/navigation");
 const mockedNotFound = vi.mocked(notFound);
+const mockedRedirect = vi.mocked(redirect);
 
 const fullProduct = {
   id: "1",
@@ -41,7 +50,7 @@ const fullProduct = {
   basePriceCents: 24990,
   status: "ACTIVE",
   featured: true,
-  category: { name: "Rackets", slug: "rackets" },
+  category: { name: "Rackets", slug: "rackets", parent: null },
   variants: [
     {
       id: "v1",
@@ -84,7 +93,9 @@ describe("ProductPage", () => {
     const page = await ProductPage({ params: makeParams("head-speed-pro") });
     render(page);
 
-    expect(screen.getByText("Head Speed Pro")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Head Speed Pro" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Head")).toBeInTheDocument();
     expect(screen.getByText("€249.90")).toBeInTheDocument();
     expect(
@@ -125,6 +136,18 @@ describe("ProductPage", () => {
     expect(screen.getByText("Out of stock")).toBeInTheDocument();
   });
 
+  it("renders breadcrumb with category hierarchy", async () => {
+    mockProduct(fullProduct);
+    const page = await ProductPage({ params: makeParams("head-speed-pro") });
+    render(page);
+
+    const breadcrumb = screen.getByRole("navigation", { name: "breadcrumb" });
+    expect(breadcrumb).toBeInTheDocument();
+    expect(breadcrumb).toHaveTextContent("Products");
+    expect(breadcrumb).toHaveTextContent("Rackets");
+    expect(breadcrumb).toHaveTextContent("Head Speed Pro");
+  });
+
   it("calls notFound when product does not exist", async () => {
     mockProduct(null);
 
@@ -133,5 +156,15 @@ describe("ProductPage", () => {
     ).rejects.toThrow(NotFoundError);
 
     expect(mockedNotFound).toHaveBeenCalled();
+  });
+
+  it("redirects archived product to category page", async () => {
+    mockProduct({ ...fullProduct, status: "ARCHIVED" });
+
+    await expect(
+      ProductPage({ params: makeParams("head-speed-pro") }),
+    ).rejects.toThrow(RedirectError);
+
+    expect(mockedRedirect).toHaveBeenCalledWith("/en/categories/rackets");
   });
 });
