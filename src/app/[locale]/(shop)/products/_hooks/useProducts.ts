@@ -2,8 +2,7 @@ import { useQuery } from "@apollo/client/react";
 import { graphql } from "@/gql";
 import { type ProductSearchInput } from "@/gql/graphql";
 import { nonNullable } from "@/lib/utils";
-
-export const PAGE_SIZE = 12;
+import { CATALOG_PAGE_SIZE } from "@/lib/constants";
 
 const PRODUCTS_QUERY = graphql(`
   query ShopProducts(
@@ -45,7 +44,7 @@ const PRODUCTS_QUERY = graphql(`
 
 export const useProducts = (filters: ProductSearchInput = {}) => {
   const { data, loading, fetchMore } = useQuery(PRODUCTS_QUERY, {
-    variables: { filters, first: PAGE_SIZE },
+    variables: { filters, first: CATALOG_PAGE_SIZE },
   });
 
   const products = (data?.products?.nodes ?? []).filter(nonNullable);

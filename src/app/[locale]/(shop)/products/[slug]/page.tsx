@@ -7,17 +7,11 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
+import { buildSlugsByLocale, buildCategoryBreadcrumb } from "@/lib/utils";
 
 type ProductPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
-
-const buildSlugsByLocale = (
-  alternateSlugs: { locale: string; value: string }[],
-) =>
-  Object.fromEntries(
-    alternateSlugs.map((alt) => [alt.locale.toLowerCase(), alt.value]),
-  );
 
 export const generateMetadata = async (
   props: ProductPageProps,
@@ -56,10 +50,7 @@ export const generateMetadata = async (
 const ProductPage = async (props: ProductPageProps) => {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
-  const [t, tProducts] = await Promise.all([
-    getTranslations("common"),
-    getTranslations("products"),
-  ]);
+  const tProducts = await getTranslations("products");
 
   const product = await getProduct(slug, locale);
 
@@ -107,31 +98,11 @@ const ProductPage = async (props: ProductPageProps) => {
     },
   };
 
-  const breadcrumbItems: { label: string; href?: string }[] = [
+  const breadcrumbItems = [
     { label: tProducts("title"), href: "/products" },
+    ...(product.category ? buildCategoryBreadcrumb(product.category) : []),
+    { label: product.name },
   ];
-
-  const category = product.category;
-  if (category) {
-    if (category.parent?.parent) {
-      breadcrumbItems.push({
-        label: category.parent.parent.name,
-        href: `/categories/${category.parent.parent.slug}`,
-      });
-    }
-    if (category.parent) {
-      breadcrumbItems.push({
-        label: category.parent.name,
-        href: `/categories/${category.parent.slug}`,
-      });
-    }
-    breadcrumbItems.push({
-      label: category.name,
-      href: `/categories/${category.slug}`,
-    });
-  }
-
-  breadcrumbItems.push({ label: product.name });
 
   return (
     <main className="py-12 space-y-6">

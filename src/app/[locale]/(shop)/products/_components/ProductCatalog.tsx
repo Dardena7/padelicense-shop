@@ -2,11 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { ProductCard, AddToCartAction, Button } from "@/components/ui";
-import {
-  ProductFilters,
-  useUrlFilters,
-  type Filters,
-} from "@/components/products";
+import { ProductFilters, useUrlFilters } from "@/components/products";
 import { useProducts } from "../_hooks/useProducts";
 import { type getInitialProducts } from "../_queries/products";
 
@@ -25,9 +21,6 @@ type ProductCatalogProps = {
   categorySlug?: string;
   categories?: CategoryOption[];
 };
-
-const hasActiveFilters = (filters: Filters) =>
-  Object.values(filters).some((v) => v != null && v !== "");
 
 export const ProductCatalog = (props: ProductCatalogProps) => {
   const {

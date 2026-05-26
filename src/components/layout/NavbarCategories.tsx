@@ -3,22 +3,10 @@
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-
-type Subcategory = {
-  id: string;
-  name: string;
-  slug: string;
-};
-
-type Category = {
-  id: string;
-  name: string;
-  slug: string;
-  subcategories: Subcategory[];
-};
+import { type getNavCategories } from "@/app/[locale]/(shop)/_queries/categories";
 
 type NavbarCategoriesProps = {
-  categories: Category[];
+  categories: Awaited<ReturnType<typeof getNavCategories>>;
 };
 
 export const NavbarCategories = (props: NavbarCategoriesProps) => {

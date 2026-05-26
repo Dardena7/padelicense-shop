@@ -1,15 +1,12 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { type getCategory } from "../_queries/category";
 
-type Subcategory = {
-  name: string;
-  slug: string;
-  description?: string | null;
-  productsCount: number;
-};
+type Category = NonNullable<Awaited<ReturnType<typeof getCategory>>>;
+type Subcategory = NonNullable<Category["subcategories"]>[number];
 
 type SubcategoryGridProps = {
-  subcategories: Subcategory[];
+  subcategories: NonNullable<Subcategory>[];
 };
 
 export const SubcategoryGrid = (props: SubcategoryGridProps) => {

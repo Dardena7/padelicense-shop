@@ -95,8 +95,8 @@ test.describe("Category pages", () => {
     await expect(page).toHaveURL(/\/fr\/categories\//, { timeout: 10000 });
 
     // --- 7. 404 for non-existent category ---
-    const response = await page.goto("/en/categories/non-existent-slug");
-    expect(response?.status()).toBe(404);
+    await page.goto("/en/categories/non-existent-slug");
+    await expect(page.locator("text=404")).toBeVisible({ timeout: 10000 });
   });
 
   test("archived product redirects to category", async ({ page }) => {

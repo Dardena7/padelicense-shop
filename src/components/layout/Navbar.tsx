@@ -4,16 +4,10 @@ import { LocaleSwitcher } from "./LocaleSwitcher";
 import { NavbarAuth } from "./NavbarAuth";
 import { NavbarCart } from "./NavbarCart";
 import { NavbarCategories } from "./NavbarCategories";
-
-type NavCategory = {
-  id: string;
-  name: string;
-  slug: string;
-  subcategories: { id: string; name: string; slug: string }[];
-};
+import { type getNavCategories } from "@/app/[locale]/(shop)/_queries/categories";
 
 type NavbarProps = {
-  categories?: NavCategory[];
+  categories?: Awaited<ReturnType<typeof getNavCategories>>;
 };
 
 export const Navbar = (props: NavbarProps) => {

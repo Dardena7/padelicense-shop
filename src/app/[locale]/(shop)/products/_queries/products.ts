@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import { getClient, localizedContext } from "@/lib/apollo";
 import { nonNullable } from "@/lib/utils";
-import { PAGE_SIZE } from "../_hooks/useProducts";
+import { CATALOG_PAGE_SIZE } from "@/lib/constants";
 
 const GET_PRODUCTS = graphql(`
   query GetInitialProducts($first: Int) {
@@ -40,7 +40,7 @@ const GET_PRODUCTS = graphql(`
 export const getInitialProducts = async (locale: string) => {
   const { data } = await getClient().query({
     query: GET_PRODUCTS,
-    variables: { first: PAGE_SIZE },
+    variables: { first: CATALOG_PAGE_SIZE },
     ...localizedContext(locale),
   });
 

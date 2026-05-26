@@ -5,20 +5,15 @@ import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
 import { AlternateUrlsSync } from "@/components/layout";
 import { Breadcrumb } from "@/components/ui";
+import { buildSlugsByLocale, buildCategoryBreadcrumb } from "@/lib/utils";
 import { ProductCatalog } from "../../products/_components/ProductCatalog";
-import { getCategory, getCategoryProducts } from "./_queries/category";
+import { getCategory } from "./_queries/category";
+import { getCategoryProducts } from "./_queries/categoryProducts";
 import { SubcategoryGrid } from "./_components/SubcategoryGrid";
 
 type CategoryPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
-
-const buildSlugsByLocale = (
-  alternateSlugs: { locale: string; value: string }[],
-) =>
-  Object.fromEntries(
-    alternateSlugs.map((alt) => [alt.locale.toLowerCase(), alt.value]),
-  );
 
 export const generateMetadata = async (
   props: CategoryPageProps,
@@ -54,40 +49,6 @@ export const generateMetadata = async (
   };
 };
 
-const buildBreadcrumbItems = (
-  category: {
-    name: string;
-    parent?: {
-      name: string;
-      slug: string;
-      parent?: { name: string; slug: string } | null;
-    } | null;
-  },
-  productsLabel: string,
-) => {
-  const items: { label: string; href?: string }[] = [
-    { label: productsLabel, href: "/products" },
-  ];
-
-  if (category.parent?.parent) {
-    items.push({
-      label: category.parent.parent.name,
-      href: `/categories/${category.parent.parent.slug}`,
-    });
-  }
-
-  if (category.parent) {
-    items.push({
-      label: category.parent.name,
-      href: `/categories/${category.parent.slug}`,
-    });
-  }
-
-  items.push({ label: category.name });
-
-  return items;
-};
-
 const CategoryPage = async (props: CategoryPageProps) => {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
@@ -113,6 +74,15 @@ const CategoryPage = async (props: CategoryPageProps) => {
     (s): s is NonNullable<typeof s> => s != null,
   );
 
+  const breadcrumbItems = [
+    { label: t("title"), href: "/products" },
+    ...buildCategoryBreadcrumb(category),
+  ];
+  // Last item is current page — remove its link
+  breadcrumbItems[breadcrumbItems.length - 1] = {
+    label: breadcrumbItems[breadcrumbItems.length - 1].label,
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -130,7 +100,7 @@ const CategoryPage = async (props: CategoryPageProps) => {
       />
       <AlternateUrlsSync urls={alternateUrls} />
 
-      <Breadcrumb items={buildBreadcrumbItems(category, t("title"))} />
+      <Breadcrumb items={breadcrumbItems} />
 
       <div>
         <h1 className="text-3xl font-bold text-foreground">{category.name}</h1>
