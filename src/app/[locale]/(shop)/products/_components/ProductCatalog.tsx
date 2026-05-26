@@ -1,35 +1,46 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ProductCard, AddToCartAction } from "@/components/ui";
-import {
-  ProductFilters,
-  useUrlFilters,
-  type Filters,
-} from "@/components/products";
+import { ProductCard, AddToCartAction, Button } from "@/components/ui";
+import { ProductFilters, useUrlFilters } from "@/components/products";
 import { useProducts } from "../_hooks/useProducts";
 import { type getInitialProducts } from "../_queries/products";
 
-type Product = Awaited<ReturnType<typeof getInitialProducts>>[number];
+type Product = Awaited<
+  ReturnType<typeof getInitialProducts>
+>["products"][number];
+
+type CategoryOption = {
+  slug: string;
+  name: string;
+};
 
 type ProductCatalogProps = {
   initialProducts?: Product[];
+  initialHasNextPage?: boolean;
   categorySlug?: string;
+  categories?: CategoryOption[];
 };
 
-const hasActiveFilters = (filters: Filters) =>
-  Object.values(filters).some((v) => v != null && v !== "");
-
 export const ProductCatalog = (props: ProductCatalogProps) => {
-  const { initialProducts = [], categorySlug } = props;
+  const {
+    initialProducts = [],
+    initialHasNextPage = false,
+    categorySlug,
+    categories,
+  } = props;
   const t = useTranslations("common");
   const { filters, updateFilters, filterKey } = useUrlFilters();
 
-  const filtersActive = hasActiveFilters(filters);
-  const { products: filteredProducts, loading } = useProducts(
-    filtersActive ? { categorySlug, ...filters } : { categorySlug },
-  );
-  const products = filtersActive ? filteredProducts : initialProducts;
+  const {
+    products: queryProducts,
+    loading,
+    hasNextPage,
+    loadMore,
+  } = useProducts({ categorySlug, ...filters });
+  const products = queryProducts.length > 0 ? queryProducts : initialProducts;
+  const showLoadMore =
+    queryProducts.length > 0 ? hasNextPage : initialHasNextPage;
 
   return (
     <div className="w-full">
@@ -38,6 +49,8 @@ export const ProductCatalog = (props: ProductCatalogProps) => {
           key={filterKey}
           filters={filters}
           onFiltersChange={updateFilters}
+          showCategoryFilter={!categorySlug}
+          categories={categories}
         />
       </div>
 
@@ -67,6 +80,7 @@ export const ProductCatalog = (props: ProductCatalogProps) => {
                   featured={product.featured}
                   inStock={inStock}
                   priority={index === 0}
+                  category={product.category ?? undefined}
                   action={
                     defaultVariant && (
                       <AddToCartAction
@@ -78,6 +92,14 @@ export const ProductCatalog = (props: ProductCatalogProps) => {
                 />
               );
             })}
+          </div>
+        )}
+
+        {showLoadMore && (
+          <div className="mt-8 flex justify-center">
+            <Button onClick={loadMore} disabled={loading}>
+              {t("loadMore")}
+            </Button>
           </div>
         )}
       </div>

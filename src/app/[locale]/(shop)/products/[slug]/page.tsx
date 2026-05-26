@@ -1,22 +1,17 @@
 import { getProduct } from "./_queries/product";
 import { AlternateUrlsSync } from "@/components/layout";
+import { Breadcrumb } from "@/components/ui";
 import { ProductDetails } from "./_components/ProductDetails";
 import { ProductGallery } from "./_components/ProductGallery";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
+import { buildSlugsByLocale, buildCategoryBreadcrumb } from "@/lib/utils";
 
 type ProductPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
-
-const buildSlugsByLocale = (
-  alternateSlugs: { locale: string; value: string }[],
-) =>
-  Object.fromEntries(
-    alternateSlugs.map((alt) => [alt.locale.toLowerCase(), alt.value]),
-  );
 
 export const generateMetadata = async (
   props: ProductPageProps,
@@ -55,12 +50,16 @@ export const generateMetadata = async (
 const ProductPage = async (props: ProductPageProps) => {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
-  const t = await getTranslations("common");
+  const tProducts = await getTranslations("products");
 
   const product = await getProduct(slug, locale);
 
   if (!product) {
     notFound();
+  }
+
+  if (product.status === "ARCHIVED" && product.category?.slug) {
+    redirect(`/${locale}/categories/${product.category.slug}`);
   }
 
   const images = [...(product.images ?? [])].sort(
@@ -99,13 +98,20 @@ const ProductPage = async (props: ProductPageProps) => {
     },
   };
 
+  const breadcrumbItems = [
+    { label: tProducts("title"), href: "/products" },
+    ...(product.category ? buildCategoryBreadcrumb(product.category) : []),
+    { label: product.name },
+  ];
+
   return (
-    <main className="py-12">
+    <main className="py-12 space-y-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <AlternateUrlsSync urls={alternateUrls} />
+      <Breadcrumb items={breadcrumbItems} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <ProductGallery images={images} productName={product.name} />
 

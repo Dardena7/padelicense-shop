@@ -3,8 +3,15 @@ import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { NavbarAuth } from "./NavbarAuth";
 import { NavbarCart } from "./NavbarCart";
+import { NavbarCategories } from "./NavbarCategories";
+import { type getNavCategories } from "@/app/[locale]/(shop)/_queries/categories";
 
-export const Navbar = () => {
+type NavbarProps = {
+  categories?: Awaited<ReturnType<typeof getNavCategories>>;
+};
+
+export const Navbar = (props: NavbarProps) => {
+  const { categories = [] } = props;
   const t = useTranslations("nav");
 
   return (
@@ -21,6 +28,7 @@ export const Navbar = () => {
             >
               {t("products")}
             </Link>
+            <NavbarCategories categories={categories} />
           </div>
         </div>
 

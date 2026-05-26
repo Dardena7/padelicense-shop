@@ -23,3 +23,47 @@ export const slugify = (text: string): string =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+
+export const buildSlugsByLocale = (
+  alternateSlugs: { locale: string; value: string }[],
+): Record<string, string> =>
+  Object.fromEntries(
+    alternateSlugs.map((alt) => [alt.locale.toLowerCase(), alt.value]),
+  );
+
+type CategoryWithParents = {
+  name: string;
+  slug: string;
+  parent?: {
+    name: string;
+    slug: string;
+    parent?: { name: string; slug: string } | null;
+  } | null;
+};
+
+export const buildCategoryBreadcrumb = (
+  category: CategoryWithParents,
+): { label: string; href?: string }[] => {
+  const items: { label: string; href?: string }[] = [];
+
+  if (category.parent?.parent) {
+    items.push({
+      label: category.parent.parent.name,
+      href: `/categories/${category.parent.parent.slug}`,
+    });
+  }
+
+  if (category.parent) {
+    items.push({
+      label: category.parent.name,
+      href: `/categories/${category.parent.slug}`,
+    });
+  }
+
+  items.push({
+    label: category.name,
+    href: `/categories/${category.slug}`,
+  });
+
+  return items;
+};

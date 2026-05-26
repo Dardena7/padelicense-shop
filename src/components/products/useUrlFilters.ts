@@ -9,6 +9,7 @@ const parseFromSearchParams = (params: URLSearchParams): Filters => ({
   search: params.get("search") || undefined,
   orderBy: (params.get("orderBy") as ProductOrderBy) || undefined,
   status: (params.get("status") as ProductStatus) || undefined,
+  categorySlug: params.get("categorySlug") || undefined,
   minPrice: params.get("minPrice")
     ? parseInt(params.get("minPrice")!)
     : undefined,
@@ -22,6 +23,7 @@ const syncFiltersToUrl = (filters: Filters) => {
   if (filters.search) params.set("search", filters.search);
   if (filters.orderBy) params.set("orderBy", filters.orderBy);
   if (filters.status) params.set("status", filters.status);
+  if (filters.categorySlug) params.set("categorySlug", filters.categorySlug);
   if (filters.minPrice) params.set("minPrice", String(filters.minPrice));
   if (filters.maxPrice) params.set("maxPrice", String(filters.maxPrice));
 

@@ -16,6 +16,14 @@ export const GET_PRODUCT = graphql(`
       category {
         name
         slug
+        parent {
+          name
+          slug
+          parent {
+            name
+            slug
+          }
+        }
       }
       variants {
         id

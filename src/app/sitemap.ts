@@ -50,12 +50,30 @@ const fetchCategories = async (): Promise<CategoryNode[]> => {
           categories {
             slug
             alternateSlugs { locale value }
+            subcategories {
+              slug
+              alternateSlugs { locale value }
+              subcategories {
+                slug
+                alternateSlugs { locale value }
+              }
+            }
           }
         }`,
       }),
     });
     const json = await res.json();
-    return json.data?.categories?.filter(Boolean) ?? [];
+    const roots: CategoryNode[] = json.data?.categories?.filter(Boolean) ?? [];
+
+    const flatten = (
+      cats: (CategoryNode & { subcategories?: CategoryNode[] })[],
+    ): CategoryNode[] =>
+      cats.flatMap((cat) => [
+        { slug: cat.slug, alternateSlugs: cat.alternateSlugs },
+        ...flatten(cat.subcategories ?? []),
+      ]);
+
+    return flatten(roots);
   } catch {
     return [];
   }
@@ -81,7 +99,10 @@ const buildAlternates = (
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const [products] = await Promise.all([fetchProducts(), fetchCategories()]);
+  const [products, categories] = await Promise.all([
+    fetchProducts(),
+    fetchCategories(),
+  ]);
 
   const staticPages = ["", "/products"].flatMap((path) =>
     routing.locales.map((locale) => ({
@@ -112,7 +133,28 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     }),
   );
 
-  return [...staticPages, ...productPages];
+  const categoryPages = categories.flatMap((category) =>
+    routing.locales.map((locale) => {
+      const slugsByLocale = Object.fromEntries(
+        category.alternateSlugs.map((alt) => [
+          alt.locale.toLowerCase(),
+          alt.value,
+        ]),
+      );
+      const slug = slugsByLocale[locale] ?? category.slug;
+
+      return {
+        url: `${BASE_URL}/${locale}/categories/${slug}`,
+        alternates: buildAlternates(
+          `/categories/${slug}`,
+          category.alternateSlugs,
+        ),
+        lastModified: new Date(),
+      };
+    }),
+  );
+
+  return [...staticPages, ...categoryPages, ...productPages];
 };
 
 export default sitemap;

@@ -14,6 +14,7 @@ type ProductCardProps = {
   featured?: boolean;
   inStock?: boolean;
   priority?: boolean;
+  category?: { name: string; slug: string };
   action?: React.ReactNode;
 };
 
@@ -28,6 +29,7 @@ export const ProductCard = (props: ProductCardProps) => {
     featured = false,
     inStock = true,
     priority = false,
+    category,
     action,
   } = props;
 
@@ -66,6 +68,9 @@ export const ProductCard = (props: ProductCardProps) => {
             <p className="text-xs font-medium uppercase tracking-wider text-muted">
               {brand}
             </p>
+            {category && (
+              <span className="text-xs text-muted">{category.name}</span>
+            )}
           </div>
 
           <h3 className="font-semibold text-foreground leading-snug group-hover:text-accent transition-colors duration-200">
